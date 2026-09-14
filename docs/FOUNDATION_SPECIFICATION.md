@@ -1,246 +1,1869 @@
-# 🥕 Underhallow — Foundation Specification V1.0 (Draft)
+# UNDERHALLOW
 
-**Document Status:** Pending Founder / Omni Review & Approval  
-**Parent Document:** [Underhallow North Star V1.0](file:///c:/Users/HP/Documents/Underhallow/docs/NORTH_STAR.md)  
-**Authority Level:** Product & System Definition (Layer 2)  
-**Target Platform:** Modern Web Browser (Desktop first, Gamepad / Mouse + Keyboard)  
-**Target Performance:** 60 FPS, <2s instant load time  
+## Foundation Specification V1.0
 
----
-
-## 1. Document Objective
-This Foundation Specification translates the visionary principles of **North Star V1.0** into concrete, unambiguous product definitions, gameplay mechanics, mathematical rules, and world systems. It resolves the open items in the V1.0 Decision Register to prepare for the Technical Architecture and Production Phase.
-
----
-
-## 2. World & Spatial Architecture
-
-### 2.1 Dual-World Topology
-Underhallow exists across two distinct world scenes with seamless travel:
-
-```
-┌────────────────────────────────────────────────────────┐
-│                      MAIN ISLAND                       │
-│  - Town Square & Market (Clementine's Shop, Bulletin)  │
-│  - Department of Agriculture Regional Branch Office    │
-│  - Harbor & Pier (Ferry Skiff to Personal Island)      │
-│  - Whispering Woods (Foraging, Wildlife, Hunting)      │
-│  - Coastline & Old Watchtower Ruins                    │
-└───────────────────────────▲────────────────────────────┘
-                            │ Ferry Travel (Instant / Skiff Transition)
-┌───────────────────────────▼────────────────────────────┐
-│                    PERSONAL ISLAND                     │
-│  - Starter Homestead & Rustic Cabin                    │
-│  - Agricultural Soil Plot (Tilled, Watered, Planted)   │
-│  - Storage Chest & Workbench                           │
-│  - 3x3 Macro Sector Grid (Unlockable Expansion Land)   │
-│  - Personal Shoreline & Pier                           │
-└────────────────────────────────────────────────────────┘
-```
-
-### 2.2 Isometric Projection & Coordinate Standard
-- **Projection Type:** 2:1 True Dimetric Isometric Projection.
-- **Tile Dimensions:** 64px width × 32px height (Base Tile Unit `1.0 TU`).
-- **Screen to World Transform:**
-  $$\text{screenX} = (x - y) \times (\text{tileWidth} / 2)$$
-  $$\text{screenY} = (x + y) \times (\text{tileHeight} / 2) - (z \times \text{tileHeight})$$
-- **Depth Sorting (Z-Ordering):**
-  Entities sorted each frame by `renderOrder = (tileX + tileY) * 1000 + tileZ * 10 + layerOffset`.
-- **Pixel Art Benchmark:** Crisp nearest-neighbor scaling at integer multiples (1x, 2x, 3x zoom levels), 16-bit color warmth, warm amber sunlight transitions, cool misty violet night palettes.
-
-### 2.3 Personal Island Grid Expansion System
-- **Macro Layout:** The Personal Island is composed of a **3 × 3 Macro Grid** (9 sectors total).
-- **Sector Size:** Each macro sector is **16 × 16 isometric tiles** (overall island = 48 × 48 tiles, 2,304 tiles total).
-- **Starting Area:** Sector `(1, 1)` (Central Sector) is unlocked from Day 1, containing the player's cabin, starter crop beds, clearing, and a small water well.
-- **Expansion Mechanics:**
-  - Surrounding 8 sectors are initially covered by dense mist, overgrown brambles, or ancient stone markers.
-  - Unlocking a sector requires:
-    1. Gold / Hallows earned through trade.
-    2. Specific tools or clearing materials (e.g., clearing wood/boulders).
-    3. Progression milestone or Council Land Permit from Town Hall.
-  - Unlocking an expansion sector permanently reveals new soil, natural springs, coastal access, or hidden archaeological plots.
+**Project:** Underhallow  
+**Document:** Foundation Specification  
+**Version:** 1.0  
+**Status:** Initial foundation baseline  
+**Supersedes:** None  
+**Parent document:** Underhallow North Star V1.0  
+**Initial Platform:** Browser  
+**Initial Game Mode:** Single-player  
+**Development Philosophy:** AI-agent-assisted, human-directed, human-QA-gated  
 
 ---
 
-## 3. The Three Primary Gameplay Pillars
+# 0. Purpose
 
-### 3.1 Pillar I: Farming
-Farming provides reliable progression, economic capital, and cozy routine.
+The Foundation Specification translates the Underhallow North Star into a coherent product structure.
 
-#### Tile Agricultural States
-1. **Virgin Turf / Grass:** Default ground state. Cannot be seeded until tilled.
-2. **Tilled Soil (Dry):** Created by using the Hoe. Decays back to turf after 48 in-game hours if unplanted.
-3. **Tilled Soil (Watered):** Created by using the Watering Can. Accelerates growth tick. Reverts to dry at midnight.
-4. **Planted Seed:** Seed placed onto tilled soil.
-5. **Growth Stages (1 to 4):**
-   - *Stage 1: Germination (Sprout)*
-   - *Stage 2: Vegetative Growth*
-   - *Stage 3: Flowering / Fruiting*
-   - *Stage 4: Mature / Harvestable*
-6. **Harvested / Regrowth:** Single-harvest crops return to tilled soil; multi-harvest crops (e.g., Berry Bushes) revert to Stage 2.
-7. **Withered / Anomalous:** Neglected without water for >3 consecutive days, or exposed to rare night fog anomalies.
+It answers:
 
-#### Core Farming Tool Arsenal
-- **Rusty Hoe:** Tills soil tiles (1x1 target). Upgradable to Copper (1x3), Iron (3x3).
-- **Watering Can:** Holds 20 charges. Refillable at wells, ponds, or coast.
-- **Seed Satchel:** Quick-select active seeds with plant preview overlay.
-- **Harvest Sickle / Bare Hands:** Quick harvest with satisfying bounce and particle pop.
+> **What are the fundamental systems, boundaries, relationships and player experiences that make Underhallow Underhallow?**
+
+It does **not** yet define every implementation detail.
+
+For example:
+
+**Foundation says:**
+
+> The player owns a persistent personal island divided into unlockable areas.
+
+**Later technical specification says:**
+
+> How those areas are represented in the database, world data, rendering system and save system.
+
+This distinction prevents us from prematurely locking technical decisions.
 
 ---
 
-### 3.2 Pillar II: Hunting & Foraging
-Hunting provides adventure, risk/reward, raw crafting resources, and exploration incentives outside the farm.
+# 1. Foundation Principles
 
-#### Encounter & Creature Ecosystem
-- **Tier 0 Critters (Passive):**
-  - Island Rabbits, Meadow Quails, Forest Squirrels.
-  - Behavior: Flee upon player approach within 4 tiles.
-  - Interaction: Slingshot or stealth trapping. Yields meat, pelts, feathers.
-- **Tier 1 Wildlife (Neutral / Defensive):**
-  - Bristle Boars, Badger Badasses.
-  - Behavior: Ignore player unless provoked or entered territorial proximity (<2 tiles).
-  - Combat: Simple charge attack with telegraphed visual dust wind-up.
-  - Yields: Heavy hides, bones, rare truffles.
-- **Tier 2 Anomalous Creatures (Mysterious / Nocturnal):**
-  - Bramble Lurkers, Luminous Wisps (appear deep in Whispering Woods or at night).
-  - Behavior: Evasive, pattern-based, dropped strange alchemical seeds and glowing residue.
+Every system in Underhallow must follow these principles.
 
-#### Combat Mechanics Specification
-- **Design Rule:** Approachable, rhythmic, non-punishing. Underhallow is NOT a twitch soulslike.
-- **Actions:**
-  - `Attack` (Tool/Weapon: Wooden Spear, Hunter's Bow, Slingshot, or Forager Knife).
-  - `Dodge / Step-Back` (Short dash with 0.2s invulnerability frames to avoid telegraphed swings).
-- **Health & Stamina:**
-  - Stamina consumed by sprinting, tilling, chopping, and heavy attacks.
-  - When Health hits 0: Player does NOT die permanently. The player faints, losing some energy, and wakes up at the Town Clinic or their Cottage bed next morning with a note from Clementine or the local Doctor.
+## 1.1 Game first
+
+Underhallow must be a good game before it is:
+
+* a Web3 product
+* an economic experiment
+* a social platform
+* a technical showcase
 
 ---
 
-### 3.3 Pillar III: Building & Customization
-Building transforms the player's personal island into an intimate, distinctive personal sanctuary.
+## 1.2 Player freedom
 
-#### Placement Engine & Rules
-- **Grid Snapping:** Clear green/red footprint indicator on isometric tiles.
-- **Placement Categories:**
-  1. **Surfacing & Paths:** Dirt trail, Cobblestone, Wood decking, Stepping stones.
-  2. **Enclosures:** Rustic picket fence, Stone wall, Garden hedges, Gates.
-  3. **Outdoor Furnishings & Deco:** Benches, Lanterns (dynamic light emission), Flower pots, Scarecrows, Tool racks.
-  4. **Functional Outbuildings:**
-     - *Tool Shed:* Expanded inventory storage.
-     - *Drying Rack / Preserves Jar:* Processes raw crops into artisanal goods.
-     - *Chicken Coop / Small Barn:* Animal husbandry (Tier 2 progression).
-  5. **Cottage Expansion:** Expands interior floor plan, roof style, and exterior facade.
+Players should be able to decide how they spend their time.
+
+The game should not constantly tell players:
+
+> "You should be doing X."
+
+Instead, the world should provide reasons to pursue different activities.
 
 ---
 
-## 4. World Geography & Town Life
+## 1.3 Multiple valid playstyles
 
-### 4.1 Main Island Districts
-1. **Town Square:**
-   - Central cobblestone plaza with fountain and bulletin notice board.
-   - **Clementine's General Store & Bakery:** Sells starter seeds, flour, coffee, and daily baked goods. Buys fresh produce.
-   - **The Department of Agriculture Field Office:** Imposing, slightly too formal government office with filing cabinets, bureaucratic paperwork, and official crop quota inquiries.
-   - **Blacksmith & Carpenter:** Tool upgrades and structural blueprints.
-2. **Harbor & Fishmarket:**
-   - Wooden docks where Barnaby the Ferryman docks his tugboat.
-   - Direct travel link to the player's Personal Island.
-   - Fishing pier and tidal foraging.
-3. **Whispering Woods:**
-   - Dense canopy, winding dirt paths, ancient mossy stones, hunting grounds, wild berry patches.
-   - Deeper trails blocked by fallen timbers or old departmental warning signs.
+Farming, hunting and building are the three foundational gameplay pillars.
+
+Exploration, trading, collecting, relationships and future professions build around them.
+
+No single activity should invalidate the others.
 
 ---
 
-## 5. Narrative Architecture & The Mystery Layer
+## 1.4 Cozy before dark
 
-### 5.1 Dual-Tone Execution
-Underhallow deliberately balances two emotional registers:
-- **Surface Layer:** Warm, comforting, humorous, satisfying daily routine.
-- **Underlying Mystery:** Strange memos, soil that whispers or hums during rainstorms, crops that grow with unnatural symmetry, NPCs who evade questions about why the mainland ferries stopped coming.
+The initial emotional experience should be:
 
-### 5.2 Key Narrative Cast (Foundation Group)
-- **Clementine:** Warm-hearted, generous local shopkeeper. Secretly worried about supply shipments that haven't arrived in months.
-- **Officer Vance (Dept. of Agriculture):** Clipboards, stamped permits, polite smiles. Insists everything is strictly routine and according to Directive 44-B.
-- **Robinhood:** Reclusive trapper living in a ramshackle hut in the Whispering Woods. Knows the forest secrets and talks about "the things beneath the roots."
-- **Barnaby:** Old sea captain running the ferry skiff. Tells stories of the sea and the forgotten history of Underhallow.
+> peaceful → comfortable → curious
 
----
+before becoming:
 
-## 6. Economy, Progression, and Core Loop
+> strange → mysterious → unsettling.
 
-### 6.1 Economy Fundamentals
-- **Currency:** Gold Coins (`G`).
-- **Primary Earn Loops:**
-  - Selling high-quality crops.
-  - Selling gathered pelts, timber, and forage items.
-  - Fulfilling daily town bulletin requests.
-- **Primary Sink Loops:**
-  - Purchasing seeds, fertilizers, blueprints, and livestock.
-  - Purchasing island expansion sector permits.
-  - Tool upgrades (Copper, Iron, Steel).
-
-### 6.2 Day/Night Cycle & Time Flow
-- **Ratio:** 1 real-world minute = 1 in-game hour (Full 24-hour cycle = 24 real minutes).
-- **Day Schedule:**
-  - `06:00 AM`: Morning rooster, day start, crops update growth stage.
-  - `12:00 PM`: Midday market bell.
-  - `06:00 PM`: Sunset, dusk lighting, shops close, tavern opens.
-  - `10:00 PM`: Nightfall, ambient lanterns ignite, nocturnal fauna active.
-  - `02:00 AM`: Exhaustion warning if player has not slept in bed.
+The mystery should be discovered rather than immediately announced.
 
 ---
 
-## 7. Recommended Technical Architecture (Browser-First)
+## 1.5 Progression without coercion
 
-### 7.1 Core Technology Stack
-- **Language & Tooling:** TypeScript + Vite (fast HMR, lightweight bundle, zero runtime bloat).
-- **Rendering Pipeline:**
-  - Dedicated **2D Canvas / WebGL Isometric Renderer** with integer scaling for pixel-art clarity.
-  - Texture atlas sprite packing for low memory footprint and high cache efficiency.
-  - Smooth 60 FPS fixed-timestep game loop (`1/60s` physics/logic tick + interpolated render tick).
-- **Architecture Pattern:** Decoupled Model-View:
-  - `Simulation / State Machine`: Pure TypeScript game logic (inventory, grid, farming ticks, time). Purely deterministic and serializable.
-  - `Render System`: Reads state and draws isometric sprites, animations, and particle effects.
-  - *Benefit:* Ensures that when multiplayer is added in the future, the state simulation is already completely decoupled from rendering!
-- **Persistence:** IndexedDB with JSON schema migration for instant local saving, auto-saving every in-game morning, and export/import capability.
-- **Input System:** Unified Input Manager supporting:
-  - Keyboard: `WASD` / Arrow movement, `E` interact, `Space` use tool, `1-8` hotbar select, `Tab` inventory.
-  - Mouse: Tile hover cursor with isometric diamond highlight, left click action, right click context.
-  - Gamepad: Analog stick movement, button mappings.
+Progression should reward engagement without requiring players to optimize their lives.
+
+A player who wants to min-max should have room to do so.
+
+A player who simply wants to farm and decorate should also have a satisfying experience.
 
 ---
 
-## 8. Milestone 1 Production Roadmap: "The First Playable Loop"
+## 1.6 Systems should reinforce one another
 
-In direct fulfillment of **Section 34 of the North Star**:
-```
-Enter the world ──► Explore Main Island ──► Discover Town ──► Meet NPC
-         │
-         ▼
-Receive objective ──► Gather / Explore ──► Travel to Personal Island
-         │
-         ▼
-Farm (Till/Water/Plant) ──► Harvest ──► Build / Customize ──► Return to Town
+The major systems should connect.
+
+For example:
+
+```text
+Exploration
+     ↓
+Resources / discoveries
+     ↓
+Farming / crafting / building
+     ↓
+Island development
+     ↓
+Improved capabilities
+     ↓
+New exploration opportunities
 ```
 
-### Production Slices:
-1. **Slice 1 — Engine & Isometric Foundations:**
-   - 2:1 Isometric grid math, camera viewport with smooth scrolling, player entity with 8-direction/4-direction pixel movement and collision.
-2. **Slice 2 — Personal Island & Farming System:**
-   - Starter island grid, tool mechanics (Hoe, Watering Can, Carrot Seeds), soil state transitions, crop growth timer, harvesting into inventory.
-3. **Slice 3 — Harbor & Dual-Island Navigation:**
-   - Travel interaction at dock, scene transition between Personal Island and Main Island Town Square.
-4. **Slice 4 — Town Square & NPC Dialogue:**
-   - Clementine's store, dialogue system with portrait modal, buying seeds and selling harvested crops.
-5. **Slice 5 — Building & Foraging Slice:**
-   - Path/fence tile placement on Personal Island; forest perimeter with basic gatherables and critter interaction.
-6. **Slice 6 — Polish & Human QA Playtest:**
-   - Audio effects, cozy color grading, UI polish, verifying the first loop feels undeniably fun and distinctly *Underhallow*.
+Rather than building isolated minigames, Underhallow should become a network of mutually reinforcing systems.
 
 ---
 
-## 9. Next Steps & Approvals
-Upon Founder / Omni approval of this Foundation Specification:
-1. Lock Foundation Specification V1.0.
-2. Draft **Technical Architecture Specification (Layer 3)** with exact engine interfaces and data schemas.
-3. Establish project codebase repository structure and commence Slice 1 implementation.
+# 2. High-Level Game Architecture
+
+At the product level:
+
+```text
+                         UNDERHALLOW
+                              │
+               ┌──────────────┴──────────────┐
+               │                             │
+          MAIN ISLAND                  PERSONAL ISLAND
+               │                             │
+        Shared world space              Player-owned space
+               │                             │
+       ┌───────┼────────┐             ┌──────┼────────┐
+       │       │        │             │      │        │
+      Town   Nature   Wilderness     Home   Farm   Expansion
+       │       │        │             │      │        │
+       └───────┼────────┘             └──────┼────────┘
+               │                             │
+               └────────── PLAYER ───────────┘
+```
+
+The two islands have different responsibilities.
+
+### Main Island
+
+**Discovery, society, narrative, exploration and shared-world activity.**
+
+### Personal Island
+
+**Ownership, progression, farming, building and player expression.**
+
+---
+
+# 3. Player Experience Architecture
+
+The game should support several gameplay loops.
+
+## 3.1 Moment-to-moment loop
+
+The smallest gameplay loop:
+
+```text
+Move
+→ Observe
+→ Interact
+→ Collect / act
+→ Receive feedback
+→ Decide what to do next
+```
+
+Movement and interaction must feel responsive enough that simply walking around the world is enjoyable.
+
+---
+
+# 4. Core Daily Loop
+
+The primary player loop should be approximately:
+
+```text
+Wake / begin session
+        ↓
+Check personal island
+        ↓
+Farm / build / manage
+        ↓
+Travel to Main Island
+        ↓
+Explore / interact / quest
+        ↓
+Gather / hunt / discover
+        ↓
+Return home
+        ↓
+Use resources / progress
+        ↓
+Develop island
+        ↓
+Continue exploring or end session
+```
+
+This is not intended to force a literal daily schedule.
+
+It represents the relationship between systems.
+
+Players should be able to break this pattern whenever they want.
+
+---
+
+# 5. Long-Term Loop
+
+Over longer play:
+
+```text
+Explore
+   ↓
+Discover
+   ↓
+Acquire resources / knowledge
+   ↓
+Improve character
+   ↓
+Improve home
+   ↓
+Expand island
+   ↓
+Unlock new possibilities
+   ↓
+Explore further
+   ↓
+Discover more of Underhallow
+```
+
+The narrative sits across this loop.
+
+The player gradually becomes more capable while simultaneously understanding more about the world.
+
+---
+
+# 6. Player Character
+
+The player character is a new resident entering the world.
+
+The character is persistent.
+
+The player controls:
+
+* Movement
+* Interaction
+* Farming
+* Hunting
+* Building
+* Exploration
+* Inventory
+* Equipment
+* Social interaction
+* Progression decisions
+
+The character should not be permanently locked into a class.
+
+---
+
+# 7. Character Progression
+
+The initial foundation recognizes several progression dimensions.
+
+### Core
+
+* Character level
+* Farming skill
+* Hunting skill
+* Building skill
+
+### Property
+
+* House progression
+* Island progression
+* Buildings
+* Land expansion
+
+### Economic
+
+* Wealth
+* Trading capability
+
+### Future
+
+* Exploration/discovery
+* Crafting
+* NPC relationships
+* Reputation
+* Collections
+* Other professions
+
+The exact formulas, XP curves and unlock trees are deferred.
+
+---
+
+# 8. Skills
+
+Skills should represent what the player actually does.
+
+For example:
+
+```text
+Farm frequently
+     ↓
+Farming progression
+     ↓
+Better farming capabilities
+     ↓
+More sophisticated farming opportunities
+```
+
+Likewise:
+
+```text
+Hunt
+ ↓
+Hunting progression
+ ↓
+Improved hunting capabilities
+ ↓
+Access to more challenging opportunities
+```
+
+And:
+
+```text
+Build
+ ↓
+Building progression
+ ↓
+More building possibilities
+ ↓
+Greater island expression
+```
+
+Skills should **enable playstyles**, not trap players inside them.
+
+---
+
+# 9. Main Island Foundation
+
+The Main Island is the primary external world.
+
+It should contain a mixture of:
+
+### Civilization
+
+* Town
+* Shops
+* NPC homes
+* Public buildings
+* Market areas
+* Social spaces
+
+### Nature
+
+* Forest
+* Fields
+* Water
+* Wilderness
+* Resource areas
+
+### Adventure
+
+* Hidden locations
+* Hunting areas
+* Secrets
+* Rare resources
+* Story locations
+
+### Narrative
+
+* Character locations
+* Story landmarks
+* Quest locations
+* Mystery locations
+
+The Main Island should eventually feel like a connected geographic environment.
+
+---
+
+# 10. Main Island Spatial Philosophy
+
+The Main Island should be:
+
+**Medium-sized.**
+
+Large enough that:
+
+* exploration matters
+* distant areas feel different
+* players can discover things organically
+
+But not so large that:
+
+* walking becomes tedious
+* the world feels empty
+* development becomes unnecessarily enormous
+
+Density is more important than raw map size.
+
+---
+
+# 11. Town Foundation
+
+The Town is the primary civilization hub.
+
+It should eventually contain:
+
+* Town Square
+* NPCs
+* Shops
+* Services
+* Quest/story locations
+* Public spaces
+* Market
+* Event spaces
+
+The Town Square should be one of the most visually memorable locations in Underhallow.
+
+It is where the player should naturally encounter:
+
+> people, stories, rumors, opportunities and clues.
+
+---
+
+# 12. Personal Island Foundation
+
+Every player receives a personal island.
+
+Initial state:
+
+> **Common starting template.**
+
+Players then progressively transform it.
+
+The island consists conceptually of:
+
+```text
+Island
+│
+├── Starting Area
+│     ├── House
+│     └── Initial usable land
+│
+├── Expansion Grid
+│     ├── Locked
+│     ├── Unlockable
+│     └── Developed
+│
+└── Future Expansion
+```
+
+---
+
+# 13. Island Grid System
+
+The island is divided into unlockable grids.
+
+A grid is a **territorial unit**, not necessarily a single gameplay tile.
+
+The grid system exists to provide:
+
+* Controlled expansion
+* Meaningful land progression
+* Spatial planning
+* Player customization
+* Long-term island development
+
+### Still unresolved
+
+We have deliberately not locked:
+
+* Physical grid dimensions
+* Number of grids
+* Unlock order
+* Cost
+* Maximum island size
+* Whether grids have terrain types
+* Whether grids can be purchased
+* Whether special grids exist
+
+These belong to later specifications.
+
+---
+
+# 14. Island Building
+
+The player should eventually be able to place and develop structures within appropriate areas.
+
+Potential categories:
+
+### Residential
+
+* House
+* Extensions
+* Decorative structures
+
+### Agricultural
+
+* Fields
+* Storage
+* Farming structures
+
+### Production
+
+* Processing buildings
+* Workshops
+* Other future production structures
+
+### Utility
+
+* Storage
+* Infrastructure
+* Functional buildings
+
+### Decorative
+
+* Trees
+* Benches
+* Paths
+* Fences
+* Gardens
+* Lighting
+* Other decorations
+
+The exact building catalogue is not yet locked.
+
+---
+
+# 15. Island Customization
+
+The personal island is a major player-expression system.
+
+Players should be able to influence:
+
+* Land usage
+* Farming layout
+* Buildings
+* Vegetation
+* Paths
+* Decorations
+* Functional zones
+
+The system should eventually support islands that look substantially different from one another.
+
+---
+
+# 16. Farming Foundation
+
+Farming is one of three primary gameplay pillars.
+
+The basic farming loop is:
+
+```text
+Prepare land
+    ↓
+Plant
+    ↓
+Care
+    ↓
+Grow
+    ↓
+Harvest
+    ↓
+Use / sell / process
+    ↓
+Improve farming capability
+```
+
+The system should eventually account for:
+
+* Crops
+* Seeds
+* Soil/land
+* Growth
+* Harvesting
+* Resources
+* Storage
+* Economic value
+
+However, **specific crop formulas and economic values do not belong in this Foundation Specification.**
+
+---
+
+# 17. Hunting Foundation
+
+Hunting provides an alternative major gameplay path.
+
+The basic loop:
+
+```text
+Explore
+ ↓
+Find creature / resource
+ ↓
+Engage
+ ↓
+Combat
+ ↓
+Defeat / collect
+ ↓
+Acquire resources
+ ↓
+Return / use resources
+ ↓
+Improve hunting capability
+```
+
+Combat should initially be:
+
+* Simple
+* Responsive
+* Understandable
+* Accessible
+* Supporting exploration
+
+It should not dominate the game.
+
+---
+
+# 18. Combat Foundation
+
+The first combat implementation should focus on the smallest useful system.
+
+At minimum:
+
+* Player attack
+* Target detection
+* Enemy health
+* Damage
+* Enemy response
+* Player damage/health
+* Defeat state
+* Loot/resource result
+
+Complex combat mechanics should only be added after the basic interaction feels good.
+
+---
+
+# 19. Exploration Foundation
+
+Exploration should operate on three layers.
+
+### Physical discovery
+
+Finding:
+
+* Areas
+* Paths
+* Resources
+* Hidden locations
+
+### Gameplay discovery
+
+Finding:
+
+* Items
+* NPCs
+* Quests
+* Creatures
+* Opportunities
+
+### Narrative discovery
+
+Finding:
+
+* Clues
+* Lore
+* Secrets
+* Strange events
+* Connections between characters/events
+
+The third layer becomes increasingly important as the story develops.
+
+---
+
+# 20. Interaction System
+
+A unified interaction system should eventually allow the player to interact with:
+
+* NPCs
+* Objects
+* Crops
+* Resources
+* Doors
+* Buildings
+* Containers
+* Environmental objects
+* Quest objects
+* World mechanisms
+
+The interaction system should avoid every gameplay system inventing its own incompatible interaction method.
+
+---
+
+# 21. NPC Foundation
+
+NPCs are core to the narrative.
+
+An NPC should conceptually have:
+
+```text
+Identity
+Personality
+Location
+Routine
+Relationships
+Dialogue
+Quests
+Progression
+Story relevance
+```
+
+NPCs should not merely exist to provide rewards.
+
+They should help make the world feel alive.
+
+---
+
+# 22. NPC Routine System
+
+Eventually NPCs should behave according to routines.
+
+For example:
+
+```text
+Morning
+ ↓
+Home
+ ↓
+Work
+ ↓
+Town
+ ↓
+Social activity
+ ↓
+Home
+```
+
+The exact schedules are future implementation details.
+
+The foundational requirement is:
+
+> NPCs should appear to live in the world independently of the player.
+
+---
+
+# 23. Quest Foundation
+
+Quests will primarily serve three functions:
+
+### Character
+
+Help the player understand NPCs.
+
+### Adventure
+
+Give the player reasons to explore.
+
+### Narrative
+
+Move the broader story forward.
+
+Quests should not become the only reason to explore.
+
+The world itself must contain discoverable content.
+
+---
+
+# 24. Quest Types
+
+The foundation supports:
+
+* Character quests
+* Main story quests
+* Exploration quests
+* Collection quests
+* Farming objectives
+* Hunting objectives
+* Building objectives
+* Discovery objectives
+* Event objectives
+
+The final quest taxonomy can be expanded later.
+
+---
+
+# 25. Narrative Architecture
+
+The story should be layered.
+
+```text
+Layer 1
+Cozy everyday life
+       ↓
+Layer 2
+Character stories
+       ↓
+Layer 3
+Strange observations
+       ↓
+Layer 4
+Connected mysteries
+       ↓
+Layer 5
+Major revelations
+       ↓
+Layer 6
+Underlying truth
+```
+
+The player should not receive the complete explanation immediately.
+
+---
+
+# 26. Narrative Pacing
+
+The mystery must coexist with ordinary gameplay.
+
+We should avoid:
+
+> Mystery → mystery → mystery → mystery.
+
+Instead:
+
+```text
+Cozy activity
+ ↓
+Normal story
+ ↓
+Small strange detail
+ ↓
+Return to normal life
+ ↓
+Another clue
+ ↓
+Major character event
+ ↓
+Larger mystery
+```
+
+This contrast is fundamental to Underhallow's identity.
+
+---
+
+# 27. Story Progression
+
+The game should support:
+
+### Main narrative
+
+The broader Underhallow mystery.
+
+### Character arcs
+
+Individual NPC stories.
+
+### World discoveries
+
+Optional lore and secrets.
+
+### Milestones
+
+Major events that permanently advance the player's understanding or capabilities.
+
+Story progression should not prevent the player from continuing normal gameplay.
+
+---
+
+# 28. Time & World Simulation
+
+Underhallow should eventually operate as a persistent simulated world.
+
+Potential simulation dimensions include:
+
+* Time
+* Day/night
+* NPC schedules
+* Crop growth
+* Resource availability
+* Events
+* World-state changes
+
+The exact calendar/season system is not yet locked.
+
+The principle is:
+
+> **The world should feel alive even when the player isn't directly interacting with every system.**
+
+---
+
+# 29. Inventory Foundation
+
+The player needs a persistent inventory capable of representing:
+
+* Crops
+* Seeds
+* Resources
+* Tools
+* Weapons
+* Building materials
+* Quest items
+* Collectibles
+* Future economic assets
+
+Inventory should be designed as a shared foundational service rather than independently recreated by farming, hunting and other systems.
+
+---
+
+# 30. Items
+
+Items should have a unified conceptual identity.
+
+An item may contain:
+
+```text
+Item ID
+Name
+Category
+Description
+Stack rules
+Value
+Source
+Usage
+Visual representation
+```
+
+More advanced properties can be introduced later.
+
+The important foundation decision is:
+
+> **Items are data-driven.**
+
+We should avoid hardcoding every item as a separate custom implementation.
+
+---
+
+# 31. Tools & Equipment
+
+The player should eventually have equipment appropriate to their chosen activities.
+
+Potential categories:
+
+* Farming tools
+* Hunting equipment
+* Building tools
+* Exploration equipment
+* Utility items
+
+Equipment progression should support the game's skill progression.
+
+---
+
+# 32. Resource System
+
+Resources are a connective tissue between gameplay systems.
+
+For example:
+
+```text
+Explore
+ ↓
+Resource
+ ↓
+Inventory
+ ↓
+Craft / Build / Sell / Use
+ ↓
+Progression
+```
+
+Resources should have meaningful relationships with the world.
+
+The resource system should not become an arbitrary item-generation machine.
+
+---
+
+# 33. Crafting
+
+Crafting is **not yet a locked primary pillar**.
+
+However, the foundation should leave room for crafting because it naturally connects:
+
+* Farming
+* Hunting
+* Exploration
+* Gathering
+* Building
+* Economy
+
+Crafting will receive its own specification before implementation.
+
+---
+
+# 34. Economy Boundary
+
+The Foundation Specification deliberately establishes only the following:
+
+### The economy must:
+
+* Have meaningful player participation
+* Support wealth creation
+* Allow different strategies
+* Not be mandatory
+* Support future expansion
+* Work without blockchain
+
+### The economy must NOT yet define:
+
+* Currency
+* Token
+* Token supply
+* Exchange rate
+* Marketplace mechanics
+* Real-world conversion
+* Blockchain network
+* NFT architecture
+* Yield
+* Monetary policy
+
+Those require a dedicated **Underhallow Economy Specification**.
+
+---
+
+# 35. Web3 Boundary
+
+Blockchain is outside the initial foundation implementation.
+
+The architecture should avoid unnecessary assumptions such as:
+
+> "Every item must be an NFT."
+
+or:
+
+> "Every player needs a wallet."
+
+The initial game must remain playable using conventional game-state persistence.
+
+---
+
+# 36. Competition Boundary
+
+Competition is optional.
+
+The foundation should support future competitive systems without making them mandatory.
+
+Potential categories:
+
+* Records
+* Challenges
+* Rankings
+* Seasonal events
+* Building contests
+* Farming achievements
+* Hunting achievements
+
+But competition must never become the primary definition of player success.
+
+---
+
+# 37. Social Boundary
+
+Social features are future-facing.
+
+Potential systems:
+
+* Chat
+* Guilds
+* Island visits
+* Gifts
+* Cooperative activities
+* Community events
+
+Initial game development should not depend on these systems.
+
+---
+
+# 38. Multiplayer Boundary
+
+The first game is single-player.
+
+However, systems should have clean boundaries so future multiplayer can be introduced without rewriting the entire game.
+
+This means we should separate concepts such as:
+
+```text
+Player
+World
+Island
+NPC
+Inventory
+Items
+Progression
+```
+
+rather than creating one enormous coupled player/world object.
+
+The exact multiplayer architecture is deferred.
+
+---
+
+# 39. Save & Persistence Foundation
+
+The player must have persistent progression.
+
+At the conceptual level, persistent state includes:
+
+### Character
+
+* Level
+* Skills
+* Inventory
+* Equipment
+* Progression
+
+### Island
+
+* Unlocked grids
+* Buildings
+* Crops
+* Decorations
+* World modifications
+
+### Narrative
+
+* Quest progress
+* Story state
+* NPC relationships
+* Discoveries
+
+### Economy
+
+* Wealth
+* Transactions/progression where applicable
+
+The implementation technology is not yet specified.
+
+---
+
+# 40. World State
+
+We need to distinguish:
+
+### Static world data
+
+Things defined by the game:
+
+* Terrain
+* Buildings
+* NPC definitions
+* Item definitions
+* Map layout
+
+from:
+
+### Dynamic player/world state
+
+Things that change:
+
+* Crops
+* Player buildings
+* Quest progress
+* NPC relationships
+* Player inventory
+* Island development
+* discovered locations
+
+This separation is foundational.
+
+---
+
+# 41. Isometric World Foundation
+
+Underhallow's world will be represented visually as an isometric/3⁄4 pixel-art environment.
+
+The world system must support:
+
+* Tile/terrain representation
+* Height/depth relationships
+* Layering
+* Walkable areas
+* Obstacles
+* Buildings
+* Props
+* Characters
+* Interactions
+* Object placement
+
+The exact projection mathematics and tile dimensions are technical decisions for the architecture phase.
+
+---
+
+# 42. Movement Foundation
+
+The player must have:
+
+* Directional movement
+* Collision
+* Walkable/non-walkable areas
+* Interaction range
+* World boundaries
+
+Movement should feel appropriate for an isometric simulation/adventure game.
+
+Movement responsiveness is a **core quality requirement**, not a minor implementation detail.
+
+---
+
+# 43. Camera Foundation
+
+Current creative requirement:
+
+> Standard isometric/3⁄4 presentation.
+
+The exact camera behavior remains open.
+
+Possible technical decisions include:
+
+* Fixed orientation
+* Zoom
+* Camera following
+* Boundaries
+* Dynamic framing
+
+We should prototype the camera before locking its final behavior.
+
+---
+
+# 44. Rendering & Layering
+
+Because Underhallow uses dense isometric environments, the rendering foundation must correctly handle depth.
+
+Conceptually:
+
+```text
+Terrain
+ ↓
+Ground objects
+ ↓
+Buildings / structures
+ ↓
+Characters
+ ↓
+Foreground elements
+```
+
+Objects must appear visually in the correct depth order.
+
+This is especially important for:
+
+* Trees
+* Buildings
+* Roofs
+* Characters
+* Furniture
+* Market stalls
+* Walls
+* Props
+
+---
+
+# 45. Art Asset Foundation
+
+All art assets should be treated as part of a unified visual language.
+
+Asset categories include:
+
+### Characters
+
+* Player
+* NPCs
+* Creatures
+
+### Environment
+
+* Terrain
+* Buildings
+* Trees
+* Vegetation
+* Water
+
+### Props
+
+* Furniture
+* Market objects
+* Tools
+* Decorations
+
+### Effects
+
+* Weather
+* Particles
+* Combat effects
+* Environmental effects
+
+### UI
+
+* Icons
+* Panels
+* Buttons
+* Inventory elements
+* Dialogue elements
+
+The exact pixel dimensions and sprite-sheet standards belong in the Art Direction Specification.
+
+---
+
+# 46. Art Consistency Rule
+
+No individual asset should be approved solely because it looks good in isolation.
+
+It must also answer:
+
+> **Does this look like it belongs in Underhallow?**
+
+This becomes particularly important because AI agents will eventually be producing and modifying assets.
+
+---
+
+# 47. UI Foundation
+
+The UI should support the world rather than dominate it.
+
+Initial foundational UI systems include:
+
+* HUD
+* Inventory
+* Character/progression
+* Interaction prompts
+* Dialogue
+* Quest information
+* Menus
+* Settings
+* Save/loading state where applicable
+
+The visual UI language should match the cozy pixel-art world.
+
+---
+
+# 48. Audio Foundation
+
+Audio is not fully specified yet, but the foundation requires three emotional layers.
+
+### Cozy
+
+* Ambient environmental sound
+* Gentle music
+* Town ambience
+* Nature
+
+### Gameplay
+
+* Farming sounds
+* Gathering
+* Building
+* Combat
+* UI feedback
+
+### Mystery
+
+* Subtle tonal changes
+* Environmental sounds
+* Musical tension
+* Unusual audio cues
+
+The audio system should eventually allow the game's emotional state to shift without destroying the cozy atmosphere.
+
+---
+
+# 49. World Events
+
+The Main Island should eventually support events.
+
+Potential event categories:
+
+* Seasonal
+* Community
+* Character
+* Story
+* Exploration
+* Competitive
+
+Events should make the world feel dynamic.
+
+However, the first prototype does not require a complete event system.
+
+---
+
+# 50. Day-One Technical Philosophy
+
+The initial implementation should be **vertical, not horizontal**.
+
+Bad approach:
+
+> Build 30 systems at 10% completion.
+
+Preferred approach:
+
+> Build a small slice of the actual game at meaningful quality.
+
+For example:
+
+```text
+Player
+ +
+Main Island
+ +
+Town
+ +
+NPC
+ +
+Exploration
+ +
+Personal Island
+ +
+Farming
+ +
+Basic Building
+```
+
+should exist together before we expand into dozens of additional systems.
+
+---
+
+# 51. The First Vertical Slice
+
+The first serious playable slice should contain:
+
+### Main Island
+
+* Basic environment
+* Town
+* Town Square
+* Basic exploration
+* At least one NPC
+
+### Player
+
+* Movement
+* Camera
+* Interaction
+* Inventory
+
+### Narrative
+
+* Introduction
+* First character interaction
+* First objective
+
+### Exploration
+
+* Basic resource gathering
+* At least one discoverable element
+
+### Personal Island
+
+* Travel to island
+* House
+* Initial land
+* Farming
+* Harvesting
+* Basic building/customization
+
+### Persistence
+
+* Player progression survives leaving/re-entering the game
+
+This slice proves the fundamental Underhallow fantasy.
+
+---
+
+# 52. Vertical Slice Success Test
+
+The prototype should answer five questions.
+
+### 1. Is movement enjoyable?
+
+### 2. Does the world visually feel like Underhallow?
+
+### 3. Is farming satisfying?
+
+### 4. Does exploration create curiosity?
+
+### 5. Do I want to keep playing?
+
+If the answer to the fifth question is **no**, we do not solve the problem by adding more features.
+
+We improve the existing loop.
+
+---
+
+# 53. What We Build Later
+
+After the vertical slice proves itself, expansion can proceed into:
+
+```text
+Core Loop
+    ↓
+More farming
+    ↓
+More hunting
+    ↓
+More building
+    ↓
+More exploration
+    ↓
+NPC relationships
+    ↓
+Story expansion
+    ↓
+Crafting
+    ↓
+Economy
+    ↓
+Competition
+    ↓
+Social systems
+    ↓
+Multiplayer
+    ↓
+Optional Web3 layer
+```
+
+This is intentionally progressive.
+
+---
+
+# 54. System Dependency Map
+
+A rough dependency hierarchy:
+
+```text
+                 WORLD FOUNDATION
+                       │
+        ┌──────────────┼──────────────┐
+        ↓              ↓              ↓
+    PLAYER          OBJECTS         NPCs
+        │              │              │
+        └──────────────┼──────────────┘
+                       ↓
+                  INTERACTION
+                       │
+        ┌──────────────┼──────────────┐
+        ↓              ↓              ↓
+     FARMING        HUNTING       EXPLORATION
+        │              │              │
+        └──────────────┼──────────────┘
+                       ↓
+                  INVENTORY
+                       │
+                       ↓
+                PROGRESSION
+                       │
+          ┌────────────┴────────────┐
+          ↓                         ↓
+       BUILDING                  ECONOMY
+          │
+          ↓
+   PERSONAL ISLAND
+          │
+          ↓
+   LONG-TERM EXPRESSION
+```
+
+Narrative runs through the entire system rather than sitting at the end.
+
+---
+
+# 55. Foundation-Level Non-Goals
+
+We are explicitly **not** solving these yet:
+
+* Final token economy
+* Blockchain architecture
+* Multiplayer networking
+* Guild architecture
+* Full monetization
+* Complete crafting tree
+* Final combat depth
+* Complete seasonal system
+* Final progression formulas
+* Final camera behavior
+* Exact tile dimensions
+* Final pixel resolution
+* Complete world map
+* Complete NPC roster
+* Complete narrative
+* Full asset catalogue
+
+This is deliberate scope control.
+
+---
+
+# 56. Design Invariants
+
+These are rules that should remain true unless the North Star changes.
+
+### Invariant 1
+
+**Underhallow must be playable without blockchain.**
+
+### Invariant 2
+
+**Underhallow must be enjoyable without competition.**
+
+### Invariant 3
+
+**No player class permanently prevents experimentation with other playstyles.**
+
+### Invariant 4
+
+**The Personal Island is a major player-expression space.**
+
+### Invariant 5
+
+**The Main Island exists primarily for world exploration, society and narrative.**
+
+### Invariant 6
+
+**Farming, hunting and building are foundational gameplay pillars.**
+
+### Invariant 7
+
+**Exploration must contain meaningful discovery.**
+
+### Invariant 8
+
+**The cozy surface and darker underlying mystery must coexist.**
+
+### Invariant 9
+
+**AI agents cannot silently change foundational game decisions.**
+
+### Invariant 10
+
+**Feature quantity must never be prioritized over gameplay quality.**
+
+---
+
+# 57. Foundation Definition of Done
+
+We consider the Foundation Specification complete enough to begin technical architecture when we can clearly answer:
+
+### World
+
+* What spaces exist?
+* What does each space accomplish?
+* How do players move between them?
+
+### Player
+
+* What can the player do?
+* How do they progress?
+* How can they express themselves?
+
+### Gameplay
+
+* What are the primary loops?
+* How do farming, hunting and building interact?
+* How does exploration feed those loops?
+
+### Narrative
+
+* Who is the player?
+* What role do NPCs play?
+* How does the mystery unfold?
+
+### Persistence
+
+* What player/world state must survive?
+
+### Future boundaries
+
+* What is deliberately postponed?
+* What must the architecture leave room for?
+
+Underhallow now has answers to these at the product level.
+
+---
+
+# 58. Foundation → Technical Architecture Boundary
+
+This is the critical handoff.
+
+The Foundation Specification says:
+
+> **What must exist.**
+
+The Technical Architecture Specification will say:
+
+> **How we build it.**
+
+For example:
+
+| Foundation       | Technical Architecture                |
+| ---------------- | ------------------------------------- |
+| Isometric world  | Rendering engine / projection         |
+| Player movement  | Movement controller                   |
+| Personal island  | World-state architecture              |
+| Unlockable grids | Data model + persistence              |
+| Farming          | Crop/state system                     |
+| NPC routines     | Simulation architecture               |
+| Inventory        | Data structures/storage               |
+| Story state      | Quest/narrative state machine         |
+| Persistence      | Database/save architecture            |
+| Browser game     | Runtime/build/deployment architecture |
+
+We should **not skip this boundary**.
+
+---
+
+# 59. Agent Development Implication
+
+When we eventually give this to agents, an agent should understand:
+
+> "You are implementing a system inside an existing game architecture. You are not designing the entire game."
+
+For example, a Farming Agent should not decide:
+
+> "Actually, Underhallow should be a farming-only game."
+
+A World Agent should not decide:
+
+> "Let's eliminate the Personal Island."
+
+An Economy Agent should not decide:
+
+> "Every item should be a token."
+
+A Multiplayer Agent should not decide:
+
+> "We need MMO infrastructure now."
+
+The Foundation and North Star constrain them.
+
+---
+
+# 60. The Underhallow Development Hierarchy
+
+Our documentation hierarchy should become:
+
+```text
+                    UNDERHALLOW
+                    NORTH STAR
+                         │
+                         ▼
+               FOUNDATION SPECIFICATION
+                         │
+            ┌────────────┼────────────┐
+            ↓            ↓            ↓
+       GAME SYSTEMS   WORLD DESIGN   NARRATIVE
+            │            │            │
+            └────────────┼────────────┘
+                         ↓
+                TECHNICAL ARCHITECTURE
+                         │
+                         ↓
+                  AGENT CONSTITUTION
+                         │
+                         ↓
+                  IMPLEMENTATION PLAN
+                         │
+                         ↓
+                      AGENTS
+                         │
+                         ↓
+                       CODE
+                         │
+                         ↓
+                    AUTOMATED QA
+                         │
+                         ↓
+                     HUMAN QA
+```
+
+This is the structure I want us to maintain throughout the rebuild.
+
+---
+
+# 61. Foundation V1.0 Decision Register
+
+### 🔒 Locked
+
+* Game name: **Underhallow**
+* Isometric pixel-art direction
+* Cozy/nostalgic visual identity
+* Dark underlying mystery
+* Main Island
+* Personal Island
+* Single-player initial experience
+* Browser initial platform
+* Farming
+* Hunting
+* Building
+* Exploration
+* Character-driven narrative
+* Player customization
+* Unlockable personal-island grids
+* Major milestones rather than forced ending
+* Optional competition
+* Future multiplayer
+* Optional Web3
+* Game must function without Web3
+* Medium-sized polished scope
+* Vertical-slice-first development
+* Specialized AI agents
+* Controlled agent autonomy
+* Human QA
+* North Star cannot be silently changed by agents
+
+### 🟡 Defined but not fully specified
+
+* Character progression
+* Skill progression
+* NPC routines
+* Quest architecture
+* Building system
+* Farming system
+* Hunting system
+* Exploration system
+* Inventory
+* Items
+* World simulation
+* Save state
+* Island expansion
+
+### ⚪ Explicitly deferred
+
+* Exact economy
+* Blockchain
+* Token
+* Real-world economic mechanics
+* Multiplayer architecture
+* Guild system
+* Exact island grid dimensions
+* Camera behavior
+* Pixel resolution
+* Tile dimensions
+* Final technology stack
+* Complete crafting system
+* Advanced combat
+* Monetization
+
+---
+
+# 62. The First Development Principle
+
+There is one principle I want sitting at the top of every future agent brief:
+
+> ## **Do not build Underhallow as a collection of features. Build it as a world.**
+
+The player should not experience:
+
+> Farming System + Inventory System + Quest System + Building System.
+
+They should experience:
+
+> **"I'm a person living in this strange little world."**
+
+That's the standard the architecture needs to support.
