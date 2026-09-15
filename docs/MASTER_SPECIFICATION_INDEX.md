@@ -424,7 +424,7 @@ Maintains: Document ID, Document Name, Version, Status, Authority Level, Purpose
 | **CG-001** | Core Gameplay | 1 | LOCKED | [docs/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md) |
 | **PC-001** | Player Control, Movement & Interaction | 1 | LOCKED | [docs/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md) |
 | **WM-001** | World & Map Architecture | 1 | DRAFT | [docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md) |
-| **PR-001** | Player Progression | 2 | Next | Planned |
+| **PR-001** | Player Progression | 2 | DRAFT | [docs/PLAYER_PROGRESSION_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_PROGRESSION_SPECIFICATION.md) |
 | **FA-001** | Farming | 2 | Planned | Planned |
 | **HC-001** | Hunting & Combat | 2 | Planned | Planned |
 | **BI-001** | Building & Personal Island | 2 | Planned | Planned |
@@ -515,8 +515,9 @@ The MSI is the primary navigation and governance layer for humans and AI agents.
 ## 38. Current Roadmap Status
 
 - **WM-001 — World & Map Architecture Specification V1.0:** Drafted and established at [`docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md).
+- **PR-001 — Player Progression Specification V1.0:** Drafted and established at [`docs/PLAYER_PROGRESSION_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_PROGRESSION_SPECIFICATION.md).
 - **Next Planned Specification (Phase 3):**
-  - **PR-001 — Player Progression Specification V1.0**
   - **II-001 — Inventory, Items, Tools & Crafting Specification V1.0**
   - **FA-001 — Farming Specification V1.0**
+  - **HC-001 — Hunting & Combat Specification V1.0**
 
