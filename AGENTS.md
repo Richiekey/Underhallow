@@ -4,7 +4,7 @@ Refer to the authoritative documentation hierarchy:
 1. **Layer 1:** [docs/NORTH_STAR.md](file:///c:/Users/HP/Documents/Underhallow/docs/NORTH_STAR.md) (Vision & Immutable Principles)
 2. **Layer 2:** [docs/FOUNDATION_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/FOUNDATION_SPECIFICATION.md) (Product & System Definition)
 3. **Core Gameplay Spec:** [docs/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md) (Loops, Pillars, Agency, & Gameplay Invariants)
-4. **Layer 3:** [docs/TECHNICAL_ARCHITECTURE.md](file:///c:/Users/HP/Documents/Underhallow/docs/TECHNICAL_ARCHITECTURE.md) (Engine, State, & Data Architecture)
+4. **Layer 3:** [docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md) (Engine, State, & Data Architecture — Godot / Dedicated Server / Supabase)
 5. **Layer 4:** [docs/AGENT_CONSTITUTION.md](file:///c:/Users/HP/Documents/Underhallow/docs/AGENT_CONSTITUTION.md) (Agent Roles, Domains, Tasks, & DoD)
 
 ---
@@ -19,4 +19,4 @@ Refer to the authoritative documentation hierarchy:
 7. **Domain Whitelisting:** Agents only modify code within their assigned domain whitelist. Never touch `src/core/state/` or global save schemas without an approved Architecture Plan.
 8. **Data-Driven Rule:** Game content (crops, items, creatures, buildings, dialogue, quests) is authored as data definitions, never hardcoded into engine classes.
 9. **Simulation Time:** World simulation (crop growth, schedules) runs on deterministic `GameTime`, never real-time frame delta accumulation.
-10. **Browser-First Standard:** 60 FPS, responsive keyboard/mouse/gamepad controls, integer pixel-art scaling, and resilient local IndexedDB persistence.
+10. **PC & Multiplayer-Native Standard:** 60 FPS on target hardware, responsive keyboard/mouse/gamepad controls, integer pixel-art scaling, Godot client presentation, authoritative dedicated servers, and resilient Supabase / local persistence.
