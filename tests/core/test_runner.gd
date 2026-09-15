@@ -40,6 +40,9 @@ const HarvestCropCommandClass = preload("res://src/core/commands/harvest_crop_co
 const GatherResourceCommandClass = preload("res://src/core/commands/gather_resource_command.gd")
 const SleepCommandClass = preload("res://src/core/commands/sleep_command.gd")
 const AdvanceDayDebugCommandClass = preload("res://src/core/commands/advance_day_debug_command.gd")
+const GameScene = preload("res://scenes/game/game.tscn")
+const InspectableSignClass = preload("res://src/world/inspectable_sign.gd")
+const FarmPlotClass = preload("res://scenes/gameplay/farming/farm_plot.gd")
 
 var total_tests: int = 0
 var passed_tests: int = 0
@@ -58,6 +61,7 @@ func _init() -> void:
 	_run_player_foundation_tests()
 	_run_world_foundation_tests()
 	_run_phase4_gameplay_tests()
+	_run_interaction_prompt_persistence_tests()
 	
 	print("==================================================")
 	print("Test Results: %d passed, %d failed of %d total tests." % [passed_tests, failed_tests, total_tests])
@@ -966,4 +970,94 @@ func _run_phase4_gameplay_tests() -> void:
 	
 	runtime.shutdown_runtime()
 	runtime.queue_free()
+
+# -----------------------------------------------------------------------------
+# 9. Interaction Prompt Persistence & Presentation Separation Tests (UX-FIX-001)
+# -----------------------------------------------------------------------------
+func _run_interaction_prompt_persistence_tests() -> void:
+	print("\n--- Testing Interaction Prompt Persistence & Separation (UX-FIX-001) ---")
+	
+	var game: Node = GameScene.instantiate()
+	root.add_child(game)
+	if not game.is_node_ready():
+		game._ready()
+	
+	_assert_true(game.get_prompt_label() != null, "Prompt 1: InteractionPrompt label exists in UI layer")
+	_assert_true(game.get_toast_label() != null, "Prompt 1: InteractionToast label exists in UI layer")
+	_assert_equal(game.get_prompt_label().text, "", "Prompt 1: Prompt label starts empty")
+	_assert_true(not game.interaction_prompt_visible, "Prompt 1: Prompt initially not visible")
+	
+	# Test 1: Focused interactable -> Prompt visible with contextual text
+	var test_sign: InspectableSign = InspectableSignClass.new()
+	test_sign.prompt_text = "Inspect"
+	test_sign.inspect_text = "Ancient Road to Underhallow."
+	
+	game._on_interactable_focused(test_sign)
+	_assert_true(game.interaction_prompt_visible, "Prompt 1: Prompt marked visible on target focus")
+	_assert_equal(game.prompt_label.text, "Press [E] to Inspect", "Prompt 1: Prompt label matches 'Press [E] to Inspect'")
+	_assert_equal(game.active_interaction_target, test_sign, "Prompt 1: active_interaction_target set to test_sign")
+	
+	# Test 2: Prompt remains visible beyond 5-10 seconds of simulation time
+	for i: int in range(10):
+		game._process(1.0)
+	_assert_true(game.interaction_prompt_visible, "Prompt 2: Prompt remains visible after 10.0s elapsed")
+	_assert_equal(game.prompt_label.text, "Press [E] to Inspect", "Prompt 2: Prompt text NOT cleared after 10.0s elapsed")
+	
+	# Test 3: Target change -> Prompt updates immediately
+	var test_bush: InteractableObject = InteractableObjectClass.new()
+	test_bush.prompt_text = "Gather Berries"
+	
+	game._on_interactable_focused(test_bush)
+	_assert_equal(game.active_interaction_target, test_bush, "Prompt 3: active_interaction_target updated to test_bush")
+	_assert_equal(game.prompt_label.text, "Press [E] to Gather Berries", "Prompt 3: Prompt updates immediately to new target text")
+	
+	# Test 4: Temporary toast behavior remains independent and expires normally
+	game._show_toast("Day 2 has dawned", 2.0)
+	_assert_equal(game.toast_label.text, "Day 2 has dawned", "Toast 4: Temporary toast displayed")
+	_assert_equal(game.prompt_label.text, "Press [E] to Gather Berries", "Toast 4: Prompt unaffected by active toast")
+	
+	# Process 1.0s: toast still active
+	game._process(1.0)
+	_assert_equal(game.toast_label.text, "Day 2 has dawned", "Toast 4: Toast remains visible at 1.0s")
+	_assert_equal(game.prompt_label.text, "Press [E] to Gather Berries", "Toast 4: Prompt still visible")
+	
+	# Process another 1.5s (total 2.5s > 2.0s): toast expires, prompt remains!
+	game._process(1.5)
+	_assert_equal(game.toast_label.text, "", "Toast 4: Toast cleared when timer expires")
+	_assert_true(not game.toast_label.visible, "Toast 4: Toast hidden after timer expiration")
+	_assert_equal(game.prompt_label.text, "Press [E] to Gather Berries", "Toast 4: Persistent prompt remains visible after toast expires")
+	
+	# Test 5: Unfocus target -> Prompt hidden immediately
+	game._on_interactable_unfocused()
+	_assert_true(not game.interaction_prompt_visible, "Prompt 5: Prompt marked invisible when unfocused")
+	_assert_equal(game.prompt_label.text, "", "Prompt 5: Prompt text cleared when unfocused")
+	_assert_true(game.active_interaction_target == null, "Prompt 5: active_interaction_target is null")
+	
+	# Test 6: Interaction execution preserves prompt while target stays focused
+	game._on_interactable_focused(test_sign)
+	_assert_equal(game.prompt_label.text, "Press [E] to Inspect", "Prompt 6: Prompt shown on refocus")
+	
+	game._on_interaction_executed(test_sign)
+	_assert_equal(game.toast_label.text, "Ancient Road to Underhallow.", "Prompt 6: Sign inspect text shown in toast")
+	_assert_equal(game.prompt_label.text, "Press [E] to Inspect", "Prompt 6: Persistent prompt remains while player stays at sign")
+	
+	# Test 7: Equipped tool change dynamically updates prompt
+	var test_plot: FarmPlot = FarmPlotClass.new()
+	test_plot.grid_coord = Vector2i(0, 0)
+	test_plot.runtime = game.runtime
+	game._on_interactable_focused(test_plot)
+	
+	game.player_instance.equipped_item_id = &"tool_hoe"
+	game._on_player_equipped_changed(&"tool_hoe")
+	_assert_equal(game.prompt_label.text, "Press [E] to Till Soil", "Prompt 7: Prompt reflects equipped Hoe")
+	
+	game.player_instance.equipped_item_id = &"tool_watering_can"
+	game._on_player_equipped_changed(&"tool_watering_can")
+	_assert_equal(game.prompt_label.text, "Press [E] to Till Soil (Equip Hoe)", "Prompt 7: Prompt updates dynamically on tool switch")
+	
+	# Clean up test nodes
+	test_sign.free()
+	test_bush.free()
+	test_plot.free()
+	game.queue_free()
 
