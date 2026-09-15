@@ -98,6 +98,7 @@ Current documents include:
 * **North Star V1.0** (`NS-001`)
 * **Creative Direction V1.0** (`CD-001`)
 * **Art Direction Bible V1.0** (`AD-001`)
+* **World Bible V1.0** (`WB-001`)
 * **Agent Constitution V1.0** (`AC-001`)
 
 These documents have the highest project-level authority.
@@ -190,6 +191,7 @@ The recommended format is:
 | `NS` | North Star |
 | `CD` | Creative Direction |
 | `AD` | Art Direction Bible |
+| `WB` | World Bible |
 | `AC` | Agent Constitution |
 | `SR` | Specification Reconciliation |
 | `ETA` | Engine & Technical Architecture (`TA` superseded) |
@@ -429,6 +431,7 @@ Maintains: Document ID, Document Name, Version, Status, Authority Level, Purpose
 | **NS-001** | North Star | 0 | LOCKED | [docs/NORTH_STAR.md](file:///c:/Users/HP/Documents/Underhallow/docs/NORTH_STAR.md) |
 | **CD-001** | Creative Direction | 0 | LOCKED | [docs/CREATIVE_DIRECTION.md](file:///c:/Users/HP/Documents/Underhallow/docs/CREATIVE_DIRECTION.md) |
 | **AD-001** | Art Direction Bible | 0 | LOCKED | [docs/ART_DIRECTION_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/ART_DIRECTION_BIBLE.md) |
+| **WB-001** | World Bible | 0 | LOCKED | [docs/WORLD_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_BIBLE.md) |
 | **AC-001** | Agent Constitution | 0 | LOCKED | [docs/AGENT_CONSTITUTION.md](file:///c:/Users/HP/Documents/Underhallow/docs/AGENT_CONSTITUTION.md) |
 | **SR-001** | Specification Reconciliation | 0 | APPROVED | [docs/SPECIFICATION_RECONCILIATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md) |
 | **ETA-001** | Engine & Technical Architecture | 1 | APPROVED | [docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md) |
@@ -460,7 +463,7 @@ Maintains: Document ID, Document Name, Version, Status, Authority Level, Purpose
 
 # 29. Recommended Build Order
 
-- **Phase 1 — Authority:** North Star (`NS-001`), Creative Direction (`CD-001`), Art Direction Bible (`AD-001`), Agent Constitution (`AC-001`), Master Specification Index (`MSI-001`), Specification Reconciliation (`SR-001`).
+- **Phase 1 — Authority:** North Star (`NS-001`), Creative Direction (`CD-001`), Art Direction Bible (`AD-001`), World Bible (`WB-001`), Agent Constitution (`AC-001`), Master Specification Index (`MSI-001`), Specification Reconciliation (`SR-001`).
 - **Phase 2 — Foundation:** Engine & Technical Architecture (`ETA-001`), Core Gameplay (`CG-001`), Player Control (`PC-001`), World & Map Architecture (`WM-001`).
 - **Phase 3 — Player, World & Social Systems:** Player Progression (`PR-001`), Farming (`FB-001`), Hunting & Combat (`HU-001`), Multiplayer & Social Systems (`MS-001`), Building & Personal Island (`BI-001`), Inventory/Items/Tools/Crafting (`II-001`), Exploration & Secrets (`EX-001`), Time & Simulation (`TS-001`).
 - **Phase 4 — World Population:** NPC/Dialogue/Quest (`NQ-001`), Story/Narrative (`ST-001`), Fishing (`FI-001`).
@@ -529,6 +532,7 @@ The MSI is the primary navigation and governance layer for humans and AI agents.
 
 - **CD-001 — Creative Direction Specification V1.0:** Canonical Creative Foundation established and locked at [`docs/CREATIVE_DIRECTION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/CREATIVE_DIRECTION.md) (defines the 65% Cozy / 35% Adventure balance, the 50-hour feeling, non-intrusive slow-burn mystery, handcrafted SNES-era retro foundation + modern detail art standard, readability vs atmosphere parity, house evolution, and the supreme creative invariant: *"Never let the mystery destroy the cozy life. Never let the cozy life erase the mystery."*).
 - **AD-001 — Art Direction Bible V1.0:** Canonical Art Direction Specification established and locked at [`docs/ART_DIRECTION_BIBLE.md`](file:///c:/Users/HP/Documents/Underhallow/docs/ART_DIRECTION_BIBLE.md) (defines the fixed isometric perspective, no camera rotation in V1.0, 16-bit foundation with modern pixel-art execution, cozy medieval-fantasy architecture, mixed architectural age, 3-tier house evolution, tiered NPC animations, subtle mystery creature language, handcrafted UI/typography/icons, six visual signatures, and the Underhallow visual evaluation rule).
+- **WB-001 — World Bible V1.0:** Canonical World-Building Foundation established and locked at [`docs/WORLD_BIBLE.md`](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_BIBLE.md) (defines the island's geography, the town and landmarks, layered history, ancient civilization and disappearance, 8-stage emotional arc, reality-breaking places, subtle strange wildlife, grandparent inheritance, personal island sanctuary, non-forced hunting processing, and the core philosophy: *"The player comes to love Underhallow before they understand it"*).
 - **SR-001 — Specification Reconciliation V1.0:** Approved baseline established at [`docs/SPECIFICATION_RECONCILIATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md) (reconciled platform to Windows PC, engine to Godot, mode to single-player-first/multiplayer-native, added Guild Islands, fixed camera orientation, and updated MSI governance).
 - **ETA-001 — Engine & Technical Architecture Specification V1:** Approved foundation architecture established at [`docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md) (supersedes initial browser/Phaser baseline `TA-001`; establishes Godot + GDScript + Dedicated Game Servers + Supabase for Windows PC).
 - **WM-001 — World & Map Architecture Specification V1.0:** Drafted and established at [`docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md).
