@@ -128,24 +128,24 @@ Rather than building isolated minigames, Underhallow should become a network of 
 At the product level:
 
 ```text
-                         UNDERHALLOW
-                              │
-               ┌──────────────┴──────────────┐
-               │                             │
-          MAIN ISLAND                  PERSONAL ISLAND
-               │                             │
-        Shared world space              Player-owned space
-               │                             │
-       ┌───────┼────────┐             ┌──────┼────────┐
-       │       │        │             │      │        │
-      Town   Nature   Wilderness     Home   Farm   Expansion
-       │       │        │             │      │        │
-       └───────┼────────┘             └──────┼────────┘
-               │                             │
-               └────────── PLAYER ───────────┘
+                               UNDERHALLOW
+                                    │
+           ┌────────────────────────┼────────────────────────┐
+           │                        │                        │
+      MAIN ISLAND            PERSONAL ISLAND           GUILD ISLANDS
+           │                        │                        │
+   Shared world space       Player-owned space      Guild-owned space
+           │                        │                        │
+   ┌───────┼────────┐        ┌──────┼────────┐        ┌──────┼────────┐
+   │       │        │        │      │        │        │      │        │
+  Town   Nature Wilderness  Home   Farm  Expansion  Guild Hall Communal Personal
+   │       │        │        │      │        │        │        Farms   Plots
+   └───────┼────────┘        └──────┼────────┘        └──────┼────────┘
+           │                        │                        │
+           └──────────────────── PLAYER ─────────────────────┘
 ```
 
-The two islands have different responsibilities.
+The three spaces have distinct, complementary responsibilities.
 
 ### Main Island
 
@@ -154,6 +154,10 @@ The two islands have different responsibilities.
 ### Personal Island
 
 **Ownership, progression, farming, building and player expression.**
+
+### Guild Islands
+
+**Cooperation, communal projects, shared farming, guild progression and group identity.**
 
 ---
 

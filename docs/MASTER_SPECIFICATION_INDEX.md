@@ -124,8 +124,8 @@ These define individual major game systems.
 Planned examples include:
 
 * Player Progression (`PR-001`)
-* Farming (`FB-001` / `FA-001`)
-* Hunting & Combat (`HC-001` / `HU-001`)
+* Farming (`FB-001`)
+* Hunting & Combat (`HU-001`)
 * Multiplayer & Social Systems (`MS-001`)
 * Building & Personal Island (`BI-001`)
 * NPCs, Dialogue & Quests (`NQ-001`)
@@ -188,13 +188,13 @@ The recommended format is:
 | `NS` | North Star |
 | `AC` | Agent Constitution |
 | `SR` | Specification Reconciliation |
-| `TA` / `ETA` | Engine & Technical Architecture |
+| `ETA` | Engine & Technical Architecture (`TA` superseded) |
 | `CG` | Core Gameplay |
 | `PC` | Player Control |
 | `WM` | World & Map |
 | `PR` | Player Progression |
-| `FA` / `FB` | Farming |
-| `HC` / `HU` | Hunting & Combat |
+| `FB` | Farming |
+| `HU` | Hunting & Combat |
 | `MS` | Multiplayer & Social Systems |
 | `BI` | Building & Personal Island |
 | `NQ` | NPC / Quest |
@@ -236,6 +236,7 @@ Major changes may require dependency review and revalidation of affected systems
 
 Every specification must have one of the following statuses:
 
+* **PLANNED:** The document is identified in the roadmap but drafting has not yet begun. Implementation must not begin on un-drafted specifications.
 * **DRAFT:** The document is actively being designed. Its decisions are not yet fully authoritative.
 * **REVIEW:** The document is substantially complete and undergoing review. Production implementation should not begin unless explicitly authorized.
 * **APPROVED:** The document has been formally reviewed and approved as authoritative baseline architecture, ready to guide system design and implementation.
@@ -433,29 +434,29 @@ Maintains: Document ID, Document Name, Version, Status, Authority Level, Purpose
 | **FB-001** | Farming | 2 | DRAFT | [docs/FARMING_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/FARMING_SYSTEM_SPECIFICATION.md) |
 | **HU-001** | Hunting & Combat | 2 | DRAFT | [docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md) |
 | **MS-001** | Multiplayer & Social Systems | 2 | DRAFT | [docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md) |
-| **BI-001** | Building & Personal Island | 2 | Planned | Planned |
-| **NQ-001** | NPC, Dialogue & Quest | 2 | Planned | Planned |
-| **EX-001** | Exploration & Secrets | 2 | Planned | Planned |
-| **II-001** | Inventory, Items, Tools & Crafting | 2 | Planned | Planned |
-| **FI-001** | Fishing | 2 | Planned | Planned |
-| **TS-001** | Time, Day/Night & Simulation | 2 | Planned | Planned |
-| **EC-001** | Economy | 2 | Planned | Planned |
-| **ST-001** | Story & Narrative Architecture | 2 | Planned | Planned |
-| **UI-001** | UI / UX | 3 | Planned | Planned |
-| **AU-001** | Audio | 3 | Planned | Planned |
-| **SV-001** | Save System | 3 | Planned | Planned |
-| **AX-001** | Accessibility | 3 | Planned | Planned |
-| **IS-001** | Input Settings | 3 | Planned | Planned |
-| **IM-001** | Implementation Architecture | 4 | Future | Planned |
-| **QA-001** | QA & Testing Specification | 4 | Future | Planned |
+| **BI-001** | Building & Personal Island | 2 | PLANNED | Not yet drafted |
+| **NQ-001** | NPC, Dialogue & Quest | 2 | PLANNED | Not yet drafted |
+| **EX-001** | Exploration & Secrets | 2 | PLANNED | Not yet drafted |
+| **II-001** | Inventory, Items, Tools & Crafting | 2 | PLANNED | Not yet drafted |
+| **FI-001** | Fishing | 2 | PLANNED | Not yet drafted |
+| **TS-001** | Time, Day/Night & Simulation | 2 | PLANNED | Not yet drafted |
+| **EC-001** | Economy | 2 | PLANNED | Not yet drafted |
+| **ST-001** | Story & Narrative Architecture | 2 | PLANNED | Not yet drafted |
+| **UI-001** | UI / UX | 3 | PLANNED | Not yet drafted |
+| **AU-001** | Audio | 3 | PLANNED | Not yet drafted |
+| **SV-001** | Save System | 3 | PLANNED | Not yet drafted |
+| **AX-001** | Accessibility | 3 | PLANNED | Not yet drafted |
+| **IS-001** | Input Settings | 3 | PLANNED | Not yet drafted |
+| **IM-001** | Implementation Architecture | 4 | PLANNED | Not yet drafted |
+| **QA-001** | QA & Testing Specification | 4 | PLANNED | Not yet drafted |
 
 ---
 
 # 29. Recommended Build Order
 
-- **Phase 1 — Authority:** North Star (`NS-001`), Agent Constitution (`AC-001`), Master Specification Index (`MSI-001`).
-- **Phase 2 — Foundation:** Technical Architecture (`TA-001`), Core Gameplay (`CG-001`), Player Control (`PC-001`), World & Map Architecture (`WM-001`).
-- **Phase 3 — Player & World Systems:** Player Progression (`PR-001`), Inventory/Items/Tools/Crafting (`II-001`), Farming (`FA-001`), Hunting/Combat (`HC-001`), Building/Personal Island (`BI-001`), Exploration/Secrets (`EX-001`), Time/Simulation (`TS-001`).
+- **Phase 1 — Authority:** North Star (`NS-001`), Agent Constitution (`AC-001`), Master Specification Index (`MSI-001`), Specification Reconciliation (`SR-001`).
+- **Phase 2 — Foundation:** Engine & Technical Architecture (`ETA-001`), Core Gameplay (`CG-001`), Player Control (`PC-001`), World & Map Architecture (`WM-001`).
+- **Phase 3 — Player, World & Social Systems:** Player Progression (`PR-001`), Farming (`FB-001`), Hunting & Combat (`HU-001`), Multiplayer & Social Systems (`MS-001`), Building & Personal Island (`BI-001`), Inventory/Items/Tools/Crafting (`II-001`), Exploration & Secrets (`EX-001`), Time & Simulation (`TS-001`).
 - **Phase 4 — World Population:** NPC/Dialogue/Quest (`NQ-001`), Story/Narrative (`ST-001`), Fishing (`FI-001`).
 - **Phase 5 — Meta Systems:** Economy (`EC-001`), Save System (`SV-001`), UI/UX (`UI-001`), Audio (`AU-001`), Accessibility (`AX-001`), Input/Settings (`IS-001`).
 - **Phase 6 — Implementation Governance:** Implementation Specs (`IM-001`), QA & Testing (`QA-001`), Performance, Production Readiness.

@@ -108,24 +108,24 @@ A player should be able to transition naturally between activities.
 ---
 
 ## 6. World Structure
-Underhallow consists of two major world spaces.
+Underhallow consists of three primary world spaces:
 
-```
-                        Underhallow
-                              │
-              ┌───────────────┴───────────────┐
-              │                               │
-        MAIN ISLAND                    PERSONAL ISLAND
-              │                               │
-       Shared world hub                 Player-owned world
-              │                               │
-      ┌───────┼───────┐                ┌──────┼──────┐
-      │       │       │                │      │      │
-     Town   Nature   Coast           Farm   Home   Expansion
-      │               │
-      │             Harbor
-      │               │
-      └───────────────┘
+```text
+                                Underhallow
+                                     │
+           ┌─────────────────────────┼─────────────────────────┐
+           │                         │                         │
+      MAIN ISLAND             PERSONAL ISLAND            GUILD ISLANDS
+           │                         │                         │
+    Shared world hub         Player-owned world        Guild-owned communal
+           │                         │                         │
+   ┌───────┼───────┐          ┌──────┼──────┐           ┌──────┼──────┐
+   │       │       │          │      │      │           │      │      │
+  Town   Nature  Coast       Farm   Home  Expansion  Guild Hall Farm Plots
+   │               │                                    │
+   │             Harbor                              Harbor
+   │               │                                    │
+   └───────────────┴────────────────────────────────────┘
 ```
 
 ---
@@ -232,6 +232,20 @@ One player might create:
 - Another: A beautiful decorative garden.
 
 The island should therefore become an important form of player expression.
+
+---
+
+## 11.1 The Guild Island
+In accordance with [SR-001](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md), [WM-001](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md), and [MS-001](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md), guilds can unlock and develop a persistent, communal **Guild Island**.  
+
+The Guild Island functions as a shared cooperative haven:
+- Guild Hall housing the communal bank, war room, and trophy displays
+- Shared agricultural fields for cooperative farming
+- Communal workshops and processing facilities
+- Modular personal residential plots assigned to individual members
+- Gathering and rally docks for group expeditions
+
+The Guild Island embodies collective group investment while strictly preserving the autonomy and privacy of individual Personal Islands.
 
 ---
 
@@ -628,7 +642,7 @@ If the answer is no, it does not belong.
 
 ## 46. North Star Summary
 - Cozy, open-ended, isometric pixel-art game.
-- Dual-world structure: Shared Main Island (hub/social/exploration) + Personal Island (player-owned farm/build/expand) + Guild Islands.
+- Three-space world structure: Shared Main Island (hub/social/exploration) + Personal Island (player-owned farm/build/expand) + Guild Islands (guild-owned communal hub/farms/plots).
 - Core loop: Farm → Hunt → Build → Explore → Trade → Progress → Discover.
 - Peaceful surface layer with a deep, unsettling mystery underneath.
 - Windows PC-first, single-player-first, multiplayer-native, fun and polish before scale.

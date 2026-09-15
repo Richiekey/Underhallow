@@ -196,7 +196,7 @@ There must not be one universally optimal playstyle.
 
 # 6. World Structure
 
-Underhallow consists initially of two major world spaces:
+Underhallow consists of three primary world spaces:
 
 ```text
                   MAIN ISLAND
@@ -1405,7 +1405,7 @@ The Core Gameplay foundation is considered complete when:
 * The major gameplay pillars are defined.
 * The primary gameplay loop is defined.
 * The expedition loop is defined.
-* The two-island structure is defined.
+* The three-space world structure (Main Island, Personal Island, Guild Islands) is defined.
 * Player progression categories are defined.
 * Farming is defined at the system level.
 * Hunting/combat is defined at the system level.
@@ -1430,7 +1430,7 @@ The major decisions currently locked are:
 
 | System                | Decision                                     |
 | --------------------- | -------------------------------------------- |
-| Game structure        | Two-island open world + Guild Islands        |
+| Game structure        | Three-space open world (Main, Personal, Guild Islands) |
 | Main world            | Main Island                                  |
 | Player world          | Personal Island                              |
 | Primary roles         | Farming + Hunting                            |
