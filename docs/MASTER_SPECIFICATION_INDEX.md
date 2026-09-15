@@ -431,7 +431,7 @@ Maintains: Document ID, Document Name, Version, Status, Authority Level, Purpose
 | **PR-001** | Player Progression | 2 | DRAFT | [docs/PLAYER_PROGRESSION_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_PROGRESSION_SPECIFICATION.md) |
 | **FB-001** | Farming | 2 | DRAFT | [docs/FARMING_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/FARMING_SYSTEM_SPECIFICATION.md) |
 | **HU-001** | Hunting & Combat | 2 | DRAFT | [docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md) |
-| **MS-001** | Multiplayer & Social Systems | 2 | Planned | Planned |
+| **MS-001** | Multiplayer & Social Systems | 2 | DRAFT | [docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md) |
 | **BI-001** | Building & Personal Island | 2 | Planned | Planned |
 | **NQ-001** | NPC, Dialogue & Quest | 2 | Planned | Planned |
 | **EX-001** | Exploration & Secrets | 2 | Planned | Planned |
@@ -525,8 +525,9 @@ The MSI is the primary navigation and governance layer for humans and AI agents.
 - **PR-001 — Player Progression Specification V1.0:** Drafted and established at [`docs/PLAYER_PROGRESSION_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_PROGRESSION_SPECIFICATION.md).
 - **FB-001 — Farming System Specification V1.0:** Drafted and established at [`docs/FARMING_SYSTEM_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/FARMING_SYSTEM_SPECIFICATION.md).
 - **HU-001 — Hunting & Combat System Specification V1.0:** Drafted and established at [`docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md).
+- **MS-001 — Multiplayer & Social Systems Specification V1.0:** Drafted and established at [`docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md).
 - **Next Planned Specification (Phase 3):**
-  - **MS-001 — Multiplayer & Social Systems Specification V1.0**
   - **II-001 — Inventory, Items, Tools & Crafting Specification V1.0**
   - **BI-001 — Building & Personal Island Specification V1.0**
+  - **TS-001 — Time, Day/Night & Simulation Specification V1.0**
 
