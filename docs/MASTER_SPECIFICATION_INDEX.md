@@ -128,6 +128,7 @@ These define individual major game systems.
 
 Planned examples include:
 
+* Main Island Design (`MI-001`)
 * Player Progression (`PR-001`)
 * Farming (`FB-001`)
 * Hunting & Combat (`HU-001`)
@@ -202,6 +203,7 @@ The recommended format is:
 | `WM` | World & Map |
 | `NB` | Narrative Bible |
 | `CB` | Character Bible |
+| `MI` | Main Island |
 | `PR` | Player Progression |
 | `FB` | Farming |
 | `HU` | Hunting & Combat |
@@ -445,6 +447,7 @@ Maintains: Document ID, Document Name, Version, Status, Authority Level, Purpose
 | **WM-001** | World & Map Architecture | 1 | DRAFT | [docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md) |
 | **NB-001** | Narrative Bible | 1 | DRAFT | [docs/NARRATIVE_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/NARRATIVE_BIBLE.md) |
 | **CB-001** | Character Bible | 1 | DRAFT | [docs/CHARACTER_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/CHARACTER_BIBLE.md) |
+| **MI-001** | Main Island Design | 2 | DRAFT | [docs/MAIN_ISLAND_DESIGN_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/MAIN_ISLAND_DESIGN_SPECIFICATION.md) |
 | **PR-001** | Player Progression | 2 | DRAFT | [docs/PLAYER_PROGRESSION_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_PROGRESSION_SPECIFICATION.md) |
 | **FB-001** | Farming | 2 | DRAFT | [docs/FARMING_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/FARMING_SYSTEM_SPECIFICATION.md) |
 | **HU-001** | Hunting & Combat | 2 | DRAFT | [docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md) |
@@ -471,7 +474,7 @@ Maintains: Document ID, Document Name, Version, Status, Authority Level, Purpose
 
 - **Phase 1 — Authority:** North Star (`NS-001`), Creative Direction (`CD-001`), Art Direction Bible (`AD-001`), World Bible (`WB-001`), Agent Constitution (`AC-001`), Master Specification Index (`MSI-001`), Specification Reconciliation (`SR-001`).
 - **Phase 2 — Foundation:** Engine & Technical Architecture (`ETA-001`), Core Gameplay (`CG-001`), Player Control (`PC-001`), World & Map Architecture (`WM-001`), Narrative Bible (`NB-001`), Character Bible (`CB-001`).
-- **Phase 3 — Player, World & Social Systems:** Player Progression (`PR-001`), Farming (`FB-001`), Hunting & Combat (`HU-001`), Multiplayer & Social Systems (`MS-001`), Building & Personal Island (`BI-001`), Inventory/Items/Tools/Crafting (`II-001`), Exploration & Secrets (`EX-001`), Time & Simulation (`TS-001`).
+- **Phase 3 — Player, World & Social Systems:** Main Island Design (`MI-001`), Player Progression (`PR-001`), Farming (`FB-001`), Hunting & Combat (`HU-001`), Multiplayer & Social Systems (`MS-001`), Building & Personal Island (`BI-001`), Inventory/Items/Tools/Crafting (`II-001`), Exploration & Secrets (`EX-001`), Time & Simulation (`TS-001`).
 - **Phase 4 — World Population:** NPC/Dialogue/Quest (`NQ-001`), Story/Narrative (`ST-001`), Fishing (`FI-001`).
 - **Phase 5 — Meta Systems:** Economy (`EC-001`), Save System (`SV-001`), UI/UX (`UI-001`), Audio (`AU-001`), Accessibility (`AX-001`), Input/Settings (`IS-001`).
 - **Phase 6 — Implementation Governance:** Implementation Specs (`IA-001`), QA & Testing (`QA-001`), Performance, Production Readiness.
@@ -548,9 +551,10 @@ The MSI is the primary navigation and governance layer for humans and AI agents.
 - **FB-001 — Farming System Specification V1.0:** Drafted and established at [`docs/FARMING_SYSTEM_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/FARMING_SYSTEM_SPECIFICATION.md).
 - **HU-001 — Hunting & Combat System Specification V1.0:** Drafted and established at [`docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md).
 - **MS-001 — Multiplayer & Social Systems Specification V1.0:** Drafted and established at [`docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md).
+- **MI-001 — Main Island Design Specification V1.0:** Draft design baseline established at [`docs/MAIN_ISLAND_DESIGN_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/MAIN_ISLAND_DESIGN_SPECIFICATION.md) (defines communal world identity, 7–9 major regional frameworks, ~50% early game accessibility, natural transitions, landmark navigation, intentional empty space/wilderness, non-lethal defeat returning to Personal Island, non-forced hunting processing, layered historical depth, and the core principle: *"The main island of Underhallow should feel like a place you could spend years getting to know rather than a map you are expected to complete"*). Note upcoming counterpart: Personal Island Design Specification V1.0.
 - **IA-001 — Implementation Architecture Specification V1.1:** Advanced to `REVIEW` status at [`docs/IMPLEMENTATION_ARCHITECTURE_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/IMPLEMENTATION_ARCHITECTURE_SPECIFICATION.md) (defines decision classification framework, Godot 4.x + GDScript project structure, domain state boundaries, input actions, GameTime simulation, persistence abstraction, V0.1 dependency sequence, and Vertical Slice V0.1 "The First Day" scope).
 - **Next Planned Specification (Phase 3):**
+  - **BI-001 — Building & Personal Island Specification V1.0** (Personal Island Design Specification V1.0)
   - **II-001 — Inventory, Items, Tools & Crafting Specification V1.0**
-  - **BI-001 — Building & Personal Island Specification V1.0**
   - **TS-001 — Time, Day/Night & Simulation Specification V1.0**
 
