@@ -447,7 +447,7 @@ Maintains: Document ID, Document Name, Version, Status, Authority Level, Purpose
 | **SV-001** | Save System | 3 | PLANNED | Not yet drafted |
 | **AX-001** | Accessibility | 3 | PLANNED | Not yet drafted |
 | **IS-001** | Input Settings | 3 | PLANNED | Not yet drafted |
-| **IA-001** | Implementation Architecture | 4 | DRAFT | [docs/IMPLEMENTATION_ARCHITECTURE_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/IMPLEMENTATION_ARCHITECTURE_SPECIFICATION.md) |
+| **IA-001** | Implementation Architecture | 4 | REVIEW | [docs/IMPLEMENTATION_ARCHITECTURE_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/IMPLEMENTATION_ARCHITECTURE_SPECIFICATION.md) |
 | **QA-001** | QA & Testing Specification | 4 | PLANNED | Not yet drafted |
 
 ---
@@ -528,7 +528,7 @@ The MSI is the primary navigation and governance layer for humans and AI agents.
 - **FB-001 — Farming System Specification V1.0:** Drafted and established at [`docs/FARMING_SYSTEM_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/FARMING_SYSTEM_SPECIFICATION.md).
 - **HU-001 — Hunting & Combat System Specification V1.0:** Drafted and established at [`docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md).
 - **MS-001 — Multiplayer & Social Systems Specification V1.0:** Drafted and established at [`docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md).
-- **IA-001 — Implementation Architecture Specification V1:** Drafted and established at [`docs/IMPLEMENTATION_ARCHITECTURE_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/IMPLEMENTATION_ARCHITECTURE_SPECIFICATION.md) (defines Godot + GDScript project structure, domain state boundaries, input actions, GameTime simulation, persistence abstraction, testing rules, and Vertical Slice V0.1 "The First Day" scope).
+- **IA-001 — Implementation Architecture Specification V1.1:** Advanced to `REVIEW` status at [`docs/IMPLEMENTATION_ARCHITECTURE_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/IMPLEMENTATION_ARCHITECTURE_SPECIFICATION.md) (defines decision classification framework, Godot 4.x + GDScript project structure, domain state boundaries, input actions, GameTime simulation, persistence abstraction, V0.1 dependency sequence, and Vertical Slice V0.1 "The First Day" scope).
 - **Next Planned Specification (Phase 3):**
   - **II-001 — Inventory, Items, Tools & Crafting Specification V1.0**
   - **BI-001 — Building & Personal Island Specification V1.0**
