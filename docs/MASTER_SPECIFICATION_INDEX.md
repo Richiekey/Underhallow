@@ -116,6 +116,7 @@ Current documents include:
 * **Player Control, Movement & Interaction Specification V1.0** (`PC-001`)
 * **World & Map Architecture Specification V1.0** (`WM-001`)
 * **Narrative Bible V1.0** (`NB-001`)
+* **Character Bible V1.0** (`CB-001`)
 
 Additional foundation documents may be added when necessary.
 
@@ -200,6 +201,7 @@ The recommended format is:
 | `PC` | Player Control |
 | `WM` | World & Map |
 | `NB` | Narrative Bible |
+| `CB` | Character Bible |
 | `PR` | Player Progression |
 | `FB` | Farming |
 | `HU` | Hunting & Combat |
@@ -442,6 +444,7 @@ Maintains: Document ID, Document Name, Version, Status, Authority Level, Purpose
 | **PC-001** | Player Control, Movement & Interaction | 1 | DRAFT | [docs/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md) |
 | **WM-001** | World & Map Architecture | 1 | DRAFT | [docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md) |
 | **NB-001** | Narrative Bible | 1 | DRAFT | [docs/NARRATIVE_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/NARRATIVE_BIBLE.md) |
+| **CB-001** | Character Bible | 1 | DRAFT | [docs/CHARACTER_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/CHARACTER_BIBLE.md) |
 | **PR-001** | Player Progression | 2 | DRAFT | [docs/PLAYER_PROGRESSION_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_PROGRESSION_SPECIFICATION.md) |
 | **FB-001** | Farming | 2 | DRAFT | [docs/FARMING_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/FARMING_SYSTEM_SPECIFICATION.md) |
 | **HU-001** | Hunting & Combat | 2 | DRAFT | [docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md) |
@@ -467,7 +470,7 @@ Maintains: Document ID, Document Name, Version, Status, Authority Level, Purpose
 # 29. Recommended Build Order
 
 - **Phase 1 — Authority:** North Star (`NS-001`), Creative Direction (`CD-001`), Art Direction Bible (`AD-001`), World Bible (`WB-001`), Agent Constitution (`AC-001`), Master Specification Index (`MSI-001`), Specification Reconciliation (`SR-001`).
-- **Phase 2 — Foundation:** Engine & Technical Architecture (`ETA-001`), Core Gameplay (`CG-001`), Player Control (`PC-001`), World & Map Architecture (`WM-001`), Narrative Bible (`NB-001`).
+- **Phase 2 — Foundation:** Engine & Technical Architecture (`ETA-001`), Core Gameplay (`CG-001`), Player Control (`PC-001`), World & Map Architecture (`WM-001`), Narrative Bible (`NB-001`), Character Bible (`CB-001`).
 - **Phase 3 — Player, World & Social Systems:** Player Progression (`PR-001`), Farming (`FB-001`), Hunting & Combat (`HU-001`), Multiplayer & Social Systems (`MS-001`), Building & Personal Island (`BI-001`), Inventory/Items/Tools/Crafting (`II-001`), Exploration & Secrets (`EX-001`), Time & Simulation (`TS-001`).
 - **Phase 4 — World Population:** NPC/Dialogue/Quest (`NQ-001`), Story/Narrative (`ST-001`), Fishing (`FI-001`).
 - **Phase 5 — Meta Systems:** Economy (`EC-001`), Save System (`SV-001`), UI/UX (`UI-001`), Audio (`AU-001`), Accessibility (`AX-001`), Input/Settings (`IS-001`).
@@ -537,6 +540,7 @@ The MSI is the primary navigation and governance layer for humans and AI agents.
 - **AD-001 — Art Direction Bible V1.0:** Canonical Art Direction Specification established and locked at [`docs/ART_DIRECTION_BIBLE.md`](file:///c:/Users/HP/Documents/Underhallow/docs/ART_DIRECTION_BIBLE.md) (defines the fixed isometric perspective, no camera rotation in V1.0, 16-bit foundation with modern pixel-art execution, cozy medieval-fantasy architecture, mixed architectural age, 3-tier house evolution, tiered NPC animations, subtle mystery creature language, handcrafted UI/typography/icons, six visual signatures, and the Underhallow visual evaluation rule).
 - **WB-001 — World Bible V1.0:** Canonical World-Building Foundation established and locked at [`docs/WORLD_BIBLE.md`](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_BIBLE.md) (defines the island's geography, the town and landmarks, layered history, ancient civilization and disappearance, 8-stage emotional arc, reality-breaking places, subtle strange wildlife, grandparent inheritance, personal island sanctuary, non-forced hunting processing, and the core philosophy: *"The player comes to love Underhallow before they understand it"*).
 - **NB-001 — Narrative Bible V1.0:** Foundation narrative specification established at [`docs/NARRATIVE_BIBLE.md`](file:///c:/Users/HP/Documents/Underhallow/docs/NARRATIVE_BIBLE.md) (defines the 6-phase mystery curve, player arrival and vague past, grandparent investigation legacy, NPC living history, the Ten Narrative Laws, ending philosophy, and core narrative balance: *"Cozy surface. Mystical middle. Deep mystery underneath"*).
+- **CB-001 — Character Bible V1.0:** Foundation character specification established at [`docs/CHARACTER_BIBLE.md`](file:///c:/Users/HP/Documents/Underhallow/docs/CHARACTER_BIBLE.md) (defines 30–50 memorable residents, 3-tier depth structure, independent routines, believable flaws, fragmented mystery knowledge, imperfect living memory, romance rules, and core philosophy: *"Underhallow's characters should feel like people who have their own lives, histories, and reasons for staying here rather than NPCs who exist only for the player"*).
 - **SR-001 — Specification Reconciliation V1.0:** Approved baseline established at [`docs/SPECIFICATION_RECONCILIATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md) (reconciled platform to Windows PC, engine to Godot, mode to single-player-first/multiplayer-native, added Guild Islands, fixed camera orientation, and updated MSI governance).
 - **ETA-001 — Engine & Technical Architecture Specification V1:** Approved foundation architecture established at [`docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md) (supersedes initial browser/Phaser baseline `TA-001`; establishes Godot + GDScript + Dedicated Game Servers + Supabase for Windows PC).
 - **WM-001 — World & Map Architecture Specification V1.0:** Drafted and established at [`docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md).
