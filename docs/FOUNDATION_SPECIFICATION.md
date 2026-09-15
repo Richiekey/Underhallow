@@ -1067,30 +1067,28 @@ But competition must never become the primary definition of player success.
 
 ---
 
-# 37. Social Boundary
+# 37. Social & Cooperative Dimension
 
-Social features are future-facing.
+Underhallow is single-player-first, multiplayer-native. While solo play is completely self-contained and uncompromised, social systems natively support shared play:
 
-Potential systems:
+Core social systems:
 
-* Chat
-* Guilds
-* Island visits
-* Gifts
-* Cooperative activities
-* Community events
+* In-game chat channels (proximity, party, guild, whisper)
+* Guilds (~50 members) and persistent Guild Islands
+* Island visits and cooperative permissions
+* Direct peer-to-peer trading and marketplace
+* Cooperative farming and shared hunting expeditions
+* Seasonal community events
 
-Initial game development should not depend on these systems.
+Solo players are never penalized or gated, but systems naturally scale when players choose to play together. Detailed rules are defined in `MS-001`.
 
 ---
 
-# 38. Multiplayer Boundary
+# 38. Multiplayer Architecture Boundary
 
-The first game is single-player.
+Underhallow is single-player-first, multiplayer-native.
 
-However, systems should have clean boundaries so future multiplayer can be introduced without rewriting the entire game.
-
-This means we should separate concepts such as:
+Systems maintain clean, decoupled state boundaries so that core gameplay functions identically in solo play and real-time cooperative multiplayer:
 
 ```text
 Player
@@ -1102,9 +1100,7 @@ Items
 Progression
 ```
 
-rather than creating one enormous coupled player/world object.
-
-The exact multiplayer architecture is deferred.
+State mutations are evaluated through authoritative dedicated servers, with Supabase providing persistent identity, guild, property, and economy storage. Detailed network architecture and synchronization protocols are governed by `ETA-001` and `MS-001`.
 
 ---
 
@@ -1712,7 +1708,7 @@ For example:
 | Inventory        | Data structures/storage               |
 | Story state      | Quest/narrative state machine         |
 | Persistence      | Database/save architecture            |
-| Browser game     | Runtime/build/deployment architecture |
+| Windows PC game (Godot) | Runtime/build/deployment architecture |
 
 We should **not skip this boundary**.
 

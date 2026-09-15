@@ -394,6 +394,12 @@ Farming cooperatively with friends or guildmates is designed to be joyful, effic
   * Farming Mastery XP.
   * +1 Social Karma Token.
 
+### 17.3 Offline Simulation & State Catch-Up
+In accordance with Invariant 9, `ETA-001`, and `TS-001`:
+* Communal crops and personal farm grids simulate deterministically against authoritative `GameTime`.
+* When an island instance is unloaded or all members are offline, real-time tick accumulation pauses on the server. Upon any player loading the island, the server executes a fast-forward catch-up calculation for all elapsed `GameTime` hours, maturing crops and updating water depletion without requiring active 24/7 background CPU simulation.
+
+
 ---
 
 # 18. Cooperative Hunting & Combat Mechanics

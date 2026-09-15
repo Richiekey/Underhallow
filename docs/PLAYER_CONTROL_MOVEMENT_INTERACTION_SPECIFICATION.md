@@ -440,7 +440,7 @@ They can therefore:
 * Be picked up
 * Participate in world interactions
 
-The system should avoid creating excessive numbers of persistent objects that could negatively affect browser performance.
+The system should avoid creating excessive numbers of persistent objects that could negatively affect client rendering performance.
 
 ---
 
@@ -1129,7 +1129,7 @@ However, the input abstraction should avoid making future controller support imp
 
 The initial control target is:
 
-> **Desktop browser + keyboard + mouse**
+> **Windows PC desktop + keyboard + mouse**
 
 ---
 
@@ -1227,7 +1227,7 @@ Orientation matters for tools, combat and relevant environmental interactions.
 
 ### Invariant 6 — No Permanent Camera Chaos
 
-Camera rotation and zoom remain controlled.
+Camera rotation is disabled in V1; zoom remains controlled, smooth, and fixed to the isometric orientation.
 
 ### Invariant 7 — No Permanent Grid Overlay
 
@@ -1247,7 +1247,7 @@ Gameplay systems operate on actions rather than directly depending on physical i
 
 ### Invariant 11 — Desktop First
 
-V1 prioritizes browser desktop controls.
+V1 prioritizes Windows PC desktop controls (keyboard + mouse, with controller-ready input abstraction).
 
 ### Invariant 12 — Future Expansion
 

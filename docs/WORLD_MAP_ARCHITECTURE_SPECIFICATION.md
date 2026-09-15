@@ -1170,7 +1170,7 @@ The world architecture must remain compatible with the established technical arc
 
 Implementation must account for:
 
-* browser performance;
+* target PC performance (stable 60 FPS in Godot);
 * asset loading;
 * map segmentation;
 * persistence;
@@ -1178,10 +1178,10 @@ Implementation must account for:
 * entity management;
 * rendering;
 * save data;
-* future multiplayer/social functionality;
+* real-time cooperative multiplayer, parties, and guild islands;
 * future world expansion.
 
-Technical implementation details belong in TA-001 and later implementation specifications.
+Technical implementation details belong in ETA-001 and later implementation specifications.
 
 ---
 
@@ -1230,7 +1230,7 @@ WM-001 provides world-level requirements for:
 * UI/UX (`UI-001`)
 * Audio (`AU-001`)
 * Accessibility (`AX-001`)
-* Technical Architecture (`TA-001`)
+* Engine & Technical Architecture (`ETA-001`)
 
 ---
 
@@ -1239,7 +1239,7 @@ WM-001 provides world-level requirements for:
 The following are authoritative constraints.
 
 ### WM-I01
-Underhallow initially consists of a Main Island and Personal Islands.
+Underhallow initially consists of a Main Island, Personal Islands, and Guild Islands.
 
 ### WM-I02
 The Main Island is the primary shared adventure space.
@@ -1287,7 +1287,7 @@ Supporting procedural techniques may be used for controlled variation.
 World simulation uses hybrid persistence and resource-specific regeneration.
 
 ### WM-I17
-The world supports four camera orientations.
+The world uses a fixed isometric camera orientation in V1 with zoom support (camera rotation disabled per SR-001 and ETA-001).
 
 ### WM-I18
 The architecture supports future world expansion.

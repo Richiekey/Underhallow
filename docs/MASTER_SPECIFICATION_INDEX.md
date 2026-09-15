@@ -125,7 +125,8 @@ Planned examples include:
 
 * Player Progression (`PR-001`)
 * Farming (`FA-001`)
-* Hunting & Combat (`HC-001`)
+* Hunting & Combat (`HC-001` / `HU-001`)
+* Multiplayer & Social Systems (`MS-001`)
 * Building & Personal Island (`BI-001`)
 * NPCs, Dialogue & Quests (`NQ-001`)
 * Exploration & Secrets (`EX-001`)
@@ -154,7 +155,6 @@ Examples include:
 * Performance
 * Analytics
 * Error Handling
-* Multiplayer/Social Systems when eventually introduced
 
 ---
 
@@ -238,6 +238,7 @@ Every specification must have one of the following statuses:
 
 * **DRAFT:** The document is actively being designed. Its decisions are not yet fully authoritative.
 * **REVIEW:** The document is substantially complete and undergoing review. Production implementation should not begin unless explicitly authorized.
+* **APPROVED:** The document has been formally reviewed and approved as authoritative baseline architecture, ready to guide system design and implementation.
 * **LOCKED:** The document is authoritative. Agents must follow it unless an approved change process modifies it.
 * **DEPRECATED:** The document has been intentionally retired. It remains available for historical reference but must not guide new implementation.
 * **SUPERSEDED:** The document has been replaced by a newer specification. The replacement document must be identified.

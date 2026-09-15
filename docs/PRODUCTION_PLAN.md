@@ -7,10 +7,12 @@
 **Version:** 1.0  
 **Status:** Baseline Implementation Roadmap (Layer 5)  
 **Parent Documents:**  
-- [Underhallow North Star V1.0](file:///c:/Users/HP/Documents/Underhallow/docs/NORTH_STAR.md)  
-- [Underhallow Foundation Specification V1.0](file:///c:/Users/HP/Documents/Underhallow/docs/FOUNDATION_SPECIFICATION.md)  
-- [Underhallow Technical Architecture Specification V1.0](file:///c:/Users/HP/Documents/Underhallow/docs/TECHNICAL_ARCHITECTURE.md)  
-- [Underhallow Agent Constitution V1.0](file:///c:/Users/HP/Documents/Underhallow/docs/AGENT_CONSTITUTION.md)  
+- [Underhallow North Star V1.0 (NS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/NORTH_STAR.md)  
+- [Underhallow Foundation Specification V1.0 (FS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/FOUNDATION_SPECIFICATION.md)  
+- [Specification Reconciliation V1.0 (SR-001)](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md)  
+- [Engine & Technical Architecture Specification V1 (ETA-001)](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)  
+- [Multiplayer & Social Systems Specification V1.0 (MS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md)  
+- [Underhallow Agent Constitution V1.0 (AC-001)](file:///c:/Users/HP/Documents/Underhallow/docs/AGENT_CONSTITUTION.md)  
 
 ---
 
@@ -18,50 +20,53 @@
 
 The Production Plan defines **what gets built, in what exact sequence, and how each milestone is verified** before progressing to the next.
 
-In accordance with **Technical Architecture Section 50 & 100–103**, development proceeds vertically rather than horizontally.
+In accordance with **ETA-001** and **Foundation Spec Section 51**, development proceeds vertically rather than horizontally, using Godot on Windows PC as the primary engine.
 
 ---
 
 # 1. Master Phase Roadmap
 
 ```text
-PHASE 0: TOOLCHAIN & ARCHITECTURE SCAFFOLDING
-  ├── Vite + TypeScript + Phaser 3 + Vitest setup
-  ├── Domain directory structure (src/core/, src/world/, src/rendering/, etc.)
-  └── TypeScript strict configuration & test runner
+PHASE 0: TOOLCHAIN & GODOT SCAFFOLDING
+  ├── Godot 4.x project configuration (project.godot, .editorconfig, .gitignore)
+  ├── Domain directory structure (src/core/, src/world/, src/rendering/, src/network/, etc.)
+  └── GUT (Godot Unit Test) framework & CI headless test runner
        │
        ▼
 PHASE 1: RENDERING & WORLD PROTOTYPE (THE VISUAL GATE)
   ├── 2:1 Dimetric Isometric coordinate transform (world <-> screen)
-  ├── Isometric tile rendering & layer system
-  ├── Depth sorting engine (Y/Z depth layering for player, trees, props)
-  ├── Player controller (WASD/Arrow keys, collision bounds)
-  ├── Isometric camera follower & integer pixel-art scaling
-  └── PROTOTYPE GATE EVALUATION (Section 101)
+  ├── Godot TileMapLayer system (isometric tile rendering & layer management)
+  ├── Y-sort depth engine (Y/Z depth layering for player, trees, buildings, props)
+  ├── Player controller (WASD/Arrow keys, continuous movement, collision boundaries)
+  ├── Fixed isometric camera with smooth zoom & integer pixel-art scaling
+  └── PROTOTYPE GATE EVALUATION (ETA-001 Section 45)
        │
        ▼
 PHASE 2: CORE RUNTIME & STATE SIMULATION
   ├── Decoupled GameState & PlayerState (truth vs representation)
-  ├── GameTime system (Day, Hour, Minute ticks)
-  ├── Centralized InputManager & EventBus
-  └── Spatial Interaction Raycast/Probe
+  ├── Deterministic GameTime simulation clock (Day, Hour, Minute ticks)
+  ├── Centralized InputManager & Event Signals
+  └── Spatial Interaction Raycast/Probe (E key contextual interaction)
        │
        ▼
 PHASE 3: DUAL-WORLD & PERSONAL ISLAND
   ├── Main Island Town Square map slice
   ├── Personal Island Starter Grid & Cabin
+  ├── Guild Island persistent template & harbor
   └── Harbor Ferry skiff scene transition
        │
        ▼
 PHASE 4: FIRST VERTICAL SLICE (CORE PLAYABLE LOOP)
-  ├── Farming System: Hoe tilling, watering, carrot seed planting, harvest
-  ├── Inventory System: Hotbar (1-8), slot stacking, item registry
-  ├── Building System: Path & fence tile-snapping placement
+  ├── Farming System: Hoe tilling, watering, seed planting, growth stages, harvest
+  ├── Hunting System: Creature tracking, ranged/melee attacks, non-lethal defeat, harvest
+  ├── Inventory System: Hotbar (1-8), slot stacking, item data registry (no stamina meter)
+  ├── Building System: Path & fence tile-snapping placement, structure ghosting
+  ├── Multiplayer Foundation: Dedicated server loop, 2-player co-op test, party formation
   ├── Narrative Slice: Clementine NPC dialogue & first objective
-  └── Local Persistence: IndexedDB save & load round-trip
+  └── Persistence: Local save & Supabase cloud state round-trip
        │
        ▼
-PHASE 5: HUMAN QA & VERTICAL SLICE SUCCESS TEST (Section 52)
+PHASE 5: HUMAN QA & VERTICAL SLICE SUCCESS TEST
 ```
 
 ---
@@ -69,57 +74,57 @@ PHASE 5: HUMAN QA & VERTICAL SLICE SUCCESS TEST (Section 52)
 # 2. Phase 0: Toolchain & Repository Scaffolding (Immediate)
 
 ### Deliverables:
-1. `package.json` with dependencies:
-   - `phaser` (Phaser 3.87+ for HTML5 WebGL/Canvas game runtime)
-   - `typescript` (Strict type safety)
-   - `vite` (Lightning-fast dev server & HMR)
-   - `vitest` (High-speed unit & integration test runner)
-2. `tsconfig.json` with strict mode, path aliases (`@core/*`, `@world/*`, `@rendering/*`, `@systems/*`, etc.).
-3. `vite.config.ts` configured for pixel-art asset handling and game canvas packaging.
-4. Clean initial directory tree conforming to **Tech Arch Section 76**.
-5. Automated smoke test (`pnpm test` / `npm test`) verifying headless execution.
+1. `project.godot` configured for Windows PC target:
+   - Display: 1920x1080 viewport, integer pixel-art scaling (`canvas_items` / `fractional_zoom_threshold`).
+   - Rendering: Compatibility / Forward+ with pixel snap enabled.
+   - Input Map: Directional vectors (`move_up`, `move_down`, `move_left`, `move_right`), `interact` (E), `use_tool` (LMB), `cancel` (RMB/Esc).
+2. GUT (Godot Unit Testing) addon installed in `addons/gut/` for automated unit/integration test suites.
+3. Directory tree conforming to **ETA-001 Section 17**:
+   - `src/core/` (GameTime, state, signals)
+   - `src/world/` (tilemaps, islands, regions)
+   - `src/player/` (controller, camera, interaction)
+   - `src/systems/` (farming, hunting, building, inventory)
+   - `src/network/` (dedicated server, client RPCs, party, trade)
+   - `src/data/` (resource definitions for items, crops, creatures)
+4. Headless automated smoke test (`godot --headless -s addons/gut/gut_cmdln.gd`) verifying clean boot.
 
 ---
 
-# 3. Phase 1: Rendering & World Prototype Specification (The Gate)
+# 3. Phase 1: Rendering & World Prototype (The Visual Gate)
 
-The goal of Phase 1 is to answer the **6 Prototype Gate Questions (Section 101)**:
-1. **Visual:** Does this actually look like Underhallow?
-2. **Technical:** Can the browser render the intended world at 60 FPS smoothly?
-3. **Movement:** Does movement feel good and responsive in isometric space?
-4. **Camera:** Does the isometric perspective feel natural?
-5. **Depth:** Do buildings, trees, and characters layer correctly without clipping artifacts?
-6. **Art scale:** Does the character size feel correct relative to the environment?
+The goal of Phase 1 is to answer the **6 Prototype Gate Questions**:
+1. **Visual:** Does this actually look and feel like Underhallow?
+2. **Technical:** Does the Godot renderer achieve a solid, stable 60 FPS with integer pixel-art scaling?
+3. **Movement:** Does continuous 8-directional movement feel responsive, fluid, and comfortable?
+4. **Camera:** Does the fixed isometric perspective feel natural with zoom controls (rotation disabled)?
+5. **Depth:** Do buildings, trees, and characters sort cleanly via Y-sort without visual clipping?
+6. **Art scale:** Does the character size feel harmonious relative to the environment and structures?
 
 ### Technical Components:
-- **`src/rendering/iso/IsoMath.ts`**: Pure mathematical transforms:
-  - `worldToScreen(x, y, z)`
-  - `screenToWorld(screenX, screenY)`
-  - `getTileIndex(x, y)`
-- **`src/rendering/iso/DepthSort.ts`**: Depth sorting comparator:
-  - `depth = (tileX + tileY) * 1000 + z * 10 + layerOffset`
-- **`src/rendering/scenes/WorldScene.ts`**: Active Phaser Scene managing the tilemap, sprite groups, and render loop.
-- **`src/player/movement/PlayerMovement.ts`**: 8-directional input converted to isometric movement vectors with normalized velocity.
-- **Mock Environment:** Isometric grass terrain, cobblestone path, rustic cabin, oak trees, and player sprite with running/idle states.
+- **`src/rendering/iso/iso_math.gd`**: Coordinate conversions between world, tile, and screen coordinates.
+- **`src/world/iso_tile_map.gd`**: TileMapLayer management for terrain, paths, foliage, and structures.
+- **`src/player/player_controller.gd`**: Continuous isometric movement controller with collision detection.
+- **`src/player/iso_camera.gd`**: Camera2D with fixed isometric angle, smooth tracking, and clamped zoom tiers.
+- **Mock Environment:** Isometric grass terrain, cobblestone path, rustic cabin, oak trees, and animated player sprite.
 
 ---
 
 # 4. Phase 2: Core Runtime & State Architecture
 
 ### Deliverables:
-- **`src/core/state/GameState.ts`**: Pure serializable data model:
-  - `PlayerState` (position, direction, health, energy, inventory)
-  - `WorldState` (currentMapId, modifiedTiles, placedObjects)
-  - `TimeState` (day, hour, minute, tickCount)
-- **`src/core/time/GameClock.ts`**: Deterministic simulation clock with event dispatchers for time ticks and daily transitions.
-- **`src/core/events/EventBus.ts`**: Strongly typed decoupled event bus.
-- **`src/player/interaction/InteractionSystem.ts`**: Detects interactable targets facing the player.
+- **`src/core/state/game_state.gd`**: Authoritative serializable state models:
+  - `PlayerState` (position, direction, health, inventory, progression — strictly no stamina meter).
+  - `WorldState` (current_island_id, modified_tiles, placed_objects).
+  - `TimeState` (day, hour, minute, tick_count).
+- **`src/core/time/game_clock.gd`**: Deterministic simulation clock dispatching minute/hour/day signals.
+- **`src/core/events/game_events.gd`**: Strongly typed global event bus for system decoupling.
+- **`src/player/interaction/interaction_detector.gd`**: Detects contextual interactable entities in front of the player.
 
 ---
 
 # 5. Phase 3 & 4: The First Vertical Slice
 
-Delivering the complete loop described in **Foundation Spec Section 51**:
+Delivering the complete gameplay loop described in **Foundation Spec Section 51**:
 ```text
 Wake up at Personal Island Homestead
        ↓
@@ -131,13 +136,13 @@ Arrive at Town Square
        ↓
 Talk to Clementine at General Store
        ↓
-Gather wild berries in the edge forest
+Gather wild berries in the edge forest & track a forest hare
        ↓
 Ferry back to Personal Island
        ↓
 Harvest mature crop & place rustic fence path
        ↓
-Save Game (persist to IndexedDB)
+Save Game (persist locally and sync to Supabase)
 ```
 
 ---
@@ -145,6 +150,6 @@ Save Game (persist to IndexedDB)
 # 6. Verification & Quality Gates
 
 Each phase ends with a formal review:
-- **Automated Verification:** `npm run build` and `npm test` pass with 0 errors.
-- **Browser Profiling:** Stable 60 FPS in Chrome, Firefox, and Edge.
-- **Human QA Evaluation:** Direct playtest against Section 52 criteria.
+- **Automated Verification:** Headless GUT test suite executes with 0 failures (`--headless`).
+- **Engine Performance Profiling:** Stable 60 FPS on target Windows PC hardware.
+- **Human QA Evaluation:** Direct playtest against Foundation Spec Section 52 acceptance criteria.

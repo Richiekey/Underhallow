@@ -166,7 +166,7 @@ Potential functions include:
 - Story progression
 - Seasonal events
 - Player gathering
-- Future multiplayer activity
+- Cooperative multiplayer activity & community gatherings
 
 The Town Square should feel alive.  
 It should contain small environmental details that reward simply walking around and observing the world.
@@ -235,19 +235,16 @@ The island should therefore become an important form of player expression.
 
 ---
 
-## 12. Visiting Other Players
-Multiplayer is not part of the initial game.  
-However, the world should be designed with eventual social interaction in mind.  
-The long-term vision includes players being able to visit another player's island.  
+## 12. Visiting Other Players & Cooperative Social Play
+Underhallow is single-player-first, multiplayer-native. The single-player experience is complete and satisfying on its own, but players can invite friends to visit their Personal Island and share their world.
 
-Initial envisioned interactions include:
-- Walking around
-- Exploring
-- Socializing
-- Leaving gifts
+Envisioned interactions include:
+- Walking around and exploring together
+- Socializing and showing off homestead designs
+- Leaving gifts and trading items
+- Cooperative farming (watering, planting assistance) and shared expeditions
 
-Future interactions may be introduced if they are technically and mechanically appropriate.  
-Multiplayer must not compromise the initial single-player experience.
+Multiplayer expands player freedom and community without compromising the core single-player autonomy.
 
 ---
 
@@ -468,23 +465,21 @@ The world should feel designed as a place rather than assembled as a collection 
 ---
 
 ## 30. Platform
-The initial platform is **Browser**.  
+The initial platform is **Windows PC** (with architecture kept open to Linux and macOS; the initial browser prototype baseline is formally superseded per `SR-001` and `ETA-001`).  
 The first version should prioritize:
-- Fast startup
-- Strong performance (60 FPS)
+- Fast startup and high stability
+- Strong performance (60 FPS on target hardware)
 - Reliable controls (keyboard/mouse + gamepad compatibility)
-- Good rendering performance
-- Reasonable asset sizes
-- Browser compatibility
-- Persistent game state
+- Clean integer-scaling pixel-art rendering in Godot
+- Efficient asset and memory management
+- Dedicated server stability and persistent game state
 
 ---
 
 ## 31. Multiplayer Strategy
-Initial development is **Single-player first**.  
-The first playable game should not require multiplayer infrastructure.  
-However, the architecture should avoid making future multiplayer unnecessarily impossible:  
-*Don't build multiplayer now. Don't accidentally architect ourselves into a dead end either.*
+Underhallow is architected as **single-player-first, multiplayer-native**.  
+The game never forces players into group content; a player can play through the entire game solo. However, the technical architecture is built from the ground up to support real-time cooperative multiplayer, parties, guilds, and shared spaces natively without bolted-on rewrites:  
+*A complete single-player game, natively architected so players can share their lives in the world together whenever they choose.*
 
 ---
 
@@ -688,7 +683,7 @@ It does not specify exactly how the game will be implemented. That distinction i
 The development sequence:
 1. **North Star V1.0** → Vision *(This Document)*
 2. **Foundation Specification** → Product/system definition
-3. **Technical Architecture** → Implementation architecture
+3. **Engine & Technical Architecture (ETA-001)** → Implementation architecture
 4. **Agent Constitution** → How AI agents execute the work
 5. **Production Plan** → What gets built, in what order, and how we verify it
 

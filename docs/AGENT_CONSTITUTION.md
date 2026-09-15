@@ -399,7 +399,7 @@ Responsibilities:
 * Save/load testing
 * State consistency testing
 * Cross-system testing
-* Browser testing
+* Client & runtime testing
 * Performance checks
 * Bug reproduction
 
@@ -431,9 +431,9 @@ The Research Agent investigates questions before implementation when necessary.
 
 Examples:
 
-* Phaser capabilities
+* Godot capabilities
 * Tiled workflows
-* Browser performance
+* Engine & target performance
 * Pixel rendering techniques
 * Supabase patterns
 * Game architecture patterns
@@ -558,7 +558,7 @@ Reserved for:
 Examples:
 
 * Changing persistence architecture
-* Replacing Phaser
+* Replacing Godot runtime
 * Replacing the entity model
 * Changing world coordinate architecture
 * Introducing multiplayer infrastructure
@@ -786,7 +786,7 @@ For user-facing changes:
 ```text
 Build
 +
-Browser verification
+Godot client / runtime verification
 +
 Human QA where required
 ```
@@ -1083,7 +1083,7 @@ Before introducing a dependency, evaluate:
 * Bundle size
 * Maintenance
 * Security
-* Browser compatibility
+* Platform compatibility
 * License
 * Long-term architectural impact
 
@@ -1097,7 +1097,7 @@ When an agent proposes a new technology, it must first research:
 
 * Official documentation
 * Current version
-* Browser compatibility
+* Platform compatibility
 * Maintenance status
 * Relevant limitations
 
