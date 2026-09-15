@@ -1,7 +1,7 @@
 # Underhallow Agent Directives
 
 Refer to the authoritative documentation hierarchy:
-1. **Layer 1:** [docs/NORTH_STAR.md](file:///c:/Users/HP/Documents/Underhallow/docs/NORTH_STAR.md) (Vision & Immutable Principles)
+1. **Layer 1 (Project Authority):** [docs/NORTH_STAR.md](file:///c:/Users/HP/Documents/Underhallow/docs/NORTH_STAR.md) (Vision & Immutable Principles) & [docs/CREATIVE_DIRECTION.md](file:///c:/Users/HP/Documents/Underhallow/docs/CREATIVE_DIRECTION.md) (Canonical Creative Foundation — CD-001)
 2. **Layer 2:** [docs/FOUNDATION_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/FOUNDATION_SPECIFICATION.md) (Product & System Definition)
 3. **Core Gameplay Spec:** [docs/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md) (Loops, Pillars, Agency, & Gameplay Invariants)
 4. **Layer 3:** [docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md) (Engine, State, & Data Architecture — Godot / Dedicated Server / Supabase)
@@ -20,3 +20,6 @@ Refer to the authoritative documentation hierarchy:
 8. **Data-Driven Rule:** Game content (crops, items, creatures, buildings, dialogue, quests) is authored as data definitions, never hardcoded into engine classes.
 9. **Simulation Time:** World simulation (crop growth, schedules) runs on deterministic `GameTime`, never real-time frame delta accumulation.
 10. **PC & Multiplayer-Native Standard:** 60 FPS on target hardware, responsive keyboard/mouse/gamepad controls, integer pixel-art scaling, Godot client presentation, authoritative dedicated servers, and resilient Supabase / local persistence.
+11. **The Creative Rule (Invariant 11):** *"Never let the mystery destroy the cozy life. Never let the cozy life erase the mystery."* Discovery is an invitation, not an obligation. Emotional balance: ~65% Cozy / 35% Adventure with mystery underlying both.
+12. **Visual & World Crafting Standard (Invariant 12):** Modern pixel art grounded in classic SNES-era visual language (retro foundation, modern execution). Equal priority between readability and beauty. Moderate environmental detail without visual noise. House evolution communicates stranger → resident → homeowner → established member.
+
