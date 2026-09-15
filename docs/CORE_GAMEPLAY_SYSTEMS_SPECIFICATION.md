@@ -199,15 +199,17 @@ There must not be one universally optimal playstyle.
 Underhallow consists initially of two major world spaces:
 
 ```text
-MAIN ISLAND
-    │
-    │ Boat / Dock
-    │
-    ▼
-PERSONAL ISLAND
+                  MAIN ISLAND
+             (Public Adventure Hub)
+                       │
+         ┌─────────────┴─────────────┐
+         │         Boat / Dock       │
+         ▼                           ▼
+  PERSONAL ISLAND              GUILD ISLANDS
+  (Player-Owned)            (Guild-Owned Co-op)
 ```
 
-The two spaces have different purposes.
+The island spaces serve distinct, complementary purposes.
 
 ---
 
@@ -273,10 +275,24 @@ Possible uses include:
 
 * Farming
 * Building
-* Planting
-* Decoration
-* Production
 * Storage
+* Decoration
+* Crafting
+
+---
+
+# 9.1 Guild Islands
+
+In accordance with [SR-001](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md), [WM-001](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md), and [MS-001](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md), guilds can unlock and develop persistent **Guild Islands**.
+
+Guild Islands provide:
+
+* A central Guild Hall housing the communal Guild Bank, trophy hall, and crafting workshops.
+* Large communal farm fields for collaborative agriculture.
+* Modular personal residential plots assigned to individual members.
+* A shared gathering and rally space for guild-organized hunting expeditions.
+
+Like Personal Islands, Guild Islands are accessed through the harbor boat/dock travel system and enforce strict, server-authoritative permission boundaries.
 
 The grid exists to provide structure, but the island must still feel like a physical world rather than a spreadsheet.
 
@@ -1146,40 +1162,38 @@ The world should feel like a place the player is actually changing over time.
 
 # 49. World Transitions
 
-The player travels between their Personal Island and Main Island using a **boat/dock system**.
+The player travels between their Personal Island, Guild Islands, and the Main Island using a **boat/dock system**.
 
 Conceptually:
 
 ```text
-Personal Island
-      ↓
-     Dock
-      ↓
-     Boat
-      ↓
- Main Island
+  Personal Island / Guild Island
+                ↓
+               Dock
+                ↓
+               Boat
+                ↓
+            Main Island
 ```
 
 The transition should feel diegetic rather than like a purely technical teleport.
 
 ---
 
-# 50. Social Systems
+# 50. Social & Cooperative Systems
 
-The initial game is primarily single-player.
+In accordance with [SR-001](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md), [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md), and [MS-001](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md), Underhallow is **single-player-first, multiplayer-native**.
 
-Future social functionality may include:
+The single-player experience is complete, self-contained, and fully playable without any social interaction. For players who choose to engage socially, the architecture natively provides:
 
-* Visiting Personal Islands
-* Leaving gifts
-* Chat
-* Guilds
-* Social activities
-* Cooperative features
+* Real-time cooperative multiplayer (V1 has no PvP).
+* Parties (4–6 players) for shared hunting expeditions, farming assistance, and exploration.
+* Guilds (~50 members) with shared progression, bank storage, and persistent Guild Islands.
+* Cross-island visitation governed by granular owner permission matrices.
+* Direct peer-to-peer trading and marketplace commerce.
+* Proximity, party, guild, and direct text chat channels.
 
-These systems are intentionally deferred.
-
-The initial game must remain complete without them.
+Multiplayer expands player agency and community without ever compromising solo autonomy or imposing mandatory group requirements.
 
 ---
 
@@ -1187,7 +1201,7 @@ The initial game must remain complete without them.
 
 Competition is optional.
 
-Underhallow does not require:
+Underhallow V1 contains no player-versus-player (PvP) combat, territory warfare, or grief raiding. The world does not require:
 
 * Leaderboards
 * PvP

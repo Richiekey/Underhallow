@@ -74,10 +74,9 @@ PHASE 5: HUMAN QA & VERTICAL SLICE SUCCESS TEST
 # 2. Phase 0: Toolchain & Repository Scaffolding (Immediate)
 
 ### Deliverables:
-1. `project.godot` configured for Windows PC target:
-   - Display: 1920x1080 viewport, integer pixel-art scaling (`canvas_items` / `fractional_zoom_threshold`).
-   - Rendering: Compatibility / Forward+ with pixel snap enabled.
-   - Input Map: Directional vectors (`move_up`, `move_down`, `move_left`, `move_right`), `interact` (E), `use_tool` (LMB), `cancel` (RMB/Esc).
+1. `project.godot` configured for Windows PC target per [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md):
+   - Pixel-art display settings with integer scaling per [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md).
+   - Default input action bindings (`move_up`, `move_down`, `move_left`, `move_right`, `interact`, `use_tool`, `cancel`) per [PC-001](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md).
 2. GUT (Godot Unit Testing) addon installed in `addons/gut/` for automated unit/integration test suites.
 3. Directory tree conforming to **ETA-001 Section 17**:
    - `src/core/` (GameTime, state, signals)
@@ -101,24 +100,24 @@ The goal of Phase 1 is to answer the **6 Prototype Gate Questions**:
 6. **Art scale:** Does the character size feel harmonious relative to the environment and structures?
 
 ### Technical Components:
-- **`src/rendering/iso/iso_math.gd`**: Coordinate conversions between world, tile, and screen coordinates.
-- **`src/world/iso_tile_map.gd`**: TileMapLayer management for terrain, paths, foliage, and structures.
-- **`src/player/player_controller.gd`**: Continuous isometric movement controller with collision detection.
-- **`src/player/iso_camera.gd`**: Camera2D with fixed isometric angle, smooth tracking, and clamped zoom tiers.
-- **Mock Environment:** Isometric grass terrain, cobblestone path, rustic cabin, oak trees, and animated player sprite.
+- Coordinate conversions between world, tile, and screen coordinates per [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md).
+- TileMapLayer management for terrain, paths, foliage, and structures.
+- Continuous isometric movement controller with collision detection per [PC-001](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md).
+- Camera2D with fixed isometric angle, smooth tracking, and clamped zoom tiers (camera rotation disabled per [SR-001](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md)).
+- Mock Environment: Isometric grass terrain, cobblestone path, rustic cabin, oak trees, and animated player sprite.
 
 ---
 
 # 4. Phase 2: Core Runtime & State Architecture
 
 ### Deliverables:
-- **`src/core/state/game_state.gd`**: Authoritative serializable state models:
+- Authoritative serializable state models per [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md):
   - `PlayerState` (position, direction, health, inventory, progression — strictly no stamina meter).
   - `WorldState` (current_island_id, modified_tiles, placed_objects).
   - `TimeState` (day, hour, minute, tick_count).
-- **`src/core/time/game_clock.gd`**: Deterministic simulation clock dispatching minute/hour/day signals.
-- **`src/core/events/game_events.gd`**: Strongly typed global event bus for system decoupling.
-- **`src/player/interaction/interaction_detector.gd`**: Detects contextual interactable entities in front of the player.
+- Deterministic simulation clock dispatching minute/hour/day signals per [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md).
+- Strongly typed global event bus for system decoupling.
+- Spatial interaction detector for contextual interactable entities in front of the player (E key) per [PC-001](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md).
 
 ---
 

@@ -124,7 +124,7 @@ These define individual major game systems.
 Planned examples include:
 
 * Player Progression (`PR-001`)
-* Farming (`FA-001`)
+* Farming (`FB-001` / `FA-001`)
 * Hunting & Combat (`HC-001` / `HU-001`)
 * Multiplayer & Social Systems (`MS-001`)
 * Building & Personal Island (`BI-001`)
