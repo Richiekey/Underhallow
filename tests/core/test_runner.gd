@@ -12,6 +12,11 @@ const SaveDataClass = preload("res://src/core/persistence/save_data.gd")
 const PersistenceBoundaryClass = preload("res://src/core/persistence/persistence_boundary.gd")
 const InputProviderClass = preload("res://src/core/input/input_provider.gd")
 const GameRuntimeClass = preload("res://src/core/runtime/game_runtime.gd")
+const PlayerStateClass = preload("res://src/player/player_state.gd")
+const PlayerControllerClass = preload("res://src/player/player_controller.gd")
+const PlayerScene = preload("res://scenes/player/player.tscn")
+const CameraControllerClass = preload("res://src/presentation/camera_controller.gd")
+const InteractableObjectClass = preload("res://src/gameplay/interaction/interactable_object.gd")
 
 var total_tests: int = 0
 var passed_tests: int = 0
@@ -19,7 +24,7 @@ var failed_tests: int = 0
 
 func _init() -> void:
 	print("==================================================")
-	print("Underhallow Phase 1 — Deterministic Core Test Suite")
+	print("Underhallow Phase 1 & 2 — Deterministic Test Suite")
 	print("==================================================")
 	
 	_run_gametime_tests()
@@ -27,6 +32,7 @@ func _init() -> void:
 	_run_command_pipeline_tests()
 	_run_state_and_persistence_tests()
 	_run_runtime_lifecycle_tests()
+	_run_player_foundation_tests()
 	
 	print("==================================================")
 	print("Test Results: %d passed, %d failed of %d total tests." % [passed_tests, failed_tests, total_tests])
@@ -428,3 +434,99 @@ func _run_runtime_lifecycle_tests() -> void:
 	_assert_equal(observed_states.size(), 3, "Lifecycle 13: Emitted exactly 3 state transition signals")
 	
 	runtime.free()
+
+# -----------------------------------------------------------------------------
+# 6. Player Foundation & Movement Tests (Phase 2)
+# -----------------------------------------------------------------------------
+func _run_player_foundation_tests() -> void:
+	print("\n--- Testing Phase 2 Player Foundation & Movement ---")
+	
+	# Test P1: PlayerState initial defaults
+	var ps: PlayerState = PlayerStateClass.new()
+	_assert_equal(ps.position, Vector2.ZERO, "Player 1: Initial position is Vector2.ZERO")
+	_assert_equal(ps.facing_direction, Vector2.DOWN, "Player 1: Initial facing direction is Vector2.DOWN")
+	_assert_equal(ps.facing_cardinal, PlayerState.FacingDirection.SOUTH, "Player 1: Initial facing cardinal is SOUTH")
+	_assert_approx(ps.move_speed, 150.0, "Player 1: Default move speed is 150.0 px/s")
+	_assert_true(not ps.is_moving, "Player 1: Initial is_moving is false")
+	
+	# Test P2: 8-Directional Facing Resolution
+	_assert_equal(PlayerState.vector_to_facing_direction(Vector2.UP), PlayerState.FacingDirection.NORTH, "Facing P2: Vector2.UP resolves to NORTH")
+	_assert_equal(PlayerState.vector_to_facing_direction(Vector2(1, -1)), PlayerState.FacingDirection.NORTHEAST, "Facing P2: (1, -1) resolves to NORTHEAST")
+	_assert_equal(PlayerState.vector_to_facing_direction(Vector2.RIGHT), PlayerState.FacingDirection.EAST, "Facing P2: Vector2.RIGHT resolves to EAST")
+	_assert_equal(PlayerState.vector_to_facing_direction(Vector2(1, 1)), PlayerState.FacingDirection.SOUTHEAST, "Facing P2: (1, 1) resolves to SOUTHEAST")
+	_assert_equal(PlayerState.vector_to_facing_direction(Vector2.DOWN), PlayerState.FacingDirection.SOUTH, "Facing P2: Vector2.DOWN resolves to SOUTH")
+	_assert_equal(PlayerState.vector_to_facing_direction(Vector2(-1, 1)), PlayerState.FacingDirection.SOUTHWEST, "Facing P2: (-1, 1) resolves to SOUTHWEST")
+	_assert_equal(PlayerState.vector_to_facing_direction(Vector2.LEFT), PlayerState.FacingDirection.WEST, "Facing P2: Vector2.LEFT resolves to WEST")
+	_assert_equal(PlayerState.vector_to_facing_direction(Vector2(-1, -1)), PlayerState.FacingDirection.NORTHWEST, "Facing P2: (-1, -1) resolves to NORTHWEST")
+	
+	# Test P3: Diagonal Normalization logic
+	var raw_diagonal: Vector2 = Vector2(1, 1)
+	var normalized_diagonal: Vector2 = raw_diagonal.normalized()
+	_assert_approx(normalized_diagonal.length(), 1.0, "Movement P3: Diagonal input vector normalizes to length 1.0 (not 1.414)")
+	
+	# Test P4: PlayerController node instantiation & movement properties
+	var player: PlayerController = PlayerScene.instantiate() as PlayerController
+	root.add_child(player)
+	
+	_assert_true(player != null, "Player P4: PlayerScene instantiates PlayerController cleanly")
+	_assert_approx(player.move_speed, 150.0, "Player P4: Controller move_speed defaults to 150.0")
+	_assert_approx(player.acceleration, 1200.0, "Player P4: Controller acceleration defaults to 1200.0")
+	_assert_approx(player.friction, 1600.0, "Player P4: Controller friction defaults to 1600.0")
+	
+	# Test P5: Facing retention when stopped
+	player.facing_direction = Vector2.LEFT
+	player.facing_cardinal = PlayerState.FacingDirection.WEST
+	player.velocity = Vector2.ZERO
+	# Simulate 1 frame with zero input:
+	player._process_movement(0.016)
+	_assert_equal(player.facing_direction, Vector2.LEFT, "Player P5: Facing direction is retained when stationary")
+	_assert_equal(player.facing_cardinal, PlayerState.FacingDirection.WEST, "Player P5: Facing cardinal enum is retained when stationary")
+	
+	# Test P6: PlayerState integration with GameState and serialization
+	var state: GameState = GameStateClass.new()
+	state.player_state.position = Vector2(128.5, -64.0)
+	state.player_state.facing_direction = Vector2(1, 1).normalized()
+	state.player_state.facing_cardinal = PlayerState.FacingDirection.SOUTHEAST
+	state.player_state.is_moving = true
+	state.player_state.move_speed = 150.0
+	
+	var serialized: Dictionary = state.to_dictionary()
+	_assert_true(serialized.has("player"), "State P6: GameState includes player serialization")
+	
+	var restored_state: GameState = GameStateClass.new()
+	restored_state.from_dictionary(serialized)
+	_assert_approx(restored_state.player_state.position.x, 128.5, "State P6: Restores player_state position.x")
+	_assert_approx(restored_state.player_state.position.y, -64.0, "State P6: Restores player_state position.y")
+	_assert_equal(restored_state.player_state.facing_cardinal, PlayerState.FacingDirection.SOUTHEAST, "State P6: Restores player_state facing_cardinal")
+	_assert_true(restored_state.player_state.is_moving, "State P6: Restores player_state is_moving")
+	
+	# Test P7: CameraController target tracking & zoom clamping
+	var cam: CameraController = CameraControllerClass.new()
+	cam.target = player
+	cam.default_zoom_level = 2.0
+	cam.min_zoom_level = 1.0
+	cam.max_zoom_level = 3.0
+	cam._ready()
+	_assert_approx(cam.target_zoom_level, 2.0, "Camera P7: Initial target zoom is 2.0")
+	
+	# Zoom clamping:
+	cam.target_zoom_level = 0.5
+	cam.target_zoom_level = clampf(cam.target_zoom_level, cam.min_zoom_level, cam.max_zoom_level)
+	_assert_approx(cam.target_zoom_level, 1.0, "Camera P7: Zoom is clamped at minimum (1.0)")
+	
+	cam.target_zoom_level = 5.0
+	cam.target_zoom_level = clampf(cam.target_zoom_level, cam.min_zoom_level, cam.max_zoom_level)
+	_assert_approx(cam.target_zoom_level, 3.0, "Camera P7: Zoom is clamped at maximum (3.0)")
+	
+	# Test P8: Minimal Interaction Hook
+	var interaction_results: Array[Node] = []
+	var test_sign: InteractableObject = InteractableObjectClass.new()
+	test_sign.interacted.connect(func(p): interaction_results.append(p))
+	test_sign.interact(player)
+	_assert_true(interaction_results.size() > 0, "Interaction P8: Interacting with InteractableObject executes interact callback")
+	_assert_equal(interaction_results[0], player, "Interaction P8: Callback receives player instance")
+	
+	# Clean up test nodes
+	player.queue_free()
+	cam.free()
+	test_sign.free()

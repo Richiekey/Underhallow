@@ -1,27 +1,161 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scenes/game/game.gd" id="1_game"]
-[ext_resource type="Script" path="res://src/core/runtime/game_runtime.gd" id="2_runtime"]
+[ext_resource type="Script" path="res://src/presentation/camera_controller.gd" id="2_camera"]
+[ext_resource type="Script" path="res://src/core/runtime/game_runtime.gd" id="3_runtime"]
+[ext_resource type="Script" path="res://src/gameplay/interaction/interactable_object.gd" id="4_interactable"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+size = Vector2(120, 20)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_boulder"]
+radius = 14.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_trunk"]
+radius = 6.0
+height = 16.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sign"]
+radius = 18.0
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_game")
 
 [node name="World" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="GroundMarker" type="Node2D" parent="World"]
+
+[node name="CenterCrossH" type="ColorRect" parent="World/GroundMarker"]
+offset_left = -30.0
+offset_top = -1.0
+offset_right = 30.0
+offset_bottom = 1.0
+color = Color(1, 1, 1, 0.1)
+
+[node name="CenterCrossV" type="ColorRect" parent="World/GroundMarker"]
+offset_left = -1.0
+offset_top = -30.0
+offset_right = 1.0
+offset_bottom = 30.0
+color = Color(1, 1, 1, 0.1)
+
+[node name="SpawnMarker" type="Marker2D" parent="World"]
+
+[node name="Obstacles" type="Node2D" parent="World"]
+y_sort_enabled = true
+
+[node name="Wall" type="StaticBody2D" parent="World/Obstacles"]
+position = Vector2(-120, -70)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Obstacles/Wall"]
+position = Vector2(0, -10)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Visual" type="ColorRect" parent="World/Obstacles/Wall"]
+offset_left = -60.0
+offset_top = -20.0
+offset_right = 60.0
+color = Color(0.35, 0.35, 0.38, 1)
+
+[node name="Boulder" type="StaticBody2D" parent="World/Obstacles"]
+position = Vector2(90, -40)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Obstacles/Boulder"]
+position = Vector2(0, -8)
+shape = SubResource("CircleShape2D_boulder")
+
+[node name="Visual" type="ColorRect" parent="World/Obstacles/Boulder"]
+offset_left = -14.0
+offset_top = -22.0
+offset_right = 14.0
+offset_bottom = 4.0
+color = Color(0.45, 0.43, 0.39, 1)
+
+[node name="Tree" type="StaticBody2D" parent="World/Obstacles"]
+position = Vector2(-60, 60)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Obstacles/Tree"]
+position = Vector2(0, -4)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_trunk")
+
+[node name="VisualTrunk" type="ColorRect" parent="World/Obstacles/Tree"]
+offset_left = -5.0
+offset_top = -22.0
+offset_right = 5.0
+offset_bottom = 2.0
+color = Color(0.35, 0.23, 0.14, 1)
+
+[node name="VisualCanopy" type="ColorRect" parent="World/Obstacles/Tree"]
+offset_left = -22.0
+offset_top = -62.0
+offset_right = 22.0
+offset_bottom = -20.0
+color = Color(0.18, 0.38, 0.22, 1)
+
+[node name="Interactables" type="Node2D" parent="World"]
+y_sort_enabled = true
+
+[node name="DevSign" type="Area2D" parent="World/Interactables"]
+position = Vector2(50, 40)
+collision_layer = 2
+collision_mask = 0
+monitoring = false
+monitorable = true
+script = ExtResource("4_interactable")
+prompt_text = "Inspect"
+interaction_name = "Sanctuary Sign"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Interactables/DevSign"]
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_sign")
+
+[node name="VisualPost" type="ColorRect" parent="World/Interactables/DevSign"]
+offset_left = -2.0
+offset_top = -8.0
+offset_right = 2.0
+offset_bottom = 2.0
+color = Color(0.28, 0.18, 0.1, 1)
+
+[node name="VisualBoard" type="ColorRect" parent="World/Interactables/DevSign"]
+offset_left = -9.0
+offset_top = -20.0
+offset_right = 9.0
+offset_bottom = -8.0
+color = Color(0.55, 0.42, 0.26, 1)
 
 [node name="Camera" type="Camera2D" parent="."]
+script = ExtResource("2_camera")
 
 [node name="Systems" type="Node" parent="."]
 
 [node name="Runtime" type="Node" parent="Systems"]
-script = ExtResource("2_runtime")
+script = ExtResource("3_runtime")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="DevLabel" type="Label" parent="UI"]
-offset_left = 32.0
-offset_top = 32.0
-offset_right = 450.0
-offset_bottom = 120.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 500.0
+offset_bottom = 140.0
 text = "UNDERHALLOW
 V0.1 DEVELOPMENT BUILD
-PHASE 1 — TECHNICAL SPINE"
+PHASE 2 — PLAYER FOUNDATION & MOVEMENT
+WASD / Arrows: Move | Mouse Wheel / +/-: Zoom | E: Inspect Sign"
+
+[node name="InteractionToast" type="Label" parent="UI"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -60.0
+offset_right = 300.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+horizontal_alignment = 1
+vertical_alignment = 1
