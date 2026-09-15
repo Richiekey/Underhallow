@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/gameplay/inventory/item_definition.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"resource_wild_berries"
+display_name = "Wild Berries"
+category = 3
+max_stack = 99
+description = "Sweet and tart wild berries gathered from the woodland edge."

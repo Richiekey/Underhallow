@@ -1,0 +1,97 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/gameplay/ui/hotbar_ui.gd" id="1_script"]
+
+[node name="HotbarUI" type="Control"]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -64.0
+offset_right = 150.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("1_script")
+
+[node name="HBox" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Slot1" type="PanelContainer" parent="HBox"]
+custom_minimum_size = Vector2(80, 50)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="HBox/Slot1"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="VBox" type="VBoxContainer" parent="HBox/Slot1/Margin"]
+layout_mode = 2
+alignment = 1
+
+[node name="KeyLabel" type="Label" parent="HBox/Slot1/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "[1] Hoe"
+horizontal_alignment = 1
+
+[node name="Slot2" type="PanelContainer" parent="HBox"]
+custom_minimum_size = Vector2(80, 50)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="HBox/Slot2"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="VBox" type="VBoxContainer" parent="HBox/Slot2/Margin"]
+layout_mode = 2
+alignment = 1
+
+[node name="KeyLabel" type="Label" parent="HBox/Slot2/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "[2] Can"
+horizontal_alignment = 1
+
+[node name="Slot3" type="PanelContainer" parent="HBox"]
+custom_minimum_size = Vector2(80, 50)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="HBox/Slot3"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="VBox" type="VBoxContainer" parent="HBox/Slot3/Margin"]
+layout_mode = 2
+alignment = 1
+
+[node name="KeyLabel" type="Label" parent="HBox/Slot3/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "[3] Seeds"
+horizontal_alignment = 1
+
+[node name="CountLabel" type="Label" parent="HBox/Slot3/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "x5"
+horizontal_alignment = 1

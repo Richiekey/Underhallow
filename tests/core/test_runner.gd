@@ -21,6 +21,24 @@ const WorldSpaceClass = preload("res://src/world/world_space.gd")
 const DayNightCycleClass = preload("res://src/presentation/day_night_cycle.gd")
 const PersonalIslandScene = preload("res://scenes/world/personal_island.tscn")
 const MainIslandSliceScene = preload("res://scenes/world/main_island_slice.tscn")
+const ItemDefinitionClass = preload("res://src/gameplay/inventory/item_definition.gd")
+const ItemDatabaseClass = preload("res://src/gameplay/inventory/item_database.gd")
+const InventoryStateClass = preload("res://src/gameplay/inventory/inventory_state.gd")
+const CropDefinitionClass = preload("res://src/gameplay/farming/crop_definition.gd")
+const CropDatabaseClass = preload("res://src/gameplay/farming/crop_database.gd")
+const CropStateClass = preload("res://src/gameplay/farming/crop_state.gd")
+const SoilPlotStateClass = preload("res://src/gameplay/farming/soil_plot_state.gd")
+const FarmingStateClass = preload("res://src/gameplay/farming/farming_state.gd")
+const ProgressionStateClass = preload("res://src/gameplay/progression/progression_state.gd")
+const TimeStateClass = preload("res://src/core/time/time_state.gd")
+const WorldStateClass = preload("res://src/world/world_state.gd")
+const TillSoilCommandClass = preload("res://src/core/commands/till_soil_command.gd")
+const PlantCropCommandClass = preload("res://src/core/commands/plant_crop_command.gd")
+const WaterCropCommandClass = preload("res://src/core/commands/water_crop_command.gd")
+const HarvestCropCommandClass = preload("res://src/core/commands/harvest_crop_command.gd")
+const GatherResourceCommandClass = preload("res://src/core/commands/gather_resource_command.gd")
+const SleepCommandClass = preload("res://src/core/commands/sleep_command.gd")
+const AdvanceDayDebugCommandClass = preload("res://src/core/commands/advance_day_debug_command.gd")
 
 var total_tests: int = 0
 var passed_tests: int = 0
@@ -28,7 +46,7 @@ var failed_tests: int = 0
 
 func _init() -> void:
 	print("==================================================")
-	print("Underhallow Phase 1, 2 & 3 — Deterministic Test Suite")
+	print("Underhallow Phase 1, 2, 3 & 4 — Deterministic Test Suite")
 	print("==================================================")
 	
 	_run_gametime_tests()
@@ -38,6 +56,7 @@ func _init() -> void:
 	_run_runtime_lifecycle_tests()
 	_run_player_foundation_tests()
 	_run_world_foundation_tests()
+	_run_phase4_gameplay_tests()
 	
 	print("==================================================")
 	print("Test Results: %d passed, %d failed of %d total tests." % [passed_tests, failed_tests, total_tests])
@@ -616,3 +635,261 @@ func _run_world_foundation_tests() -> void:
 	# Clean up test nodes
 	pi.queue_free()
 	mi.queue_free()
+
+# -----------------------------------------------------------------------------
+# 8. Phase 4 Gameplay Behavioral Verification
+# -----------------------------------------------------------------------------
+func _run_phase4_gameplay_tests() -> void:
+	print("\n--- Testing Phase 4 Gameplay Loop ---")
+	
+	# Behavioral Test 1: Data-Driven Definitions
+	ItemDatabaseClass.clear()
+	ItemDatabaseClass.initialize()
+	var hoe_def: ItemDefinition = ItemDatabaseClass.get_definition(&"tool_hoe")
+	_assert_true(hoe_def != null, "Definitions 1: Hoe ItemDefinition loaded from .tres")
+	_assert_equal(hoe_def.display_name, "Hoe", "Definitions 1: Hoe display name matches resource")
+	_assert_equal(hoe_def.category, ItemDefinitionClass.ItemCategory.TOOL, "Definitions 1: Hoe category is TOOL")
+	
+	var seed_def: ItemDefinition = ItemDatabaseClass.get_definition(&"seed_carrot")
+	_assert_true(seed_def != null, "Definitions 1: Carrot seed ItemDefinition loaded from .tres")
+	_assert_equal(seed_def.category, ItemDefinitionClass.ItemCategory.SEED, "Definitions 1: Seed category is SEED")
+	
+	CropDatabaseClass.clear()
+	CropDatabaseClass.initialize()
+	var carrot_def: CropDefinition = CropDatabaseClass.get_definition(&"carrot")
+	_assert_true(carrot_def != null, "Definitions 1: Carrot CropDefinition loaded from .tres")
+	_assert_equal(carrot_def.display_name, "Carrot", "Definitions 1: Crop display name is Carrot")
+	_assert_equal(carrot_def.days_to_mature, 2, "Definitions 1: Carrot days_to_mature is 2")
+	_assert_equal(carrot_def.seed_item_id, &"seed_carrot", "Definitions 1: Carrot seed_item_id is seed_carrot")
+	_assert_equal(carrot_def.harvest_item_id, &"crop_carrot", "Definitions 1: Carrot harvest_item_id is crop_carrot")
+	
+	# Behavioral Test 2: Inventory Operations & Guards
+	var inv: InventoryState = InventoryStateClass.new()
+	_assert_equal(inv.get_quantity(&"seed_carrot"), 5, "Inventory 2: Starting carrot seed count is 5")
+	_assert_equal(inv.get_quantity(&"tool_hoe"), 1, "Inventory 2: Starting hoe count is 1")
+	_assert_equal(inv.get_quantity(&"tool_watering_can"), 1, "Inventory 2: Starting watering can count is 1")
+	_assert_equal(inv.get_quantity(&"crop_carrot"), 0, "Inventory 2: Starting carrot count is 0")
+	
+	_assert_true(inv.add_item(&"crop_carrot", 3), "Inventory 2: Adding 3 carrots succeeds")
+	_assert_equal(inv.get_quantity(&"crop_carrot"), 3, "Inventory 2: Carrot count is now 3")
+	_assert_true(inv.remove_item(&"crop_carrot", 1), "Inventory 2: Removing 1 carrot succeeds")
+	_assert_equal(inv.get_quantity(&"crop_carrot"), 2, "Inventory 2: Carrot count is now 2")
+	
+	# Guard: cannot remove more than available
+	_assert_true(not inv.remove_item(&"crop_carrot", 5), "Inventory 2: Removing 5 carrots when only 2 held is rejected")
+	_assert_equal(inv.get_quantity(&"crop_carrot"), 2, "Inventory 2: Carrot count remains strictly 2")
+	
+	# Guard: negative / zero counts
+	_assert_true(not inv.add_item(&"crop_carrot", -2), "Inventory 2: Negative item add rejected")
+	_assert_true(not inv.remove_item(&"crop_carrot", 0), "Inventory 2: Zero item removal rejected")
+	
+	# Inventory serialization
+	var inv_dict: Dictionary = inv.to_dictionary()
+	var inv_restored: InventoryState = InventoryStateClass.new()
+	inv_restored.from_dictionary(inv_dict)
+	_assert_equal(inv_restored.get_quantity(&"crop_carrot"), 2, "Inventory 2: Deserialized carrot count matches (2)")
+	_assert_equal(inv_restored.get_quantity(&"seed_carrot"), 5, "Inventory 2: Deserialized seed count matches (5)")
+	
+	# Behavioral Test 3: Soil Preparation & Tilling
+	var runtime: GameRuntime = GameRuntimeClass.new()
+	runtime.initialize_runtime()
+	runtime.start_runtime()
+	
+	var plot_coord: Vector2i = Vector2i(0, 0)
+	var plot_pos: Vector2 = Vector2(-130, 20)
+	var player_pos: Vector2 = Vector2(-130, 25) # Close to plot
+	
+	# Till plot
+	var till_cmd: TillSoilCommand = TillSoilCommandClass.new(plot_coord, player_pos, plot_pos, true)
+	var till_res: CommandResult = runtime.execute_command(till_cmd)
+	_assert_true(till_res.success, "Farming 3: TillSoilCommand on fresh plot succeeds")
+	var plot_state: SoilPlotState = runtime.game_state.farming_state.get_plot(plot_coord)
+	_assert_true(plot_state != null and plot_state.is_tilled, "Farming 3: Plot is now marked as tilled")
+	_assert_equal(runtime.game_state.progression_state.farming_xp, 2, "Farming 3: Tilling awards +2 Farming XP")
+	
+	# Re-tilling already tilled plot fails validation
+	var re_till_cmd: TillSoilCommand = TillSoilCommandClass.new(plot_coord, player_pos, plot_pos, true)
+	var re_till_res: CommandResult = runtime.execute_command(re_till_cmd)
+	_assert_true(not re_till_res.success, "Farming 3: Re-tilling already tilled plot is rejected")
+	
+	# Behavioral Test 4: Planting & Seed Consumption
+	# Attempt planting on untilled plot
+	var untilled_coord: Vector2i = Vector2i(1, 0)
+	var plant_fail_cmd: PlantCropCommand = PlantCropCommandClass.new(untilled_coord, &"carrot", player_pos, plot_pos, false)
+	var plant_fail_res: CommandResult = runtime.execute_command(plant_fail_cmd)
+	_assert_true(not plant_fail_res.success, "Farming 4: Planting on untilled plot fails validation")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"seed_carrot"), 5, "Farming 4: Seeds not consumed on failed plant")
+	
+	# Plant on tilled plot
+	var plant_cmd: PlantCropCommand = PlantCropCommandClass.new(plot_coord, &"carrot", player_pos, plot_pos, true)
+	var plant_res: CommandResult = runtime.execute_command(plant_cmd)
+	_assert_true(plant_res.success, "Farming 4: Planting carrot on tilled plot succeeds")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"seed_carrot"), 4, "Farming 4: Exactly 1 seed consumed from inventory (4 remaining)")
+	
+	plot_state = runtime.game_state.farming_state.get_plot(plot_coord)
+	_assert_true(plot_state.crop != null, "Farming 4: Plot contains growing crop")
+	_assert_equal(plot_state.crop.growth_stage, 0, "Farming 4: Initial crop growth stage is 0 (Planted)")
+	_assert_equal(plot_state.crop.days_grown, 0, "Farming 4: Initial days grown is 0")
+	_assert_equal(runtime.game_state.progression_state.farming_xp, 7, "Farming 4: Planting awards +5 Farming XP (total 7)")
+	
+	# Occupied plot rejection
+	var plant_occupied_cmd: PlantCropCommand = PlantCropCommandClass.new(plot_coord, &"carrot", player_pos, plot_pos, true)
+	var plant_occupied_res: CommandResult = runtime.execute_command(plant_occupied_cmd)
+	_assert_true(not plant_occupied_res.success, "Farming 4: Planting on already-occupied plot fails validation")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"seed_carrot"), 4, "Farming 4: Seed not consumed on occupied rejection")
+	
+	# Behavioral Test 5: Soil Watering
+	# Attempt watering untilled plot
+	var water_untilled: WaterCropCommand = WaterCropCommandClass.new(untilled_coord, player_pos, plot_pos, false)
+	_assert_true(not runtime.execute_command(water_untilled).success, "Farming 5: Watering untilled plot fails validation")
+	
+	# Water planted plot
+	var water_cmd: WaterCropCommand = WaterCropCommandClass.new(plot_coord, player_pos, plot_pos, true)
+	var water_res: CommandResult = runtime.execute_command(water_cmd)
+	_assert_true(water_res.success, "Farming 5: Watering planted plot succeeds")
+	_assert_true(runtime.game_state.farming_state.get_plot(plot_coord).is_watered, "Farming 5: Plot is marked as watered")
+	_assert_equal(runtime.game_state.progression_state.farming_xp, 9, "Farming 5: Watering awards +2 Farming XP (total 9)")
+	
+	# Re-watering already watered plot fails validation
+	_assert_true(not runtime.execute_command(water_cmd).success, "Farming 5: Re-watering already watered plot fails validation")
+	
+	# Behavioral Test 6: Crop Growth & Forgiving Simulation Invariant
+	# Day 1 -> Day 2 (Plot was watered): should advance to stage 1 (Growing)
+	var sleep_cmd1: AdvanceDayDebugCommand = AdvanceDayDebugCommandClass.new()
+	var sleep_res1: CommandResult = runtime.execute_command(sleep_cmd1)
+	_assert_true(sleep_res1.success, "Time 6: Day advancement to Day 2 succeeds")
+	_assert_equal(runtime.game_state.time_state.current_day, 2, "Time 6: Current day is now 2")
+	
+	plot_state = runtime.game_state.farming_state.get_plot(plot_coord)
+	_assert_equal(plot_state.crop.days_grown, 1, "Growth 6: Watered crop advanced to 1 day grown")
+	_assert_equal(plot_state.crop.growth_stage, 1, "Growth 6: Crop growth stage is now 1 (Growing)")
+	_assert_true(not plot_state.crop.is_mature, "Growth 6: Crop is not mature yet")
+	_assert_true(not plot_state.is_watered, "Growth 6: Plot watering reset to false for new day")
+	
+	# Day 2: Player does NOT water the crop!
+	# Advance Day 2 -> Day 3: Growth must pause, and crop must NOT die!
+	var sleep_cmd2: AdvanceDayDebugCommand = AdvanceDayDebugCommandClass.new()
+	runtime.execute_command(sleep_cmd2)
+	_assert_equal(runtime.game_state.time_state.current_day, 3, "Time 6: Current day is now 3")
+	
+	plot_state = runtime.game_state.farming_state.get_plot(plot_coord)
+	_assert_equal(plot_state.crop.days_grown, 1, "Forgiving 6: Unwatered crop days_grown remained paused at 1")
+	_assert_equal(plot_state.crop.growth_stage, 1, "Forgiving 6: Unwatered crop stage remained paused at 1")
+	_assert_true(not plot_state.crop.is_mature, "Forgiving 6: Unwatered crop is not mature")
+	_assert_true(plot_state.crop != null, "Forgiving 6: Crop was NOT destroyed or withered")
+	
+	# Day 3: Player now waters the crop!
+	var water_cmd2: WaterCropCommand = WaterCropCommandClass.new(plot_coord, player_pos, plot_pos, false)
+	_assert_true(runtime.execute_command(water_cmd2).success, "Growth 6: Watering crop on Day 3 succeeds")
+	
+	# Advance Day 3 -> Day 4: Crop reaches 2 days grown -> Matures!
+	var sleep_cmd3: AdvanceDayDebugCommand = AdvanceDayDebugCommandClass.new()
+	runtime.execute_command(sleep_cmd3)
+	_assert_equal(runtime.game_state.time_state.current_day, 4, "Time 6: Current day is now 4")
+	
+	plot_state = runtime.game_state.farming_state.get_plot(plot_coord)
+	_assert_equal(plot_state.crop.days_grown, 2, "Growth 6: Watered crop reached 2 days grown")
+	_assert_equal(plot_state.crop.growth_stage, 2, "Growth 6: Crop reached mature stage 2")
+	_assert_true(plot_state.crop.is_mature, "Growth 6: Crop is marked mature")
+	
+	# Behavioral Test 7: Crop Harvesting
+	# Harvest mature crop
+	var harvest_cmd: HarvestCropCommand = HarvestCropCommandClass.new(plot_coord, player_pos, plot_pos, true)
+	var harvest_res: CommandResult = runtime.execute_command(harvest_cmd)
+	_assert_true(harvest_res.success, "Harvest 7: Harvesting mature crop succeeds")
+	
+	plot_state = runtime.game_state.farming_state.get_plot(plot_coord)
+	_assert_true(plot_state.crop == null, "Harvest 7: Crop is removed from plot")
+	_assert_true(plot_state.is_tilled, "Harvest 7: Plot remains tilled for future planting")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"crop_carrot"), 1, "Harvest 7: 1 harvested carrot in inventory")
+	_assert_equal(runtime.game_state.progression_state.farming_xp, 31, "Harvest 7: Harvesting awards +20 Farming XP (total 31)")
+	
+	# Attempt harvesting empty plot fails
+	var harvest_empty_cmd: HarvestCropCommand = HarvestCropCommandClass.new(plot_coord, player_pos, plot_pos, true)
+	_assert_true(not runtime.execute_command(harvest_empty_cmd).success, "Harvest 7: Harvesting plot without crop fails validation")
+	
+	# Behavioral Test 8: Resource Gathering & Daily Respawn
+	var bush_node_id: StringName = &"wild_berry_bush_1"
+	var bush_pos: Vector2 = Vector2(120, -130)
+	var player_near_bush: Vector2 = Vector2(120, -125)
+	
+	_assert_true(not runtime.game_state.world_state.is_gathered(bush_node_id), "Gathering 8: Berry bush initially not gathered")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wild_berries"), 0, "Gathering 8: Initially 0 wild berries in inventory")
+	
+	var gather_cmd: GatherResourceCommand = GatherResourceCommandClass.new(bush_node_id, &"resource_wild_berries", 3, player_near_bush, bush_pos, true)
+	var gather_res: CommandResult = runtime.execute_command(gather_cmd)
+	_assert_true(gather_res.success, "Gathering 8: Gathering berry bush succeeds")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wild_berries"), 3, "Gathering 8: Exactly 3 wild berries added to inventory")
+	_assert_true(runtime.game_state.world_state.is_gathered(bush_node_id), "Gathering 8: Bush is marked gathered in WorldState")
+	
+	# Attempt gathering again on same day fails
+	var gather_again_cmd: GatherResourceCommand = GatherResourceCommandClass.new(bush_node_id, &"resource_wild_berries", 3, player_near_bush, bush_pos, true)
+	_assert_true(not runtime.execute_command(gather_again_cmd).success, "Gathering 8: Gathering already-depleted bush fails validation")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wild_berries"), 3, "Gathering 8: Berry count unchanged on failed gather")
+	
+	# Advance day -> Bush respawns
+	var sleep_cmd4: AdvanceDayDebugCommand = AdvanceDayDebugCommandClass.new()
+	runtime.execute_command(sleep_cmd4)
+	_assert_equal(runtime.game_state.time_state.current_day, 5, "Time 8: Advanced to Day 5")
+	_assert_true(not runtime.game_state.world_state.is_gathered(bush_node_id), "Respawn 8: Berry bush is respawned on new day")
+	
+	# Behavioral Test 9: Time & Sleep Proximity Validation
+	var cottage_door_pos: Vector2 = Vector2(-60, -36)
+	var player_far_from_cottage: Vector2 = Vector2(200, 200)
+	
+	var sleep_far_cmd: SleepCommand = SleepCommandClass.new(player_far_from_cottage, cottage_door_pos, true)
+	_assert_true(not runtime.execute_command(sleep_far_cmd).success, "Sleep 9: Sleeping when far from cottage fails proximity validation")
+	_assert_equal(runtime.game_state.time_state.current_day, 5, "Sleep 9: Day did not advance on failed sleep")
+	
+	var player_at_cottage: Vector2 = Vector2(-60, -30)
+	var sleep_near_cmd: SleepCommand = SleepCommandClass.new(player_at_cottage, cottage_door_pos, true)
+	_assert_true(runtime.execute_command(sleep_near_cmd).success, "Sleep 9: Sleeping at cottage door succeeds")
+	_assert_equal(runtime.game_state.time_state.current_day, 6, "Sleep 9: Advanced to Day 6")
+	
+	# Behavioral Test 10: Farming XP & Level Progression
+	var prog: ProgressionState = ProgressionStateClass.new()
+	_assert_equal(prog.farming_level, 1, "Progression 10: Starts at Level 1")
+	_assert_equal(prog.farming_xp, 0, "Progression 10: Starts at 0 XP")
+	
+	_assert_true(not prog.add_farming_xp(30), "Progression 10: 30 XP does not trigger level up")
+	_assert_equal(prog.farming_level, 1, "Progression 10: Level remains 1 at 30 XP")
+	
+	_assert_true(prog.add_farming_xp(25), "Progression 10: Crossing 50 XP (total 55) triggers level up")
+	_assert_equal(prog.farming_level, 2, "Progression 10: Level is now 2")
+	
+	# Behavioral Test 11: Authoritative Persistence Round-Trip
+	var pb: PersistenceBoundary = PersistenceBoundaryClass.new()
+	var save: SaveData = pb.serialize_state(runtime.game_state, runtime.game_time)
+	_assert_equal(save.schema_version, 1, "Persistence 11: Schema version is 1")
+	
+	var restored_state: GameState = GameStateClass.new()
+	var restored_time: GameTime = GameTimeClass.new()
+	var deser_ok: bool = pb.deserialize_state(save, restored_state, restored_time)
+	_assert_true(deser_ok, "Persistence 11: Deserialization succeeds")
+	_assert_equal(restored_state.time_state.current_day, 6, "Persistence 11: Restores current_day 6")
+	_assert_equal(restored_state.inventory_state.get_quantity(&"crop_carrot"), 1, "Persistence 11: Restores 1 harvested carrot")
+	_assert_equal(restored_state.inventory_state.get_quantity(&"resource_wild_berries"), 3, "Persistence 11: Restores 3 wild berries")
+	_assert_equal(restored_state.inventory_state.get_quantity(&"seed_carrot"), 4, "Persistence 11: Restores 4 carrot seeds")
+	_assert_equal(restored_state.progression_state.farming_xp, 31, "Persistence 11: Restores 31 Farming XP")
+	_assert_true(restored_state.farming_state.get_plot(plot_coord).is_tilled, "Persistence 11: Restores tilled plot state")
+	
+	# Behavioral Test 12: Backward Compatibility with Legacy Schema 1 Saves
+	var legacy_dict: Dictionary = {
+		"game_time_elapsed": 120.0,
+		"test_counter": 10,
+		"player": {
+			"position": {"x": -60.0, "y": 0.0},
+			"facing_cardinal": 4
+		}
+	}
+	var legacy_save: SaveData = SaveDataClass.new(1, 1000, 120.0, legacy_dict)
+	var legacy_state: GameState = GameStateClass.new()
+	var legacy_time: GameTime = GameTimeClass.new()
+	var legacy_deser: bool = pb.deserialize_state(legacy_save, legacy_state, legacy_time)
+	_assert_true(legacy_deser, "BackwardCompat 12: Legacy save deserializes cleanly")
+	_assert_equal(legacy_state.time_state.current_day, 1, "BackwardCompat 12: Missing time payload safely defaults to Day 1")
+	_assert_equal(legacy_state.inventory_state.get_quantity(&"seed_carrot"), 5, "BackwardCompat 12: Missing inventory safely defaults to starting items")
+	_assert_equal(legacy_state.progression_state.farming_level, 1, "BackwardCompat 12: Missing progression safely defaults to Level 1")
+	
+	runtime.shutdown_runtime()
+	runtime.queue_free()

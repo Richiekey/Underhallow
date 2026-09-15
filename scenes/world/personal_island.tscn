@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://src/world/world_space.gd" id="1_world_space"]
 [ext_resource type="PackedScene" path="res://scenes/world/environment/cottage.tscn" id="2_cottage"]
@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" path="res://scenes/world/environment/bush_foliage.tscn" id="6_bush"]
 [ext_resource type="PackedScene" path="res://scenes/world/environment/fence_segment.tscn" id="7_fence"]
 [ext_resource type="PackedScene" path="res://scenes/world/environment/signpost.tscn" id="8_sign"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/farming/farm_plot.tscn" id="9_plot"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/resources/berry_bush.tscn" id="10_berry"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_water_north"]
 size = Vector2(900, 60)
@@ -195,3 +197,58 @@ position = Vector2(150, 90)
 
 [node name="Bush6" parent="Environment" instance=ExtResource("6_bush")]
 position = Vector2(270, -20)
+
+[node name="FarmGrid" type="Node2D" parent="Environment"]
+y_sort_enabled = true
+
+[node name="Plot_0_0" parent="Environment/FarmGrid" instance=ExtResource("9_plot")]
+position = Vector2(-130, 20)
+grid_coord = Vector2i(0, 0)
+
+[node name="Plot_1_0" parent="Environment/FarmGrid" instance=ExtResource("9_plot")]
+position = Vector2(-114, 20)
+grid_coord = Vector2i(1, 0)
+
+[node name="Plot_2_0" parent="Environment/FarmGrid" instance=ExtResource("9_plot")]
+position = Vector2(-98, 20)
+grid_coord = Vector2i(2, 0)
+
+[node name="Plot_3_0" parent="Environment/FarmGrid" instance=ExtResource("9_plot")]
+position = Vector2(-82, 20)
+grid_coord = Vector2i(3, 0)
+
+[node name="Plot_0_1" parent="Environment/FarmGrid" instance=ExtResource("9_plot")]
+position = Vector2(-130, 35)
+grid_coord = Vector2i(0, 1)
+
+[node name="Plot_1_1" parent="Environment/FarmGrid" instance=ExtResource("9_plot")]
+position = Vector2(-114, 35)
+grid_coord = Vector2i(1, 1)
+
+[node name="Plot_2_1" parent="Environment/FarmGrid" instance=ExtResource("9_plot")]
+position = Vector2(-98, 35)
+grid_coord = Vector2i(2, 1)
+
+[node name="Plot_3_1" parent="Environment/FarmGrid" instance=ExtResource("9_plot")]
+position = Vector2(-82, 35)
+grid_coord = Vector2i(3, 1)
+
+[node name="Plot_0_2" parent="Environment/FarmGrid" instance=ExtResource("9_plot")]
+position = Vector2(-130, 50)
+grid_coord = Vector2i(0, 2)
+
+[node name="Plot_1_2" parent="Environment/FarmGrid" instance=ExtResource("9_plot")]
+position = Vector2(-114, 50)
+grid_coord = Vector2i(1, 2)
+
+[node name="Plot_2_2" parent="Environment/FarmGrid" instance=ExtResource("9_plot")]
+position = Vector2(-98, 50)
+grid_coord = Vector2i(2, 2)
+
+[node name="Plot_3_2" parent="Environment/FarmGrid" instance=ExtResource("9_plot")]
+position = Vector2(-82, 50)
+grid_coord = Vector2i(3, 2)
+
+[node name="WildBerryBush" parent="Environment" instance=ExtResource("10_berry")]
+position = Vector2(120, -130)
+node_id = &"wild_berry_bush_1"

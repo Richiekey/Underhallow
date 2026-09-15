@@ -89,6 +89,8 @@ func step_simulation(step_delta: float) -> void:
 	
 	game_time.advance(step_delta)
 	game_state.game_time_elapsed = game_time.elapsed_seconds
+	if game_state.time_state != null:
+		game_state.time_state.elapsed_seconds = game_time.elapsed_seconds
 	simulation_stepped.emit(step_delta)
 
 ## Receives variable render/frame delta from engine loop, accumulates it, and executes

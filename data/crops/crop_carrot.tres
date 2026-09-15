@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CropDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/gameplay/farming/crop_definition.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"carrot"
+display_name = "Carrot"
+seed_item_id = &"seed_carrot"
+harvest_item_id = &"crop_carrot"
+growth_stages = 3
+days_to_mature = 2
+harvest_yield_min = 1
+harvest_yield_max = 2
+xp_reward_plant = 5
+xp_reward_harvest = 20

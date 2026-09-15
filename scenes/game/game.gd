@@ -3,6 +3,7 @@ extends Node2D
 ## Game root controller for Underhallow.
 ## Coordinates runtime lifecycle, active world space, player spawn, camera tracking,
 ## dock-to-dock travel transitions, and deterministic day/night presentation.
+## Integrates Phase 4 UI and command execution feedback.
 
 const PlayerScene = preload("res://scenes/player/player.tscn")
 const DefaultWorldScene = preload("res://scenes/world/personal_island.tscn")
@@ -11,9 +12,11 @@ const DefaultWorldScene = preload("res://scenes/world/personal_island.tscn")
 @onready var camera: CameraController = $Camera
 @onready var runtime: GameRuntime = $Systems/Runtime
 @onready var day_night: DayNightCycle = $DayNight
-@onready var dev_label: Label = $UI/DevLabel
+@onready var status_bar: StatusBarUI = $UI/StatusBarUI
 @onready var location_banner: Label = $UI/LocationBanner
 @onready var toast_label: Label = $UI/InteractionToast
+@onready var hotbar_ui: HotbarUI = $UI/HotbarUI
+@onready var inventory_ui: InventoryUI = $UI/InventoryUI
 
 var player_instance: PlayerController = null
 var active_world: WorldSpace = null
@@ -25,11 +28,13 @@ func _ready() -> void:
 	_verify_input_actions()
 	_initialize_technical_spine()
 	_load_initial_world()
+	_initialize_ui()
 
 func _verify_input_actions() -> void:
 	var required_actions: Array[String] = [
 		"move_up", "move_down", "move_left", "move_right",
-		"interact", "cancel", "zoom_in", "zoom_out"
+		"interact", "cancel", "zoom_in", "zoom_out",
+		"hotbar_1", "hotbar_2", "hotbar_3", "toggle_inventory", "debug_advance_day"
 	]
 	var all_actions_valid: bool = true
 	for action: String in required_actions:
@@ -46,7 +51,18 @@ func _initialize_technical_spine() -> void:
 	
 	runtime.initialize_runtime()
 	runtime.start_runtime()
+	
+	runtime.command_executed.connect(_on_command_executed)
+	runtime.command_failed.connect(_on_command_failed)
 	print("Underhallow: Phase 1 Technical Spine initialized and running cleanly.")
+
+func _initialize_ui() -> void:
+	if status_bar != null:
+		status_bar.initialize(runtime)
+	if inventory_ui != null:
+		inventory_ui.initialize(runtime)
+	if hotbar_ui != null:
+		hotbar_ui.initialize(runtime, player_instance)
 
 func _load_initial_world() -> void:
 	# Instantiate default starting world: Personal Island
@@ -95,6 +111,37 @@ func _spawn_player(marker_name: String) -> void:
 	
 	print("Underhallow: Player positioned at %s %s" % [marker_name, target_pos])
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("toggle_inventory"):
+		if inventory_ui != null:
+			inventory_ui.toggle()
+	elif event.is_action_pressed("debug_advance_day"):
+		if runtime != null:
+			runtime.execute_command(AdvanceDayDebugCommand.new())
+
+func _on_command_executed(cmd: Command, result: CommandResult) -> void:
+	if cmd is SleepCommand:
+		if runtime != null and runtime.game_state != null and runtime.game_state.time_state != null:
+			_show_location_banner("Day %d" % runtime.game_state.time_state.current_day)
+		_show_toast(result.message, 3.5)
+		_refresh_all_world_nodes()
+	elif result.message != "":
+		_show_toast(result.message, 2.0)
+
+func _on_command_failed(_cmd: Command, result: CommandResult) -> void:
+	if result.message != "":
+		_show_toast(result.message, 2.0)
+
+func _refresh_all_world_nodes() -> void:
+	# Refreshes FarmPlot and BerryBush visuals across active world
+	if active_world != null:
+		for plot: Node in active_world.find_children("*", "FarmPlot", true, false):
+			if plot.has_method("update_visuals"):
+				plot.update_visuals()
+		for bush: Node in active_world.find_children("*", "BerryBushInteractable", true, false):
+			if bush.has_method("update_visuals"):
+				bush.update_visuals()
+
 ## Handles dock-to-dock travel transition between world spaces.
 func _on_travel_requested(destination_scene_path: String, arrival_marker: String) -> void:
 	print("[Underhallow Travel] Transitioning to: ", destination_scene_path, " via ", arrival_marker)
@@ -139,10 +186,15 @@ func switch_world(destination_scene_path: String, arrival_marker: String) -> voi
 func _on_interactable_focused(target: Node) -> void:
 	var prompt: String = "Inspect"
 	var target_name: String = "Object"
+	
+	if target.has_method("update_prompt_for_player"):
+		target.update_prompt_for_player(player_instance)
+	
 	if target is InteractableObject:
 		prompt = target.prompt_text
 		target_name = target.interaction_name
-	_show_toast("Press [E] to %s %s" % [prompt, target_name], 0.5)
+	
+	_show_toast("Press [E] to %s" % prompt, 0.5)
 
 func _on_interactable_unfocused() -> void:
 	if _toast_timer <= 0.6:
