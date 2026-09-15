@@ -1,0 +1,116 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://src/world/dock_pier.gd" id="1_dock_pier"]
+[ext_resource type="Script" path="res://src/world/travel_dock.gd" id="2_travel_dock"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dock"]
+radius = 22.0
+
+[node name="DockPier" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_dock_pier")
+
+[node name="ArrivalMarker" type="Marker2D" parent="."]
+position = Vector2(0, 0)
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="PlanksShadow" type="ColorRect" parent="Visual"]
+offset_left = -26.0
+offset_top = -6.0
+offset_right = 26.0
+offset_bottom = 26.0
+color = Color(0, 0, 0, 0.3)
+
+[node name="PierDeck" type="ColorRect" parent="Visual"]
+offset_left = -24.0
+offset_top = -8.0
+offset_right = 24.0
+offset_bottom = 22.0
+color = Color(0.48, 0.35, 0.22, 1)
+
+[node name="PlankLine1" type="ColorRect" parent="Visual/PierDeck"]
+offset_left = 12.0
+offset_top = 0.0
+offset_right = 13.0
+offset_bottom = 30.0
+color = Color(0.35, 0.25, 0.15, 1)
+
+[node name="PlankLine2" type="ColorRect" parent="Visual/PierDeck"]
+offset_left = 24.0
+offset_top = 0.0
+offset_right = 25.0
+offset_bottom = 30.0
+color = Color(0.35, 0.25, 0.15, 1)
+
+[node name="PlankLine3" type="ColorRect" parent="Visual/PierDeck"]
+offset_left = 36.0
+offset_top = 0.0
+offset_right = 37.0
+offset_bottom = 30.0
+color = Color(0.35, 0.25, 0.15, 1)
+
+[node name="PilingLeft" type="ColorRect" parent="Visual"]
+offset_left = -22.0
+offset_top = 18.0
+offset_right = -18.0
+offset_bottom = 32.0
+color = Color(0.28, 0.18, 0.1, 1)
+
+[node name="PilingRight" type="ColorRect" parent="Visual"]
+offset_left = 18.0
+offset_top = 18.0
+offset_right = 22.0
+offset_bottom = 32.0
+color = Color(0.28, 0.18, 0.1, 1)
+
+[node name="MooringPost" type="ColorRect" parent="Visual"]
+offset_left = 16.0
+offset_top = -12.0
+offset_right = 20.0
+offset_bottom = -6.0
+color = Color(0.32, 0.2, 0.1, 1)
+
+[node name="Skiff" type="Node2D" parent="Visual"]
+position = Vector2(0, 36)
+
+[node name="SkiffShadow" type="ColorRect" parent="Visual/Skiff"]
+offset_left = -16.0
+offset_top = -3.0
+offset_right = 16.0
+offset_bottom = 11.0
+color = Color(0, 0, 0, 0.25)
+
+[node name="SkiffHull" type="ColorRect" parent="Visual/Skiff"]
+offset_left = -15.0
+offset_top = -4.0
+offset_right = 15.0
+offset_bottom = 8.0
+color = Color(0.55, 0.4, 0.25, 1)
+
+[node name="SkiffSeat" type="ColorRect" parent="Visual/Skiff"]
+offset_left = -4.0
+offset_top = -3.0
+offset_right = 4.0
+offset_bottom = 7.0
+color = Color(0.38, 0.26, 0.15, 1)
+
+[node name="MooringRope" type="ColorRect" parent="Visual"]
+offset_left = 14.0
+offset_top = -6.0
+offset_right = 15.0
+offset_bottom = 34.0
+color = Color(0.75, 0.7, 0.55, 1)
+
+[node name="DockInteractable" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+monitoring = false
+monitorable = true
+script = ExtResource("2_travel_dock")
+prompt_text = "Board Boat"
+interaction_name = "Dock"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DockInteractable"]
+position = Vector2(0, 10)
+shape = SubResource("CircleShape2D_dock")

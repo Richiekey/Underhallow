@@ -1,0 +1,70 @@
+[gd_scene load_steps=3 format=3]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_railing_top"]
+size = Vector2(64, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_railing_bot"]
+size = Vector2(64, 8)
+
+[node name="StoneBridge" type="Node2D"]
+y_sort_enabled = true
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Deck" type="ColorRect" parent="Visual"]
+offset_left = -32.0
+offset_top = -18.0
+offset_right = 32.0
+offset_bottom = 18.0
+color = Color(0.5, 0.48, 0.45, 1)
+
+[node name="PlanksLines" type="ColorRect" parent="Visual/Deck"]
+offset_left = 16.0
+offset_top = 0.0
+offset_right = 17.0
+offset_bottom = 36.0
+color = Color(0.42, 0.4, 0.38, 1)
+
+[node name="PlanksLines2" type="ColorRect" parent="Visual/Deck"]
+offset_left = 32.0
+offset_top = 0.0
+offset_right = 33.0
+offset_bottom = 36.0
+color = Color(0.42, 0.4, 0.38, 1)
+
+[node name="PlanksLines3" type="ColorRect" parent="Visual/Deck"]
+offset_left = 48.0
+offset_top = 0.0
+offset_right = 49.0
+offset_bottom = 36.0
+color = Color(0.42, 0.4, 0.38, 1)
+
+[node name="ParapetTopVisual" type="ColorRect" parent="Visual"]
+offset_left = -32.0
+offset_top = -20.0
+offset_right = 32.0
+offset_bottom = -14.0
+color = Color(0.38, 0.36, 0.34, 1)
+
+[node name="ParapetBotVisual" type="ColorRect" parent="Visual"]
+offset_left = -32.0
+offset_top = 14.0
+offset_right = 32.0
+offset_bottom = 20.0
+color = Color(0.38, 0.36, 0.34, 1)
+
+[node name="RailingTop" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RailingTop"]
+position = Vector2(0, -17)
+shape = SubResource("RectangleShape2D_railing_top")
+
+[node name="RailingBot" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RailingBot"]
+position = Vector2(0, 17)
+shape = SubResource("RectangleShape2D_railing_bot")

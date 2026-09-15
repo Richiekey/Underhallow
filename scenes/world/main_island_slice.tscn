@@ -1,0 +1,231 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://src/world/world_space.gd" id="1_world_space"]
+[ext_resource type="PackedScene" path="res://scenes/world/environment/dock_pier.tscn" id="2_dock"]
+[ext_resource type="PackedScene" path="res://scenes/world/environment/stone_bridge.tscn" id="3_bridge"]
+[ext_resource type="PackedScene" path="res://scenes/world/environment/ancient_arch.tscn" id="4_arch"]
+[ext_resource type="PackedScene" path="res://scenes/world/environment/tree_cozy.tscn" id="5_tree"]
+[ext_resource type="PackedScene" path="res://scenes/world/environment/rock_boulder.tscn" id="6_rock"]
+[ext_resource type="PackedScene" path="res://scenes/world/environment/bush_foliage.tscn" id="7_bush"]
+[ext_resource type="PackedScene" path="res://scenes/world/environment/signpost.tscn" id="8_sign"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bound_north"]
+size = Vector2(1000, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bound_south"]
+size = Vector2(1000, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bound_west"]
+size = Vector2(60, 700)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bound_east"]
+size = Vector2(60, 700)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_river_upper"]
+size = Vector2(36, 180)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_river_lower"]
+size = Vector2(36, 180)
+
+[node name="MainIslandSlice" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_world_space")
+world_id = &"main_island"
+display_name = "Whispering Reach — Main Island"
+
+[node name="TerrainBackground" type="Node2D" parent="."]
+z_index = -10
+
+[node name="OceanDeep" type="ColorRect" parent="TerrainBackground"]
+offset_left = -600.0
+offset_top = -400.0
+offset_right = 600.0
+offset_bottom = 400.0
+color = Color(0.18, 0.32, 0.48, 1)
+
+[node name="MainLand" type="ColorRect" parent="TerrainBackground"]
+offset_left = -450.0
+offset_top = -280.0
+offset_right = 450.0
+offset_bottom = 260.0
+color = Color(0.28, 0.46, 0.25, 1)
+
+[node name="MeadowHighland" type="ColorRect" parent="TerrainBackground"]
+offset_left = 20.0
+offset_top = -180.0
+offset_right = 420.0
+offset_bottom = 200.0
+color = Color(0.32, 0.52, 0.28, 1)
+
+[node name="SecludedClearing" type="ColorRect" parent="TerrainBackground"]
+offset_left = -260.0
+offset_top = -240.0
+offset_right = -130.0
+offset_bottom = -120.0
+color = Color(0.25, 0.4, 0.22, 1)
+
+[node name="RiverWater" type="ColorRect" parent="TerrainBackground"]
+offset_left = -58.0
+offset_top = -280.0
+offset_right = -22.0
+offset_bottom = 260.0
+color = Color(0.22, 0.38, 0.52, 1)
+
+[node name="TrailFromDock" type="ColorRect" parent="TerrainBackground"]
+offset_left = -310.0
+offset_top = 130.0
+offset_right = -50.0
+offset_bottom = 154.0
+rotation = -0.349
+color = Color(0.48, 0.42, 0.3, 1)
+
+[node name="TrailToMeadow" type="ColorRect" parent="TerrainBackground"]
+offset_left = -10.0
+offset_top = 30.0
+offset_right = 400.0
+offset_bottom = 54.0
+color = Color(0.48, 0.42, 0.3, 1)
+
+[node name="HiddenPath" type="ColorRect" parent="TerrainBackground"]
+offset_left = -150.0
+offset_top = 40.0
+offset_right = -130.0
+offset_bottom = 200.0
+rotation = 3.14159
+color = Color(0.38, 0.35, 0.26, 1)
+
+[node name="HiddenPathBranch" type="ColorRect" parent="TerrainBackground"]
+offset_left = -140.0
+offset_top = -140.0
+offset_right = -200.0
+offset_bottom = -120.0
+color = Color(0.38, 0.35, 0.26, 1)
+
+[node name="Boundaries" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="ColNorth" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(0, -290)
+shape = SubResource("RectangleShape2D_bound_north")
+
+[node name="ColSouth" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(0, 275)
+shape = SubResource("RectangleShape2D_bound_south")
+
+[node name="ColWest" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(-465, 0)
+shape = SubResource("RectangleShape2D_bound_west")
+
+[node name="ColEast" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(465, 0)
+shape = SubResource("RectangleShape2D_bound_east")
+
+[node name="RiverCollisionUpper" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(-40, -170)
+shape = SubResource("RectangleShape2D_river_upper")
+
+[node name="RiverCollisionLower" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(-40, 160)
+shape = SubResource("RectangleShape2D_river_lower")
+
+[node name="Markers" type="Node2D" parent="."]
+
+[node name="DockArrivalMarker" type="Marker2D" parent="Markers"]
+position = Vector2(-300, 160)
+
+[node name="Environment" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="DockPier" parent="Environment" instance=ExtResource("2_dock")]
+position = Vector2(-320, 180)
+destination_scene_path = "res://scenes/world/personal_island.tscn"
+destination_marker_name = "DockArrivalMarker"
+
+[node name="StoneBridge" parent="Environment" instance=ExtResource("3_bridge")]
+position = Vector2(-40, 42)
+
+[node name="AncientArch" parent="Environment" instance=ExtResource("4_arch")]
+position = Vector2(-200, -180)
+
+[node name="TownSign" parent="Environment" instance=ExtResource("8_sign")]
+position = Vector2(80, 20)
+inspect_text = "← To Coastal Dock | To Oakhaven & Town Square →"
+
+[node name="Tree1" parent="Environment" instance=ExtResource("5_tree")]
+position = Vector2(-360, 40)
+
+[node name="Tree2" parent="Environment" instance=ExtResource("5_tree")]
+position = Vector2(-280, -40)
+
+[node name="Tree3" parent="Environment" instance=ExtResource("5_tree")]
+position = Vector2(-270, -190)
+
+[node name="Tree4" parent="Environment" instance=ExtResource("5_tree")]
+position = Vector2(-130, -210)
+
+[node name="Tree5" parent="Environment" instance=ExtResource("5_tree")]
+position = Vector2(-90, -140)
+
+[node name="Tree6" parent="Environment" instance=ExtResource("5_tree")]
+position = Vector2(-90, -70)
+
+[node name="Tree7" parent="Environment" instance=ExtResource("5_tree")]
+position = Vector2(10, -210)
+
+[node name="Tree8" parent="Environment" instance=ExtResource("5_tree")]
+position = Vector2(90, -170)
+
+[node name="Tree9" parent="Environment" instance=ExtResource("5_tree")]
+position = Vector2(180, -200)
+
+[node name="Tree10" parent="Environment" instance=ExtResource("5_tree")]
+position = Vector2(300, -160)
+
+[node name="Tree11" parent="Environment" instance=ExtResource("5_tree")]
+position = Vector2(380, -80)
+
+[node name="Tree12" parent="Environment" instance=ExtResource("5_tree")]
+position = Vector2(340, 120)
+
+[node name="Tree13" parent="Environment" instance=ExtResource("5_tree")]
+position = Vector2(240, 180)
+
+[node name="Tree14" parent="Environment" instance=ExtResource("5_tree")]
+position = Vector2(70, 170)
+
+[node name="Rock1" parent="Environment" instance=ExtResource("6_rock")]
+position = Vector2(-250, -110)
+
+[node name="Rock2" parent="Environment" instance=ExtResource("6_rock")]
+position = Vector2(-150, -170)
+
+[node name="Rock3" parent="Environment" instance=ExtResource("6_rock")]
+position = Vector2(-70, 10)
+
+[node name="Rock4" parent="Environment" instance=ExtResource("6_rock")]
+position = Vector2(-10, 80)
+
+[node name="Rock5" parent="Environment" instance=ExtResource("6_rock")]
+position = Vector2(170, -80)
+
+[node name="Rock6" parent="Environment" instance=ExtResource("6_rock")]
+position = Vector2(280, 30)
+
+[node name="Bush1" parent="Environment" instance=ExtResource("7_bush")]
+position = Vector2(-230, 90)
+
+[node name="Bush2" parent="Environment" instance=ExtResource("7_bush")]
+position = Vector2(-120, 20)
+
+[node name="Bush3" parent="Environment" instance=ExtResource("7_bush")]
+position = Vector2(40, 10)
+
+[node name="Bush4" parent="Environment" instance=ExtResource("7_bush")]
+position = Vector2(140, 50)
+
+[node name="Bush5" parent="Environment" instance=ExtResource("7_bush")]
+position = Vector2(210, -40)
+
+[node name="Bush6" parent="Environment" instance=ExtResource("7_bush")]
+position = Vector2(310, 80)

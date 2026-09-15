@@ -1,0 +1,63 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://src/world/signpost_controller.gd" id="1_controller"]
+[ext_resource type="Script" path="res://src/world/inspectable_sign.gd" id="2_sign"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_post_collision"]
+size = Vector2(6, 6)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_detect"]
+radius = 20.0
+
+[node name="Signpost" type="StaticBody2D"]
+y_sort_enabled = true
+collision_layer = 1
+collision_mask = 0
+script = ExtResource("1_controller")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_post_collision")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Shadow" type="ColorRect" parent="Visual"]
+offset_left = -5.0
+offset_top = -4.0
+offset_right = 5.0
+offset_bottom = 2.0
+color = Color(0, 0, 0, 0.25)
+
+[node name="Post" type="ColorRect" parent="Visual"]
+offset_left = -2.0
+offset_top = -18.0
+offset_right = 2.0
+offset_bottom = 0.0
+color = Color(0.32, 0.2, 0.1, 1)
+
+[node name="Board" type="ColorRect" parent="Visual"]
+offset_left = -10.0
+offset_top = -22.0
+offset_right = 12.0
+offset_bottom = -12.0
+color = Color(0.55, 0.42, 0.26, 1)
+
+[node name="Pointer" type="ColorRect" parent="Visual"]
+offset_left = 12.0
+offset_top = -20.0
+offset_right = 15.0
+offset_bottom = -14.0
+color = Color(0.5, 0.38, 0.22, 1)
+
+[node name="SignInteractable" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+monitoring = false
+monitorable = true
+script = ExtResource("2_sign")
+prompt_text = "Read"
+interaction_name = "Signpost"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SignInteractable"]
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_detect")

@@ -17,6 +17,10 @@ const PlayerControllerClass = preload("res://src/player/player_controller.gd")
 const PlayerScene = preload("res://scenes/player/player.tscn")
 const CameraControllerClass = preload("res://src/presentation/camera_controller.gd")
 const InteractableObjectClass = preload("res://src/gameplay/interaction/interactable_object.gd")
+const WorldSpaceClass = preload("res://src/world/world_space.gd")
+const DayNightCycleClass = preload("res://src/presentation/day_night_cycle.gd")
+const PersonalIslandScene = preload("res://scenes/world/personal_island.tscn")
+const MainIslandSliceScene = preload("res://scenes/world/main_island_slice.tscn")
 
 var total_tests: int = 0
 var passed_tests: int = 0
@@ -24,7 +28,7 @@ var failed_tests: int = 0
 
 func _init() -> void:
 	print("==================================================")
-	print("Underhallow Phase 1 & 2 — Deterministic Test Suite")
+	print("Underhallow Phase 1, 2 & 3 — Deterministic Test Suite")
 	print("==================================================")
 	
 	_run_gametime_tests()
@@ -33,6 +37,7 @@ func _init() -> void:
 	_run_state_and_persistence_tests()
 	_run_runtime_lifecycle_tests()
 	_run_player_foundation_tests()
+	_run_world_foundation_tests()
 	
 	print("==================================================")
 	print("Test Results: %d passed, %d failed of %d total tests." % [passed_tests, failed_tests, total_tests])
@@ -530,3 +535,84 @@ func _run_player_foundation_tests() -> void:
 	player.queue_free()
 	cam.free()
 	test_sign.free()
+
+# -----------------------------------------------------------------------------
+# 7. World Foundation Tests (Phase 3)
+# -----------------------------------------------------------------------------
+func _run_world_foundation_tests() -> void:
+	print("\n--- Testing Phase 3 World Foundation ---")
+	
+	# Test W1: Personal Island Scene Instantiation & Markers
+	var pi: WorldSpace = PersonalIslandScene.instantiate() as WorldSpace
+	root.add_child(pi)
+	_assert_true(pi != null, "World W1: Personal Island instantiates as WorldSpace")
+	_assert_equal(pi.world_id, &"personal_island", "World W1: Personal Island world_id is 'personal_island'")
+	_assert_equal(pi.display_name, "Personal Island", "World W1: Personal Island display_name is correct")
+	
+	var spawn_pos: Vector2 = pi.get_marker_position("SpawnMarker")
+	_assert_equal(spawn_pos, Vector2(-60, 0), "World W1: Personal Island SpawnMarker is at (-60, 0)")
+	
+	var dock_arr_pos: Vector2 = pi.get_marker_position("DockArrivalMarker")
+	_assert_equal(dock_arr_pos, Vector2(210, 150), "World W1: Personal Island DockArrivalMarker exists")
+	
+	var cottage_node: Node = pi.find_child("Cottage", true, false)
+	_assert_true(cottage_node != null, "World W1: Cottage instance exists on Personal Island")
+	
+	var pi_dock_node: Node = pi.find_child("DockPier", true, false)
+	_assert_true(pi_dock_node != null, "World W1: DockPier instance exists on Personal Island")
+	
+	# Test W2: Main Island Slice Scene Instantiation & Markers
+	var mi: WorldSpace = MainIslandSliceScene.instantiate() as WorldSpace
+	root.add_child(mi)
+	_assert_true(mi != null, "World W2: Main Island slice instantiates as WorldSpace")
+	_assert_equal(mi.world_id, &"main_island", "World W2: Main Island world_id is 'main_island'")
+	
+	var mi_dock_pos: Vector2 = mi.get_marker_position("DockArrivalMarker")
+	_assert_equal(mi_dock_pos, Vector2(-300, 160), "World W2: Main Island DockArrivalMarker exists at (-300, 160)")
+	
+	var bridge_node: Node = mi.find_child("StoneBridge", true, false)
+	_assert_true(bridge_node != null, "World W2: StoneBridge instance exists on Main Island slice")
+	
+	var arch_node: Node = mi.find_child("AncientArch", true, false)
+	_assert_true(arch_node != null, "World W2: AncientArch exploration landmark exists on Main Island slice")
+	
+	var town_sign: Node = mi.find_child("TownSign", true, false)
+	_assert_true(town_sign != null, "World W2: Town direction signpost exists on Main Island slice")
+	
+	# Test W3: Water & World Boundary Collisions
+	var pi_water: StaticBody2D = pi.find_child("WaterBoundaries", true, false) as StaticBody2D
+	_assert_true(pi_water != null, "World W3: WaterBoundaries StaticBody2D exists on Personal Island")
+	_assert_equal(pi_water.collision_layer, 1, "World W3: Water boundaries have collision layer 1 active")
+	
+	var mi_bounds: StaticBody2D = mi.find_child("Boundaries", true, false) as StaticBody2D
+	_assert_true(mi_bounds != null, "World W3: Boundaries StaticBody2D exists on Main Island slice")
+	_assert_equal(mi_bounds.collision_layer, 1, "World W3: Main Island boundaries have collision layer 1 active")
+	
+	# Test W4: Dock Travel Transition Signal
+	var travel_events: Array[Dictionary] = []
+	pi.travel_requested.connect(func(dest, marker): travel_events.append({"dest": dest, "marker": marker}))
+	pi.request_travel("res://scenes/world/main_island_slice.tscn", "DockArrivalMarker")
+	_assert_equal(travel_events.size(), 1, "World W4: request_travel emits travel_requested signal")
+	_assert_equal(travel_events[0]["dest"], "res://scenes/world/main_island_slice.tscn", "World W4: Destination matches requested scene path")
+	_assert_equal(travel_events[0]["marker"], "DockArrivalMarker", "World W4: Arrival marker matches requested marker")
+	
+	# Test W5: Deterministic Day/Night Ambient Color Evaluation
+	var day_color: Color = DayNightCycleClass.evaluate_ambient_color(60.0, 240.0)
+	_assert_equal(day_color, DayNightCycleClass.COLOR_DAY, "DayNight W5: 60s/240s (progress 0.25) evaluates to COLOR_DAY")
+	
+	var twilight_color: Color = DayNightCycleClass.evaluate_ambient_color(180.0, 240.0)
+	_assert_equal(twilight_color, DayNightCycleClass.COLOR_TWILIGHT, "DayNight W5: 180s/240s (progress 0.75) evaluates to COLOR_TWILIGHT")
+	
+	var night_color: Color = DayNightCycleClass.evaluate_ambient_color(216.0, 240.0)
+	_assert_equal(night_color, DayNightCycleClass.COLOR_NIGHT, "DayNight W5: 216s/240s (progress 0.90) evaluates to COLOR_NIGHT")
+	
+	var next_day_color: Color = DayNightCycleClass.evaluate_ambient_color(300.0, 240.0)
+	_assert_equal(next_day_color, DayNightCycleClass.COLOR_DAY, "DayNight W5: 300s/240s (next day noon) deterministically wraps to COLOR_DAY")
+	
+	# Test W6: Thin WorldSpace Marker Lookup & Fallback
+	var fallback_pos: Vector2 = pi.get_marker_position("NonExistentMarker")
+	_assert_equal(fallback_pos, pi.global_position, "World W6: Missing marker lookup falls back to world root position")
+	
+	# Clean up test nodes
+	pi.queue_free()
+	mi.queue_free()

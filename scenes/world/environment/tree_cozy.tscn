@@ -1,0 +1,52 @@
+[gd_scene load_steps=2 format=3]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_trunk"]
+radius = 5.0
+height = 14.0
+
+[node name="TreeCozy" type="StaticBody2D"]
+y_sort_enabled = true
+collision_layer = 1
+collision_mask = 0
+
+[node name="TrunkCollision" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_trunk")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Shadow" type="ColorRect" parent="Visual"]
+offset_left = -12.0
+offset_top = -6.0
+offset_right = 12.0
+offset_bottom = 2.0
+color = Color(0, 0, 0, 0.25)
+
+[node name="Trunk" type="ColorRect" parent="Visual"]
+offset_left = -4.0
+offset_top = -20.0
+offset_right = 4.0
+offset_bottom = 0.0
+color = Color(0.32, 0.21, 0.12, 1)
+
+[node name="CanopyBase" type="ColorRect" parent="Visual"]
+offset_left = -20.0
+offset_top = -54.0
+offset_right = 20.0
+offset_bottom = -16.0
+color = Color(0.14, 0.28, 0.16, 1)
+
+[node name="CanopyMid" type="ColorRect" parent="Visual"]
+offset_left = -16.0
+offset_top = -62.0
+offset_right = 16.0
+offset_bottom = -26.0
+color = Color(0.2, 0.38, 0.22, 1)
+
+[node name="CanopyTop" type="ColorRect" parent="Visual"]
+offset_left = -12.0
+offset_top = -68.0
+offset_right = 12.0
+offset_bottom = -38.0
+color = Color(0.28, 0.48, 0.28, 1)

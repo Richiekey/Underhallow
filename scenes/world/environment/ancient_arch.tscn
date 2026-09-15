@@ -1,0 +1,96 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://src/gameplay/interaction/interactable_object.gd" id="1_interactable"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_left"]
+size = Vector2(10, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_right"]
+size = Vector2(10, 10)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_arch_detect"]
+radius = 24.0
+
+[node name="AncientArch" type="StaticBody2D"]
+y_sort_enabled = true
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionPillarLeft" type="CollisionShape2D" parent="."]
+position = Vector2(-15, -5)
+shape = SubResource("RectangleShape2D_left")
+
+[node name="CollisionPillarRight" type="CollisionShape2D" parent="."]
+position = Vector2(15, -5)
+shape = SubResource("RectangleShape2D_right")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="ShadowLeft" type="ColorRect" parent="Visual"]
+offset_left = -21.0
+offset_top = -6.0
+offset_right = -9.0
+offset_bottom = 2.0
+color = Color(0, 0, 0, 0.25)
+
+[node name="ShadowRight" type="ColorRect" parent="Visual"]
+offset_left = 9.0
+offset_top = -6.0
+offset_right = 21.0
+offset_bottom = 2.0
+color = Color(0, 0, 0, 0.25)
+
+[node name="PillarLeft" type="ColorRect" parent="Visual"]
+offset_left = -20.0
+offset_top = -36.0
+offset_right = -10.0
+offset_bottom = -2.0
+color = Color(0.32, 0.33, 0.35, 1)
+
+[node name="PillarRight" type="ColorRect" parent="Visual"]
+offset_left = 10.0
+offset_top = -36.0
+offset_right = 20.0
+offset_bottom = -2.0
+color = Color(0.32, 0.33, 0.35, 1)
+
+[node name="Lintel" type="ColorRect" parent="Visual"]
+offset_left = -24.0
+offset_top = -46.0
+offset_right = 24.0
+offset_bottom = -34.0
+color = Color(0.38, 0.39, 0.42, 1)
+
+[node name="Ivy1" type="ColorRect" parent="Visual"]
+offset_left = -18.0
+offset_top = -32.0
+offset_right = -14.0
+offset_bottom = -14.0
+color = Color(0.22, 0.36, 0.22, 1)
+
+[node name="Ivy2" type="ColorRect" parent="Visual"]
+offset_left = 12.0
+offset_top = -44.0
+offset_right = 17.0
+offset_bottom = -24.0
+color = Color(0.22, 0.36, 0.22, 1)
+
+[node name="RuneCarving" type="ColorRect" parent="Visual"]
+offset_left = -5.0
+offset_top = -42.0
+offset_right = 5.0
+offset_bottom = -38.0
+color = Color(0.55, 0.72, 0.78, 0.75)
+
+[node name="ArchInteractable" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+monitoring = false
+monitorable = true
+script = ExtResource("1_interactable")
+prompt_text = "Inspect"
+interaction_name = "Ancient Arch"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ArchInteractable"]
+position = Vector2(0, -10)
+shape = SubResource("CircleShape2D_arch_detect")
