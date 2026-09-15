@@ -133,7 +133,7 @@ Planned examples include:
 * Farming (`FB-001`)
 * Hunting & Combat (`HU-001`)
 * Multiplayer & Social Systems (`MS-001`)
-* Building & Personal Island (`BI-001`)
+* Building & Construction (`BI-001`)
 * NPCs, Dialogue & Quests (`NQ-001`)
 * Exploration & Secrets (`EX-001`)
 * Inventory, Items, Tools & Crafting (`II-001`)
@@ -208,7 +208,7 @@ The recommended format is:
 | `FB` | Farming |
 | `HU` | Hunting & Combat |
 | `MS` | Multiplayer & Social Systems |
-| `BI` | Building & Personal Island |
+| `BI` | Building & Construction |
 | `NQ` | NPC / Quest |
 | `EX` | Exploration |
 | `II` | Inventory / Items |
@@ -452,7 +452,7 @@ Maintains: Document ID, Document Name, Version, Status, Authority Level, Purpose
 | **FB-001** | Farming | 2 | DRAFT | [docs/FARMING_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/FARMING_SYSTEM_SPECIFICATION.md) |
 | **HU-001** | Hunting & Combat | 2 | DRAFT | [docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md) |
 | **MS-001** | Multiplayer & Social Systems | 2 | DRAFT | [docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md) |
-| **BI-001** | Building & Personal Island | 2 | PLANNED | Not yet drafted |
+| **BI-001** | Building & Construction | 2 | DRAFT | [docs/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md) |
 | **NQ-001** | NPC, Dialogue & Quest | 2 | PLANNED | Not yet drafted |
 | **EX-001** | Exploration & Secrets | 2 | PLANNED | Not yet drafted |
 | **II-001** | Inventory, Items, Tools & Crafting | 2 | PLANNED | Not yet drafted |
@@ -552,9 +552,10 @@ The MSI is the primary navigation and governance layer for humans and AI agents.
 - **HU-001 — Hunting & Combat System Specification V1.0:** Drafted and established at [`docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md).
 - **MS-001 — Multiplayer & Social Systems Specification V1.0:** Drafted and established at [`docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md).
 - **MI-001 — Main Island Design Specification V1.0:** Draft design baseline established at [`docs/MAIN_ISLAND_DESIGN_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/MAIN_ISLAND_DESIGN_SPECIFICATION.md) (defines communal world identity, 7–9 major regional frameworks, ~50% early game accessibility, natural transitions, landmark navigation, intentional empty space/wilderness, non-lethal defeat returning to Personal Island, non-forced hunting processing, layered historical depth, and the core principle: *"The main island of Underhallow should feel like a place you could spend years getting to know rather than a map you are expected to complete"*). Note upcoming counterpart: Personal Island Design Specification V1.0.
+- **BI-001 — Building & Construction System Specification V1.0:** Drafted and established at [`docs/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md) (defines universal construction framework, hybrid placement model with structured snapping & expressive placement, server authority over persistent state via Command → Validation → Mutation → Event, non-tedious construction duration, generous material recovery on demolition, soft builder specialization, distinct property authority contexts between Personal and Guild islands, data-driven construction definitions, and 9 system invariants BI-I01 to BI-I09). Note upcoming property counterpart: Personal Island Design Specification V1.0 (PI-001).
 - **IA-001 — Implementation Architecture Specification V1.1:** Advanced to `REVIEW` status at [`docs/IMPLEMENTATION_ARCHITECTURE_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/IMPLEMENTATION_ARCHITECTURE_SPECIFICATION.md) (defines decision classification framework, Godot 4.x + GDScript project structure, domain state boundaries, input actions, GameTime simulation, persistence abstraction, V0.1 dependency sequence, and Vertical Slice V0.1 "The First Day" scope).
 - **Next Planned Specification (Phase 3):**
-  - **BI-001 — Building & Personal Island Specification V1.0** (Personal Island Design Specification V1.0)
+  - **PI-001 — Personal Island Design Specification V1.0**
   - **II-001 — Inventory, Items, Tools & Crafting Specification V1.0**
   - **TS-001 — Time, Day/Night & Simulation Specification V1.0**
 
