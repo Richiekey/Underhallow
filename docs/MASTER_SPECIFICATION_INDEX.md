@@ -2,12 +2,13 @@
 
 ## Master Specification Index & Build Governance
 
-### Version 1.0 — Draft
+### Version 1.1 — Reconciled Baseline
 
 **Document ID:** MSI-001  
-**Status:** DRAFT  
-**Authority Level:** Project Governance  
+**Status:** APPROVED (Project Governance Baseline)  
+**Authority Level:** Level 0 — Project Governance & Control Layer  
 **Applies To:** All Underhallow design, specification, implementation, testing, and agent workflows  
+**Repository:** `Richiekey/Underhallow`  
 
 ---
 
@@ -53,11 +54,12 @@ When two documents appear to conflict, the higher-authority document takes prece
 
 The authority hierarchy is:
 
-1. **North Star**
-2. **Foundation Specifications**
-3. **System Specifications**
-4. **Implementation Specifications**
-5. **Agent Task Specifications**
+1. **North Star & Creative Authority (Level 0)**
+2. **Foundation Specifications (Level 1)**
+3. **World & Gameplay System Specifications (Level 2)**
+4. **Supporting Systems (Level 3)**
+5. **Implementation & Governance Specifications (Level 4)**
+6. **Agent Task Specifications**
 
 An agent must not resolve an authority conflict by simply choosing whichever document is more convenient.
 
@@ -65,7 +67,7 @@ An agent must not resolve an authority conflict by simply choosing whichever doc
 
 ### 2.3 Human Authority Through the Master Specification
 
-The ultimate project authority is the human project owner.
+The ultimate project authority is the human project owner (Founder / Omni).
 
 However, decisions are operationalized through the Master Specification system rather than informal instructions scattered throughout development.
 
@@ -87,188 +89,192 @@ The project uses progressive specification and prototype validation.
 
 # 3. Specification Hierarchy
 
-Underhallow documentation is divided into four primary levels.
+Underhallow documentation is divided into five distinct operational levels:
 
 ## Level 0 — Project Authority
 
-These documents establish the fundamental identity and rules of Underhallow.
+These documents establish the fundamental creative vision, immutable design principles, and governance rules of Underhallow. They possess the highest project-level authority.
 
 Current documents include:
 
-* **North Star V1.0** (`NS-001`)
-* **Creative Direction V1.0** (`CD-001`)
-* **Art Direction Bible V1.0** (`AD-001`)
-* **World Bible V1.0** (`WB-001`)
-* **Agent Constitution V1.0** (`AC-001`)
-
-These documents have the highest project-level authority.
+* **North Star V1.0** (`NS-001`) — Vision, Core Philosophy, & Immutable Invariants
+* **Creative Direction V1.0** (`CD-001`) — Canonical Creative Foundation & Invariant 11
+* **Art Direction Bible V1.0** (`AD-001`) — Canonical Art Direction Specification & Invariant 12
+* **World Bible V1.0** (`WB-001`) — Canonical World-Building Foundation & Invariant 13
+* **Agent Constitution V1.0** (`AC-001`) — Development Governance, Agent Whitelists, & DoD
+* **Specification Reconciliation V1.0** (`SR-001`) — Approved Architecture Reconciliation
+* **Master Specification Index & Build Governance V1.1** (`MSI-001`) — Project Navigation & Control Layer
 
 ---
 
 ## Level 1 — Foundation Specifications
 
-Foundation specifications define the structural rules of the game.
+Foundation specifications translate Level 0 creative and product authority into structural architectures for gameplay, technology, world geography, narrative, and character identity.
 
-Current documents include:
+Current established documents include:
 
-* **Engine & Technical Architecture Specification V1** (`ETA-001`) — Approved Foundation (supersedes `TA-001`)
-* **Core Gameplay Specifications V1.0** (`CG-001`)
-* **Player Control, Movement & Interaction Specification V1.0** (`PC-001`)
-* **World & Map Architecture Specification V1.0** (`WM-001`)
-* **Narrative Bible V1.0** (`NB-001`)
-* **Character Bible V1.0** (`CB-001`)
+* **Foundation Specification V1.0** (`FS-001`) — Product & System Definition Baseline
+* **Engine & Technical Architecture Specification V1** (`ETA-001`) — Engine, State, Dedicated Server & Persistence (supersedes `TA-001`)
+* **Core Gameplay Systems Specification V1.0** (`CG-001`) — Primary Loops, Pillars, Agency, & Gameplay Invariants
+* **Player Control, Movement & Interaction Specification V1.0** (`PC-001`) — Traversal, Interactions, & Fixed Camera Controls
+* **World & Map Architecture Specification V1.0** (`WM-001`) — Isometric Map, Chunking, Y-Sort Depth, & Coordinate Geometry
+* **Narrative Bible V1.0** (`NB-001`) — Narrative Architecture, Mystery Curve, & Ten Narrative Laws
+* **Character Bible V1.0** (`CB-001`) — Living Population Architecture, NPC Tiers, & Community Relations
 
-Additional foundation documents may be added when necessary.
+Planned Creative / World Foundations:
+
+* **Biome & Environment Bible V1.0** (`BE-001`) — **NEXT CREATIVE SPECIFICATION TO DRAFT**
+* **Creature & Wildlife Bible V1.0** (`CW-001`) — Planned
+* **Mystery & Lore Architecture V1.0** (`ML-001`) — Planned
+* **Narrative Content Framework V1.0** (`NC-001`) — Planned
 
 ---
 
-## Level 2 — Gameplay System Specifications
+## Level 2 — World & Gameplay System Specifications
 
-These define individual major game systems.
+These define concrete world territories and individual major game systems.
 
-Planned examples include:
+### 2.1 World & Territory Contexts
 
-* Main Island Design (`MI-001`)
-* Personal Island Design (`PI-001`)
-* Player Progression (`PR-001`)
-* Farming (`FB-001`)
-* Livestock & Animal Husbandry (`LA-001`)
-* Hunting & Combat (`HU-001`)
-* Fishing (`FI-001`)
-* Foraging & Wild Resources (`FR-001`)
-* Resource Gathering, Forestry & Mining (`RG-001`)
-* Cooking & Food (`CK-001`)
-* Building & Construction (`BI-001`)
-* Inventory, Items, Tools & Crafting (`II-001`)
-* Exploration & Secrets (`EX-001`)
-* Transportation & Travel (`TR-001`)
-* Time, Day/Night & Simulation (`TS-001`)
-* Weather & Environmental Systems (`WE-001`)
-* NPCs, Dialogue & Quests (`NQ-001`)
-* Multiplayer & Social Systems (`MS-001`)
-* Economy (`EC-001`)
-* Story/Narrative Architecture (`ST-001`)
+* **Main Island Design Specification V1.0** (`MI-001`) — Shared Geography, 7–9 Regions, Landmarks, Wilderness
+* **Personal Island Design Specification V1.0** (`PI-001`) — Private Sanctuary, Homestead Evolution, Preparation Hub [Specializes `BI-001`]
+* **Regional World Specifications** (`RW-001`) — Planned
+* **Town Social Structure Specification** (`TC-001`) — Planned
+* **Major NPC / Character Roster Specification** (`CR-001`) — Planned
+* **World Events & Festival Direction Specification** (`EV-001`) — Planned
+
+### 2.2 Universal Gameplay Systems
+
+* **Player Progression Specification V1.0** (`PR-001`)
+* **Farming System Specification V1.0** (`FB-001`)
+* **Livestock & Animal Husbandry Specification V1.0** (`LA-001`) — Planned
+* **Hunting & Combat System Specification V1.0** (`HU-001`)
+* **Fishing Specification V1.0** (`FI-001`) — Planned
+* **Foraging & Wild Resources Specification V1.0** (`FR-001`) — Planned
+* **Resource Gathering, Forestry & Mining Specification V1.0** (`RG-001`) — Planned
+* **Cooking & Food Specification V1.0** (`CK-001`) — Planned
+* **Building & Construction System Specification V1.0** (`BI-001`) — Universal Construction Framework
+* **Inventory, Items, Tools & Crafting Specification V1.0** (`II-001`) — Planned
+* **Exploration & Secrets Specification V1.0** (`EX-001`) — Planned
+* **Transportation & Travel Specification V1.0** (`TR-001`) — Planned
+* **Time, Day/Night & Simulation Specification V1.0** (`TS-001`) — Planned
+* **Weather & Environmental Systems Specification V1.0** (`WE-001`) — Planned
+* **NPCs, Dialogue & Quests Specification V1.0** (`NQ-001`) — Planned
+* **Multiplayer & Social Systems Specification V1.0** (`MS-001`) — Cross-Cutting Social Systems
+* **Economy Specification V1.0** (`EC-001`) — Planned
+* **Story & Narrative Architecture Specification V1.0** (`ST-001`) — Planned
 
 ---
 
 ## Level 3 — Supporting Systems
 
-These define systems that support gameplay but do not necessarily determine the game's primary fantasy.
+These define systems that support gameplay presentation, accessibility, audio, and player configuration.
 
-Examples include:
+Current planned examples include:
 
-* UI/UX (`UI-001`)
-* Audio (`AU-001`)
-* Save System (`SV-001`)
-* Settings (`IS-001`)
-* Accessibility (`AX-001`)
-* Input Configuration
-* Notifications
-* Loading/Transition Systems
-* Performance
-* Analytics
-* Error Handling
+* **UI / UX Specification** (`UI-001`) — Planned
+* **Audio & Music Direction Bible** (`AU-001`) — Planned
+* **Save System Specification** (`SV-001`) — Planned
+* **Input Settings Specification** (`IS-001`) — Planned
+* **Accessibility Specification** (`AX-001`) — Planned
+* Supporting Runtime Specifications (Notifications, Loading/Transition Systems, Performance Budgets)
 
 ---
 
-## Level 4 — Implementation Specifications
+## Level 4 — Implementation & Governance Specifications
 
-These documents translate approved system designs into implementation-level requirements.
+These documents translate approved system designs into concrete engineering requirements, production schedules, and quality gates.
 
-Examples:
+Current documents include:
 
-* Database schemas
-* API contracts
-* Component architecture
-* Data models
-* Save-state structures
-* Asset pipelines
-* State machines
-* Technical interfaces
-* Performance budgets
-* Testing specifications (`QA-001`)
+* **Implementation Architecture Specification V1.1** (`IA-001`) — REVIEW (Godot 4.x, GDScript Domain Structure, Input Actions, V0.1 Slice)
+* **Production Plan & Vertical Slice Roadmap V1.0** (`PP-001`) — APPROVED (Phases 0–7, Vertical Slice Roadmap, Quality Gates)
+* **QA & Testing Specification** (`QA-001`) — PLANNED
 
 ---
 
-# 4. Document Registry
+# 4. Document Registry Prefix Table
 
-Every major specification receives a permanent Document ID.
+Every major specification receives a permanent Document ID. The canonical prefix registry is:
 
-The recommended format is:
-
-| Prefix | Document Type |
-| :--- | :--- |
-| `NS` | North Star |
-| `CD` | Creative Direction |
-| `AD` | Art Direction Bible |
-| `WB` | World Bible |
-| `AC` | Agent Constitution |
-| `SR` | Specification Reconciliation |
-| `ETA` | Engine & Technical Architecture (`TA` superseded) |
-| `CG` | Core Gameplay |
-| `PC` | Player Control |
-| `WM` | World & Map |
-| `NB` | Narrative Bible |
-| `CB` | Character Bible |
-| `MI` | Main Island |
-| `PI` | Personal Island |
-| `PR` | Player Progression |
-| `FB` | Farming |
-| `LA` | Livestock & Animal Husbandry |
-| `HU` | Hunting & Combat |
-| `FI` | Fishing |
-| `FR` | Foraging & Wild Resources |
-| `RG` | Resource Gathering, Forestry & Mining |
-| `CK` | Cooking & Food |
-| `BI` | Building & Construction |
-| `II` | Inventory / Items |
-| `EX` | Exploration |
-| `TR` | Transportation & Travel |
-| `TS` | Time / Simulation |
-| `WE` | Weather & Environmental Systems |
-| `NQ` | NPC / Quest |
-| `MS` | Multiplayer & Social Systems |
-| `EC` | Economy |
-| `ST` | Story / Narrative |
-| `UI` | UI / UX |
-| `AU` | Audio |
-| `SV` | Save System |
-| `AX` | Accessibility |
-| `IS` | Input Settings |
-| `QA` | QA & Testing |
-| `IA` | Implementation Architecture |
-
-Each document receives a permanent numeric identifier. Example: `WM-001 — World & Map Architecture Specification`.  
-The ID remains permanent even if the document is revised.
+| Prefix | Document Category | Authority Level |
+| :--- | :--- | :---: |
+| `NS` | North Star | 0 |
+| `CD` | Creative Direction | 0 |
+| `AD` | Art Direction Bible | 0 |
+| `WB` | World Bible | 0 |
+| `AC` | Agent Constitution | 0 |
+| `SR` | Specification Reconciliation | 0 |
+| `MSI` | Master Specification Index | 0 |
+| `FS` | Foundation Specification | 1 |
+| `ETA` | Engine & Technical Architecture (`TA` superseded) | 1 |
+| `CG` | Core Gameplay Systems | 1 |
+| `PC` | Player Control, Movement & Interaction | 1 |
+| `WM` | World & Map Architecture | 1 |
+| `NB` | Narrative Bible | 1 |
+| `CB` | Character Bible | 1 |
+| `BE` | Biome & Environment Bible | 1 |
+| `CW` | Creature & Wildlife Bible | 1 |
+| `ML` | Mystery & Lore Architecture | 1 |
+| `NC` | Narrative Content Framework | 1 |
+| `MI` | Main Island Design | 2 |
+| `PI` | Personal Island Design | 2 |
+| `RW` | Regional World Specifications | 2 |
+| `TC` | Town Social Structure | 2 |
+| `CR` | Major NPC / Character Roster | 2 |
+| `EV` | World Events & Festival Direction | 2 |
+| `PR` | Player Progression | 2 |
+| `FB` | Farming System | 2 |
+| `LA` | Livestock & Animal Husbandry | 2 |
+| `HU` | Hunting & Combat System | 2 |
+| `FI` | Fishing | 2 |
+| `FR` | Foraging & Wild Resources | 2 |
+| `RG` | Resource Gathering, Forestry & Mining | 2 |
+| `CK` | Cooking & Food | 2 |
+| `BI` | Building & Construction System | 2 |
+| `II` | Inventory, Items, Tools & Crafting | 2 |
+| `EX` | Exploration & Secrets | 2 |
+| `TR` | Transportation & Travel | 2 |
+| `TS` | Time, Day/Night & Simulation | 2 |
+| `WE` | Weather & Environmental Systems | 2 |
+| `NQ` | NPCs, Dialogue & Quests | 2 |
+| `MS` | Multiplayer & Social Systems | 2 |
+| `EC` | Economy | 2 |
+| `ST` | Story & Narrative Architecture | 2 |
+| `UI` | UI / UX | 3 |
+| `AU` | Audio & Music Direction Bible | 3 |
+| `SV` | Save System | 3 |
+| `AX` | Accessibility | 3 |
+| `IS` | Input Settings | 3 |
+| `IA` | Implementation Architecture | 4 |
+| `PP` | Production Plan & Roadmap | 4 |
+| `QA` | QA & Testing | 4 |
 
 ---
 
 # 5. Versioning
 
-Underhallow uses semantic document versioning.
+Underhallow uses semantic document versioning:
 
 ### Minor Version
-A minor version represents clarification, refinement, or limited changes that do not fundamentally alter the system.  
-Example: `V1.0 → V1.1`
+Represents clarification, refinement, or metadata reconciliations that do not fundamentally alter system rules. Example: `V1.0 → V1.1`.
 
 ### Major Version
-A major version represents a fundamental design change.  
-Example: `V1.1 → V2.0`  
-Major changes may require dependency review and revalidation of affected systems.
+Represents a fundamental design or architectural change. Example: `V1.1 → V2.0`. Major revisions require dependency review and validation of affected systems.
 
 ---
 
 # 6. Document Statuses
 
-Every specification must have one of the following statuses:
+Every specification must possess one of the following statuses:
 
-* **PLANNED:** The document is identified in the roadmap but drafting has not yet begun. Implementation must not begin on un-drafted specifications.
-* **DRAFT:** The document is actively being designed. Its decisions are not yet fully authoritative.
-* **REVIEW:** The document is substantially complete and undergoing review. Production implementation should not begin unless explicitly authorized.
-* **APPROVED:** The document has been formally reviewed and approved as authoritative baseline architecture, ready to guide system design and implementation.
-* **LOCKED:** The document is authoritative. Agents must follow it unless an approved change process modifies it.
-* **DEPRECATED:** The document has been intentionally retired. It remains available for historical reference but must not guide new implementation.
-* **SUPERSEDED:** The document has been replaced by a newer specification. The replacement document must be identified.
+* **PLANNED:** Identified in the roadmap; drafting has not yet begun. Implementation must not begin on un-drafted specifications.
+* **DRAFT:** Actively being designed. Decisions represent design baselines but are subject to revision prior to lock.
+* **REVIEW:** Substantially complete and undergoing cross-system dependency review.
+* **APPROVED:** Formally reviewed and adopted as authoritative foundation architecture.
+* **LOCKED:** Authoritative baseline. Governs all implementation; cannot be modified without formal change request.
+* **DEPRECATED:** Intentionally retired. Preserved for historical context; must not guide new work.
+* **SUPERSEDED:** Replaced by a newer specification. The replacement document must be explicitly cited.
 
 ---
 
@@ -284,7 +290,7 @@ The agent must determine:
 5. whether the relevant specification is DRAFT, REVIEW, or LOCKED;
 6. whether implementation is currently authorized.
 
-Agents are not expected to blindly read the entire documentation library for every task. Instead, the MSI provides the dependency path required for the task.
+Agents are not expected to blindly read the entire documentation library for every task. Instead, the MSI provides the exact dependency path required for the task.
 
 ---
 
@@ -292,10 +298,20 @@ Agents are not expected to blindly read the entire documentation library for eve
 
 Before modifying a system, an agent must read the specifications directly relevant to that system and the necessary parent specifications identified by the MSI.
 
-For example:
-> Farming Agent → Farming Specification → Core Gameplay → Player Control where relevant → Technical Architecture where relevant.
+### 8.1 Agent Mandatory Reading Matrices
 
-This prevents agents from making technically correct changes that violate higher-level game design.
+To avoid unnecessary reading while ensuring absolute fidelity to established design, agents must follow these domain-specific reading paths:
+
+| Domain / Work Area | Minimum Required Reading Sequence |
+| :--- | :--- |
+| **Creative / World / Lore** | `MSI-001` → `NS-001` → `CD-001` → `AD-001` → `WB-001` → `NB-001` → `WM-001` / `MI-001` |
+| **Character / Social / Quests** | `MSI-001` → `NS-001` → `CD-001` → `WB-001` → `NB-001` → `CB-001` → `MI-001` → `NQ-001` / `MS-001` |
+| **Main Island & Regional Exploration** | `MSI-001` → `NS-001` → `CD-001` → `AD-001` → `WB-001` → `NB-001` → `CB-001` → `WM-001` → `CG-001` → `MI-001` |
+| **Personal Island & Homestead** | `MSI-001` → `NS-001` → `CD-001` → `AD-001` → `WB-001` → `CG-001` → `WM-001` → `BI-001` → `PI-001` (+ `FB-001`) |
+| **Building & Construction Systems** | `MSI-001` → `NS-001` → `CD-001` → `AD-001` → `CG-001` → `ETA-001` → `PC-001` → `BI-001` (universal) → `PI-001` (personal context) |
+| **Core Gameplay Loops (Farming, Hunting, Gathering)** | `MSI-001` → `NS-001` → `CG-001` → `PC-001` → `ETA-001` → System Spec (`FB-001`, `HU-001`, etc.) → `PR-001` |
+| **Engine, State & Persistence Engineering** | `MSI-001` → `NS-001` → `AC-001` → `SR-001` → `FS-001` → `ETA-001` → `CG-001` → `IA-001` → `PP-001` |
+| **Presentation, Audio & UI/UX** | `MSI-001` → `NS-001` → `CD-001` → `AD-001` → `CG-001` → `PC-001` → `UI-001` / `AU-001` |
 
 ---
 
@@ -303,8 +319,7 @@ This prevents agents from making technically correct changes that violate higher
 
 Not every task requires its own formal document.
 
-Task specifications are required for **complex, high-risk, cross-system, or architectural work**.  
-Simple implementation tasks may operate directly from the relevant locked specification.
+Task specifications are required for **complex, high-risk, cross-system, or architectural work**. Simple implementation tasks may operate directly from the relevant locked specification.
 
 ---
 
@@ -444,34 +459,46 @@ Maintains: Document ID, Document Name, Version, Status, Authority Level, Purpose
 
 ---
 
-# 28. Initial Underhallow Registry
+# 28. Underhallow Specification Registry
 
-| ID | Specification | Level | Status | File Link |
-| :--- | :--- | :---: | :--- | :--- |
+The following table documents the active specification registry for the Underhallow repository:
+
+| ID | Specification Name | Level | Status | Canonical File Link |
+| :--- | :--- | :---: | :---: | :--- |
 | **NS-001** | North Star | 0 | LOCKED | [docs/NORTH_STAR.md](file:///c:/Users/HP/Documents/Underhallow/docs/NORTH_STAR.md) |
 | **CD-001** | Creative Direction | 0 | LOCKED | [docs/CREATIVE_DIRECTION.md](file:///c:/Users/HP/Documents/Underhallow/docs/CREATIVE_DIRECTION.md) |
 | **AD-001** | Art Direction Bible | 0 | LOCKED | [docs/ART_DIRECTION_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/ART_DIRECTION_BIBLE.md) |
 | **WB-001** | World Bible | 0 | LOCKED | [docs/WORLD_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_BIBLE.md) |
 | **AC-001** | Agent Constitution | 0 | LOCKED | [docs/AGENT_CONSTITUTION.md](file:///c:/Users/HP/Documents/Underhallow/docs/AGENT_CONSTITUTION.md) |
 | **SR-001** | Specification Reconciliation | 0 | APPROVED | [docs/SPECIFICATION_RECONCILIATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md) |
+| **MSI-001** | Master Specification Index & Build Governance | 0 | APPROVED | [docs/MASTER_SPECIFICATION_INDEX.md](file:///c:/Users/HP/Documents/Underhallow/docs/MASTER_SPECIFICATION_INDEX.md) |
+| **FS-001** | Foundation Specification | 1 | APPROVED | [docs/FOUNDATION_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/FOUNDATION_SPECIFICATION.md) |
 | **ETA-001** | Engine & Technical Architecture | 1 | APPROVED | [docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md) |
 | **TA-001** | Technical Architecture (Browser/Phaser Prototype Baseline) | 1 | SUPERSEDED | [docs/TECHNICAL_ARCHITECTURE.md](file:///c:/Users/HP/Documents/Underhallow/docs/TECHNICAL_ARCHITECTURE.md) |
-| **CG-001** | Core Gameplay | 1 | LOCKED | [docs/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md) |
+| **CG-001** | Core Gameplay Systems | 1 | LOCKED | [docs/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md) |
 | **PC-001** | Player Control, Movement & Interaction | 1 | DRAFT | [docs/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md) |
 | **WM-001** | World & Map Architecture | 1 | DRAFT | [docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md) |
 | **NB-001** | Narrative Bible | 1 | DRAFT | [docs/NARRATIVE_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/NARRATIVE_BIBLE.md) |
 | **CB-001** | Character Bible | 1 | DRAFT | [docs/CHARACTER_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/CHARACTER_BIBLE.md) |
+| **BE-001** | Biome & Environment Bible | 1 | PLANNED | Not yet drafted *(Next Creative Specification)* |
+| **CW-001** | Creature & Wildlife Bible | 1 | PLANNED | Not yet drafted |
+| **ML-001** | Mystery & Lore Architecture | 1 | PLANNED | Not yet drafted |
+| **NC-001** | Narrative Content Framework | 1 | PLANNED | Not yet drafted |
 | **MI-001** | Main Island Design | 2 | DRAFT | [docs/MAIN_ISLAND_DESIGN_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/MAIN_ISLAND_DESIGN_SPECIFICATION.md) |
 | **PI-001** | Personal Island Design | 2 | DRAFT | [docs/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md) |
+| **RW-001** | Regional World Specifications | 2 | PLANNED | Not yet drafted |
+| **TC-001** | Town Social Structure | 2 | PLANNED | Not yet drafted |
+| **CR-001** | Major NPC / Character Roster | 2 | PLANNED | Not yet drafted |
+| **EV-001** | World Events & Festival Direction | 2 | PLANNED | Not yet drafted |
 | **PR-001** | Player Progression | 2 | DRAFT | [docs/PLAYER_PROGRESSION_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_PROGRESSION_SPECIFICATION.md) |
-| **FB-001** | Farming | 2 | DRAFT | [docs/FARMING_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/FARMING_SYSTEM_SPECIFICATION.md) |
+| **FB-001** | Farming System | 2 | DRAFT | [docs/FARMING_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/FARMING_SYSTEM_SPECIFICATION.md) |
 | **LA-001** | Livestock & Animal Husbandry | 2 | PLANNED | Not yet drafted |
-| **HU-001** | Hunting & Combat | 2 | DRAFT | [docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md) |
+| **HU-001** | Hunting & Combat System | 2 | DRAFT | [docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md) |
 | **FI-001** | Fishing | 2 | PLANNED | Not yet drafted |
 | **FR-001** | Foraging & Wild Resources | 2 | PLANNED | Not yet drafted |
 | **RG-001** | Resource Gathering, Forestry & Mining | 2 | PLANNED | Not yet drafted |
 | **CK-001** | Cooking & Food | 2 | PLANNED | Not yet drafted |
-| **BI-001** | Building & Construction | 2 | DRAFT | [docs/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md) |
+| **BI-001** | Building & Construction System | 2 | DRAFT | [docs/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md) |
 | **II-001** | Inventory, Items, Tools & Crafting | 2 | PLANNED | Not yet drafted |
 | **EX-001** | Exploration & Secrets | 2 | PLANNED | Not yet drafted |
 | **TR-001** | Transportation & Travel | 2 | PLANNED | Not yet drafted |
@@ -482,11 +509,12 @@ Maintains: Document ID, Document Name, Version, Status, Authority Level, Purpose
 | **EC-001** | Economy | 2 | PLANNED | Not yet drafted |
 | **ST-001** | Story & Narrative Architecture | 2 | PLANNED | Not yet drafted |
 | **UI-001** | UI / UX | 3 | PLANNED | Not yet drafted |
-| **AU-001** | Audio | 3 | PLANNED | Not yet drafted |
+| **AU-001** | Audio & Music Direction Bible | 3 | PLANNED | Not yet drafted |
 | **SV-001** | Save System | 3 | PLANNED | Not yet drafted |
 | **AX-001** | Accessibility | 3 | PLANNED | Not yet drafted |
 | **IS-001** | Input Settings | 3 | PLANNED | Not yet drafted |
 | **IA-001** | Implementation Architecture | 4 | REVIEW | [docs/IMPLEMENTATION_ARCHITECTURE_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/IMPLEMENTATION_ARCHITECTURE_SPECIFICATION.md) |
+| **PP-001** | Production Plan & Vertical Slice Roadmap | 4 | APPROVED | [docs/PRODUCTION_PLAN.md](file:///c:/Users/HP/Documents/Underhallow/docs/PRODUCTION_PLAN.md) |
 | **QA-001** | QA & Testing Specification | 4 | PLANNED | Not yet drafted |
 
 ---
@@ -494,11 +522,12 @@ Maintains: Document ID, Document Name, Version, Status, Authority Level, Purpose
 # 29. Recommended Build Order
 
 - **Phase 1 — Authority:** North Star (`NS-001`), Creative Direction (`CD-001`), Art Direction Bible (`AD-001`), World Bible (`WB-001`), Agent Constitution (`AC-001`), Master Specification Index (`MSI-001`), Specification Reconciliation (`SR-001`).
-- **Phase 2 — Foundation:** Engine & Technical Architecture (`ETA-001`), Core Gameplay (`CG-001`), Player Control (`PC-001`), World & Map Architecture (`WM-001`), Narrative Bible (`NB-001`), Character Bible (`CB-001`).
+- **Phase 2 — Foundation Architecture & Creative Foundations:** Foundation Specification (`FS-001`), Engine & Technical Architecture (`ETA-001`), Core Gameplay (`CG-001`), Player Control (`PC-001`), World & Map Architecture (`WM-001`), Narrative Bible (`NB-001`), Character Bible (`CB-001`).
+  - *Upcoming Creative Foundations:* Biome & Environment Bible (`BE-001`), Creature & Wildlife Bible (`CW-001`), Mystery & Lore Architecture (`ML-001`), Narrative Content Framework (`NC-001`).
 - **Phase 3 — Player, World & Social Systems:** Main Island Design (`MI-001`), Personal Island Design (`PI-001`), Player Progression (`PR-001`), Farming (`FB-001`), Livestock & Animal Husbandry (`LA-001`), Hunting & Combat (`HU-001`), Fishing (`FI-001`), Foraging & Wild Resources (`FR-001`), Resource Gathering, Forestry & Mining (`RG-001`), Cooking & Food (`CK-001`), Building & Construction (`BI-001`), Inventory/Items/Tools/Crafting (`II-001`), Exploration & Secrets (`EX-001`), Transportation & Travel (`TR-001`), Time & Simulation (`TS-001`), Weather & Environmental Systems (`WE-001`), Multiplayer & Social Systems (`MS-001`).
-- **Phase 4 — World Population:** NPC/Dialogue/Quest (`NQ-001`), Story/Narrative (`ST-001`).
-- **Phase 5 — Meta Systems:** Economy (`EC-001`), Save System (`SV-001`), UI/UX (`UI-001`), Audio (`AU-001`), Accessibility (`AX-001`), Input/Settings (`IS-001`).
-- **Phase 6 — Implementation Governance:** Implementation Specs (`IA-001`), QA & Testing (`QA-001`), Performance, Production Readiness.
+- **Phase 4 — World Population & Communities:** NPCs, Dialogue & Quests (`NQ-001`), Story/Narrative Architecture (`ST-001`), Regional World Specifications (`RW-001`), Town Social Structure (`TC-001`), Major NPC / Character Roster (`CR-001`), World Events & Festival Direction (`EV-001`).
+- **Phase 5 — Meta Systems:** Economy (`EC-001`), Save System (`SV-001`), UI/UX (`UI-001`), Audio & Music Direction Bible (`AU-001`), Accessibility (`AX-001`), Input/Settings (`IS-001`).
+- **Phase 6 — Implementation Governance & Execution:** Implementation Specs (`IA-001`), Production Plan & Roadmap (`PP-001`), QA & Testing (`QA-001`), Performance, Production Readiness.
 
 ---
 
@@ -554,6 +583,55 @@ TR-001 (Transportation & Travel)
 
 ---
 
+### 30.2 Authoritative Creative & World Hierarchy Graph
+
+The creative specifications form a coherent, top-down semantic chain. Downstream specifications inherit rules without duplicating or overriding upstream authorities:
+
+```text
+NS-001 (North Star — Vision & Immutable Principles)
+ ├── CD-001 (Creative Direction — 65% Cozy / 35% Adventure, Creative Invariant 11)
+ │    ├── AD-001 (Art Direction Bible — Fixed Isometric, Pixel Art, Invariant 12)
+ │    │    ├── BE-001 (Biome & Environment Bible — NEXT CREATIVE SPEC)
+ │    │    ├── CW-001 (Creature & Wildlife Bible — Planned)
+ │    │    └── AU-001 (Audio & Music Direction Bible — Planned)
+ │    │
+ │    └── WB-001 (World Bible — Three-Tier Balance, Ancient History, Invariant 13)
+ │         ├── NB-001 (Narrative Bible — Mystery Progression, Ten Narrative Laws)
+ │         │    ├── CB-001 (Character Bible — 30–50 NPCs, Living Memory, Invariant 15)
+ │         │    │    ├── TC-001 (Town Social Structure — Planned)
+ │         │    │    └── CR-001 (Major NPC / Character Roster — Planned)
+ │         │    ├── ML-001 (Mystery & Lore Architecture — Planned)
+ │         │    └── NC-001 (Narrative Content Framework — Planned)
+ │         │
+ │         ├── WM-001 (World & Map Architecture — Coordinate Geometry, Isometric Tiles)
+ │         ├── MI-001 (Main Island Design — Shared World, 7–9 Regions, Invariant 16)
+ │         │    ├── RW-001 (Regional World Specifications — Planned)
+ │         │    └── EV-001 (World Events & Festival Direction — Planned)
+ │         └── PI-001 (Personal Island Design — Sanctuary, Homestead, Invariant 18)
+ │              └── [Specializes BI-001 Building & Construction System]
+```
+
+---
+
+### 30.3 Cross-Cutting Architecture & Multiplayer Dependency Map
+
+Technical architecture operates horizontally across gameplay systems to enforce server authority, data determinism, and persistent multiplayer safety:
+
+```text
+ETA-001 (Engine & Technical Architecture)
+ ├── FS-001 (Foundation Specification)
+ ├── SR-001 (Specification Reconciliation)
+ ├── IA-001 (Implementation Architecture — GDScript, GameState/PlayerState, InputActions)
+ ├── PP-001 (Production Plan & Vertical Slice Milestones)
+ └── MS-001 (Multiplayer & Social Systems — Server Authority, Parties, Guilds)
+      ├── BI-001 (Building & Construction — Command → Validation → Mutation → Event)
+      ├── FB-001 (Farming — Grid Authority, Crop State, Tick Advancement)
+      ├── HU-001 (Hunting & Combat — Non-lethal Defeat, Expedition Boundaries)
+      └── TR-001 (Transportation & Travel — Seamless Zone Transitions, Boat System)
+```
+
+---
+
 # 31. Change Propagation
 
 When an authoritative specification changes, dependent specifications must be reviewed.
@@ -604,32 +682,83 @@ The MSI is the primary navigation and governance layer for humans and AI agents.
 
 ---
 
-## 38. Current Roadmap Status
+# 38. Current Roadmap Status
 
-- **CD-001 — Creative Direction Specification V1.0:** Canonical Creative Foundation established and locked at [`docs/CREATIVE_DIRECTION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/CREATIVE_DIRECTION.md) (defines the 65% Cozy / 35% Adventure balance, the 50-hour feeling, non-intrusive slow-burn mystery, handcrafted SNES-era retro foundation + modern detail art standard, readability vs atmosphere parity, house evolution, and the supreme creative invariant: *"Never let the mystery destroy the cozy life. Never let the cozy life erase the mystery."*).
-- **AD-001 — Art Direction Bible V1.0:** Canonical Art Direction Specification established and locked at [`docs/ART_DIRECTION_BIBLE.md`](file:///c:/Users/HP/Documents/Underhallow/docs/ART_DIRECTION_BIBLE.md) (defines the fixed isometric perspective, no camera rotation in V1.0, 16-bit foundation with modern pixel-art execution, cozy medieval-fantasy architecture, mixed architectural age, 3-tier house evolution, tiered NPC animations, subtle mystery creature language, handcrafted UI/typography/icons, six visual signatures, and the Underhallow visual evaluation rule).
-- **WB-001 — World Bible V1.0:** Canonical World-Building Foundation established and locked at [`docs/WORLD_BIBLE.md`](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_BIBLE.md) (defines the island's geography, the town and landmarks, layered history, ancient civilization and disappearance, 8-stage emotional arc, reality-breaking places, subtle strange wildlife, grandparent inheritance, personal island sanctuary, non-forced hunting processing, and the core philosophy: *"The player comes to love Underhallow before they understand it"*).
-- **NB-001 — Narrative Bible V1.0:** Foundation narrative specification established at [`docs/NARRATIVE_BIBLE.md`](file:///c:/Users/HP/Documents/Underhallow/docs/NARRATIVE_BIBLE.md) (defines the 6-phase mystery curve, player arrival and vague past, grandparent investigation legacy, NPC living history, the Ten Narrative Laws, ending philosophy, and core narrative balance: *"Cozy surface. Mystical middle. Deep mystery underneath"*).
-- **CB-001 — Character Bible V1.0:** Foundation character specification established at [`docs/CHARACTER_BIBLE.md`](file:///c:/Users/HP/Documents/Underhallow/docs/CHARACTER_BIBLE.md) (defines 30–50 memorable residents, 3-tier depth structure, independent routines, believable flaws, fragmented mystery knowledge, imperfect living memory, romance rules, and core philosophy: *"Underhallow's characters should feel like people who have their own lives, histories, and reasons for staying here rather than NPCs who exist only for the player"*).
+- **NS-001 — North Star V1.0:** Locked project authority established at [`docs/NORTH_STAR.md`](file:///c:/Users/HP/Documents/Underhallow/docs/NORTH_STAR.md) (defines executive definition, creative vision, Windows PC platform per SR-001, single-player-first/multiplayer-native, and immutable design principles).
+- **CD-001 — Creative Direction Specification V1.0:** Canonical Creative Foundation established and locked at [`docs/CREATIVE_DIRECTION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/CREATIVE_DIRECTION.md) (defines 65% Cozy / 35% Adventure balance, 50-hour feeling, slow-burn mystery, handcrafted SNES-era retro foundation + modern detail art standard, readability vs atmosphere parity, house evolution, and Creative Invariant 11: *"Never let the mystery destroy the cozy life. Never let the cozy life erase the mystery."*).
+- **AD-001 — Art Direction Bible V1.0:** Canonical Art Direction Specification established and locked at [`docs/ART_DIRECTION_BIBLE.md`](file:///c:/Users/HP/Documents/Underhallow/docs/ART_DIRECTION_BIBLE.md) (defines fixed isometric perspective, no camera rotation in V1.0, 16-bit foundation with modern pixel-art execution, cozy medieval-fantasy architecture, mixed architectural age, 3-tier house evolution, tiered NPC animations, subtle mystery creature language, handcrafted UI/typography/icons, six visual signatures, and the Underhallow visual evaluation rule).
+- **WB-001 — World Bible V1.0:** Canonical World-Building Foundation established and locked at [`docs/WORLD_BIBLE.md`](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_BIBLE.md) (defines island geography, town and landmarks, layered history, ancient civilization and disappearance, 8-stage emotional arc, reality-breaking places, subtle strange wildlife, grandparent inheritance, personal island sanctuary, non-forced hunting processing, and the core philosophy: *"The player comes to love Underhallow before they understand it"*).
+- **AC-001 — Agent Constitution V1.0:** Development governance baseline locked at [`docs/AGENT_CONSTITUTION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/AGENT_CONSTITUTION.md) (defines agent roles, domain whitelists, Definition of Done, architecture plan requirements, and code modification rules).
 - **SR-001 — Specification Reconciliation V1.0:** Approved baseline established at [`docs/SPECIFICATION_RECONCILIATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md) (reconciled platform to Windows PC, engine to Godot, mode to single-player-first/multiplayer-native, added Guild Islands, fixed camera orientation, and updated MSI governance).
+- **MSI-001 — Master Specification Index & Build Governance V1.1:** Approved baseline established at [`docs/MASTER_SPECIFICATION_INDEX.md`](file:///c:/Users/HP/Documents/Underhallow/docs/MASTER_SPECIFICATION_INDEX.md) (reconciled master registry, authority levels, reading matrices, and roadmap).
+- **FS-001 — Foundation Specification V1.0:** Approved foundation product definition established at [`docs/FOUNDATION_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/FOUNDATION_SPECIFICATION.md) (defines comprehensive system boundaries, core player loops, non-lethal defeat, no stamina, and product structure).
 - **ETA-001 — Engine & Technical Architecture Specification V1:** Approved foundation architecture established at [`docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md) (supersedes initial browser/Phaser baseline `TA-001`; establishes Godot + GDScript + Dedicated Game Servers + Supabase for Windows PC).
-- **WM-001 — World & Map Architecture Specification V1.0:** Drafted and established at [`docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md).
+- **CG-001 — Core Gameplay Systems Specification V1.0:** Locked gameplay foundation established at [`docs/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md) (defines primary gameplay loops, progression pillars, player agency, and gameplay invariants).
+- **PC-001 — Player Control, Movement & Interaction Specification V1.0:** Drafted and established at [`docs/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md) (defines 8-direction movement, raycast interactions, tool usage, placement preview, and fixed camera with zoom).
+- **WM-001 — World & Map Architecture Specification V1.0:** Drafted and established at [`docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md) (defines 2:1 dimetric isometric coordinate geometry, TileMapLayer structure, chunk streaming, and depth sorting).
+- **NB-001 — Narrative Bible V1.0:** Foundation narrative specification established at [`docs/NARRATIVE_BIBLE.md`](file:///c:/Users/HP/Documents/Underhallow/docs/NARRATIVE_BIBLE.md) (defines 6-phase mystery curve, player arrival and vague past, grandparent legacy, NPC living history, the Ten Narrative Laws, ending philosophy, and core narrative balance: *"Cozy surface. Mystical middle. Deep mystery underneath"*).
+- **CB-001 — Character Bible V1.0:** Foundation character specification established at [`docs/CHARACTER_BIBLE.md`](file:///c:/Users/HP/Documents/Underhallow/docs/CHARACTER_BIBLE.md) (defines 30–50 memorable residents, 3-tier depth structure, independent routines, believable flaws, fragmented mystery knowledge, imperfect living memory, romance rules, and core philosophy: *"Underhallow's characters should feel like people who have their own lives, histories, and reasons for staying here rather than NPCs who exist only for the player"*).
+- **MI-001 — Main Island Design Specification V1.0:** Draft design baseline established at [`docs/MAIN_ISLAND_DESIGN_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/MAIN_ISLAND_DESIGN_SPECIFICATION.md) (defines communal world identity, 7–9 major regional frameworks, ~50% early game accessibility, natural transitions, landmark navigation, intentional empty space/wilderness, non-lethal defeat returning to Personal Island, non-forced hunting processing, layered historical depth, and Invariant 16: *"The main island of Underhallow should feel like a place you could spend years getting to know rather than a map you are expected to complete"*).
+- **PI-001 — Personal Island Design Specification V1.0:** Draft design baseline established at [`docs/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md) (defines private sanctuary & emotional destination, functional inherited starting cottage with undeveloped land, gradual grid-based area expansion, organic 3-stage house evolution, balanced efficiency vs. expression, preserved wilderness without mandatory optimization, ecological wildlife attraction, persistent authoritative state, and Invariant 18: *"The Personal Island is where the player turns progress into place"*).
 - **PR-001 — Player Progression Specification V1.0:** Drafted and established at [`docs/PLAYER_PROGRESSION_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_PROGRESSION_SPECIFICATION.md).
 - **FB-001 — Farming System Specification V1.0:** Drafted and established at [`docs/FARMING_SYSTEM_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/FARMING_SYSTEM_SPECIFICATION.md).
 - **HU-001 — Hunting & Combat System Specification V1.0:** Drafted and established at [`docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md).
 - **MS-001 — Multiplayer & Social Systems Specification V1.0:** Drafted and established at [`docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md).
-- **MI-001 — Main Island Design Specification V1.0:** Draft design baseline established at [`docs/MAIN_ISLAND_DESIGN_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/MAIN_ISLAND_DESIGN_SPECIFICATION.md) (defines communal world identity, 7–9 major regional frameworks, ~50% early game accessibility, natural transitions, landmark navigation, intentional empty space/wilderness, non-lethal defeat returning to Personal Island, non-forced hunting processing, layered historical depth, and the core principle: *"The main island of Underhallow should feel like a place you could spend years getting to know rather than a map you are expected to complete"*). Note upcoming counterpart: Personal Island Design Specification V1.0.
-- **BI-001 — Building & Construction System Specification V1.0:** Drafted and established at [`docs/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md) (defines universal construction framework, hybrid placement model with structured snapping & expressive placement, server authority over persistent state via Command → Validation → Mutation → Event, non-tedious construction duration, generous material recovery on demolition, soft builder specialization, distinct property authority contexts between Personal and Guild islands, data-driven construction definitions, and 9 system invariants BI-I01 to BI-I09).
-- **PI-001 — Personal Island Design Specification V1.0:** Draft design baseline established at [`docs/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md) (defines private sanctuary & emotional destination, functional inherited starting cottage with undeveloped land, gradual grid-based area expansion, organic 3-stage house evolution, balanced efficiency vs. expression, preserved wilderness without mandatory optimization, ecological wildlife attraction, persistent authoritative state, and subtle non-oppressive mystery: *"The Personal Island is where the player turns progress into place"*).
+- **BI-001 — Building & Construction System Specification V1.0:** Drafted and established at [`docs/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md) (defines universal construction framework, hybrid placement model with structured snapping & expressive placement, server authority over persistent state via Command → Validation → Mutation → Event, non-tedious construction duration, generous material recovery on demolition, soft builder specialization, distinct property authority contexts between Personal and Guild islands, data-driven construction definitions, and Invariant 17).
 - **IA-001 — Implementation Architecture Specification V1.1:** Advanced to `REVIEW` status at [`docs/IMPLEMENTATION_ARCHITECTURE_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/IMPLEMENTATION_ARCHITECTURE_SPECIFICATION.md) (defines decision classification framework, Godot 4.x + GDScript project structure, domain state boundaries, input actions, GameTime simulation, persistence abstraction, V0.1 dependency sequence, and Vertical Slice V0.1 "The First Day" scope).
-- **Next Planned Specification (Phase 3):**
-  - **II-001 — Inventory, Items, Tools & Crafting Specification V1.0**
-  - **TS-001 — Time, Day/Night & Simulation Specification V1.0**
-  - **EX-001 — Exploration & Secrets Specification V1.0**
-  - **RG-001 — Resource Gathering, Forestry & Mining Specification V1.0**
-  - **FR-001 — Foraging & Wild Resources Specification V1.0**
-  - **LA-001 — Livestock & Animal Husbandry Specification V1.0**
-  - **CK-001 — Cooking & Food Specification V1.0**
-  - **WE-001 — Weather & Environmental Systems Specification V1.0**
-  - **TR-001 — Transportation & Travel Specification V1.0**
+- **PP-001 — Production Plan & Vertical Slice Roadmap V1.0:** Approved baseline implementation roadmap established at [`docs/PRODUCTION_PLAN.md`](file:///c:/Users/HP/Documents/Underhallow/docs/PRODUCTION_PLAN.md) (defines master phased progression from Phase 0 toolchain to Phase 7 production polish, vertical slice gates, and milestone acceptance criteria).
 
+---
+
+### 38.1 Next Planned Creative Specification
+
+The next authoritative specification in the creative direction roadmap is:
+
+> **BE-001 — Biome & Environment Bible V1.0**
+
+This document will define environmental identities, visual palettes, lighting parameters, vegetation layers, transition rules, and atmospheric conditions across Underhallow's biomes.
+
+---
+
+### 38.2 Sequenced Creative Roadmap
+
+Following `BE-001`, creative and world authoring proceeds in the following sequential order:
+
+1. **BE-001 — Biome & Environment Bible V1.0** *(Next Specification)*
+2. **CW-001 — Creature & Wildlife Bible V1.0**
+3. **ML-001 — Mystery & Lore Architecture V1.0**
+4. **NC-001 — Narrative Content Framework V1.0**
+5. **RW-001 — Regional World Specifications V1.0**
+6. **TC-001 — Town Social Structure Specification V1.0**
+7. **CR-001 — Major NPC / Character Roster V1.0**
+8. **EV-001 — World Events & Festival Direction V1.0**
+9. **AU-001 — Audio & Music Direction Bible V1.0**
+
+---
+
+### 38.3 Planned Level 2 Gameplay Specifications
+
+Following foundational creative definitions, remaining Level 2 gameplay specifications will be drafted per dependency readiness:
+
+* **II-001 — Inventory, Items, Tools & Crafting Specification V1.0**
+* **TS-001 — Time, Day/Night & Simulation Specification V1.0**
+* **EX-001 — Exploration & Secrets Specification V1.0**
+* **RG-001 — Resource Gathering, Forestry & Mining Specification V1.0**
+* **FR-001 — Foraging & Wild Resources Specification V1.0**
+* **LA-001 — Livestock & Animal Husbandry Specification V1.0**
+* **CK-001 — Cooking & Food Specification V1.0**
+* **WE-001 — Weather & Environmental Systems Specification V1.0**
+* **TR-001 — Transportation & Travel Specification V1.0**
+* **FI-001 — Fishing Specification V1.0**
+* **NQ-001 — NPCs, Dialogue & Quests Specification V1.0**
+* **EC-001 — Economy Specification V1.0**
+* **ST-001 — Story & Narrative Architecture Specification V1.0**
+
+---
+
+# 39. Revision & Reconciliation History
+
+| Version | Date | Status | Author | Summary of Changes | Authority & Rationale |
+| :--- | :--- | :---: | :--- | :--- | :--- |
+| **V1.0** | 2026-09-14 | DRAFT | System Architecture | Initial creation of Master Specification Index, build governance rules, and registry baseline. | Initial governance standard. |
+| **V1.1** | 2026-09-16 | APPROVED | Gemini / Project Governance | Comprehensive MSI Reconciliation Pass. Reconciled complete specification library against current repository state; restored missing Level 1 and Level 4 specifications (`FS-001`, `PP-001`, `MSI-001`); registered complete creative pipeline with `BE-001` as next specification; established Section 8.1 Agent Mandatory Reading Matrices; integrated Section 30.2 Creative & World Hierarchy Graph; audited camera controls across all specs (fixed isometric, zoomable, no V1 rotation); no underlying game design decisions altered. | Approved baseline per MSI Reconciliation Pass. |
