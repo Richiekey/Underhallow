@@ -19,6 +19,9 @@ func validate(state: GameState) -> CommandResult:
 	if state == null or state.farming_state == null:
 		return CommandResult.fail("Invalid game state for watering.")
 	
+	if not FarmingGrid.is_valid_cell(grid_coord):
+		return CommandResult.fail("Grid coordinate (%d, %d) is outside the valid farming boundary." % [grid_coord.x, grid_coord.y])
+	
 	if check_distance and player_position.distance_to(plot_world_position) > 50.0:
 		return CommandResult.fail("Too far away to water.")
 	

@@ -29,6 +29,7 @@ const CropDatabaseClass = preload("res://src/gameplay/farming/crop_database.gd")
 const CropStateClass = preload("res://src/gameplay/farming/crop_state.gd")
 const SoilPlotStateClass = preload("res://src/gameplay/farming/soil_plot_state.gd")
 const FarmingStateClass = preload("res://src/gameplay/farming/farming_state.gd")
+const FarmingGridClass = preload("res://src/gameplay/farming/farming_grid.gd")
 const ProgressionStateClass = preload("res://src/gameplay/progression/progression_state.gd")
 const TimeStateClass = preload("res://src/core/time/time_state.gd")
 const WorldStateClass = preload("res://src/world/world_state.gd")
@@ -891,5 +892,78 @@ func _run_phase4_gameplay_tests() -> void:
 	_assert_equal(legacy_state.inventory_state.get_quantity(&"seed_carrot"), 5, "BackwardCompat 12: Missing inventory safely defaults to starting items")
 	_assert_equal(legacy_state.progression_state.farming_level, 1, "BackwardCompat 12: Missing progression safely defaults to Level 1")
 	
+	# Behavioral Test 13: Farming Grid Authoritative Boundary & Mutation Safety (PH4-FIX-001)
+	# 13a: Pure coordinate boundary evaluations
+	_assert_true(FarmingGridClass.is_valid_cell(Vector2i(0, 0)), "FarmingGrid 13a: Min coordinate (0, 0) is valid")
+	_assert_true(FarmingGridClass.is_valid_cell(Vector2i(3, 2)), "FarmingGrid 13a: Max coordinate (3, 2) is valid")
+	_assert_true(FarmingGridClass.is_valid_cell(Vector2i(1, 1)), "FarmingGrid 13a: Interior coordinate (1, 1) is valid")
+	_assert_true(FarmingGridClass.is_valid_cell(Vector2i(0, 2)), "FarmingGrid 13a: Corner coordinate (0, 2) is valid")
+	_assert_true(FarmingGridClass.is_valid_cell(Vector2i(3, 0)), "FarmingGrid 13a: Corner coordinate (3, 0) is valid")
+	
+	_assert_true(not FarmingGridClass.is_valid_cell(Vector2i(-1, 0)), "FarmingGrid 13a: Negative X (-1, 0) is invalid")
+	_assert_true(not FarmingGridClass.is_valid_cell(Vector2i(0, -1)), "FarmingGrid 13a: Negative Y (0, -1) is invalid")
+	_assert_true(not FarmingGridClass.is_valid_cell(Vector2i(-1, -1)), "FarmingGrid 13a: Both negative (-1, -1) is invalid")
+	_assert_true(not FarmingGridClass.is_valid_cell(Vector2i(4, 0)), "FarmingGrid 13a: X out-of-bounds (4, 0) is invalid")
+	_assert_true(not FarmingGridClass.is_valid_cell(Vector2i(0, 3)), "FarmingGrid 13a: Y out-of-bounds (0, 3) is invalid")
+	_assert_true(not FarmingGridClass.is_valid_cell(Vector2i(100, 100)), "FarmingGrid 13a: Far positive (100, 100) is invalid")
+	_assert_true(not FarmingGridClass.is_valid_cell(Vector2i(-100, -100)), "FarmingGrid 13a: Far negative (-100, -100) is invalid")
+	
+	# 13b: World position mapping
+	_assert_equal(FarmingGridClass.get_cell_world_position(Vector2i(0, 0)), Vector2(-130.0, 20.0), "FarmingGrid 13b: (0, 0) maps to GRID_ORIGIN")
+	_assert_equal(FarmingGridClass.get_cell_world_position(Vector2i(1, 1)), Vector2(-114.0, 35.0), "FarmingGrid 13b: (1, 1) maps to expected offset")
+	
+	# 13c: Command validation and mutation safety on out-of-bounds coordinates
+	var xp_before: int = runtime.game_state.progression_state.farming_xp
+	var seeds_before: int = runtime.game_state.inventory_state.get_quantity(&"seed_carrot")
+	var crops_before: int = runtime.game_state.inventory_state.get_quantity(&"crop_carrot")
+	
+	# TillSoilCommand rejects invalid coordinates without creating plots or awarding XP
+	var invalid_coords: Array[Vector2i] = [
+		Vector2i(-1, 0),
+		Vector2i(0, -1),
+		Vector2i(-1, -1),
+		Vector2i(4, 0),
+		Vector2i(0, 3),
+		Vector2i(100, 100),
+		Vector2i(-100, -100)
+	]
+	for inv_c in invalid_coords:
+		var inv_till_cmd: TillSoilCommand = TillSoilCommandClass.new(inv_c, player_pos, plot_pos, false)
+		var inv_till_res: CommandResult = runtime.execute_command(inv_till_cmd)
+		_assert_true(not inv_till_res.success, "FarmingGrid 13c: TillSoilCommand on %s fails validation" % str(inv_c))
+		_assert_true(runtime.game_state.farming_state.get_plot(inv_c) == null, "FarmingGrid 13c: No plot created for invalid coordinate %s" % str(inv_c))
+	
+	_assert_equal(runtime.game_state.progression_state.farming_xp, xp_before, "FarmingGrid 13c: Zero XP awarded across invalid till attempts")
+	
+	# PlantCropCommand rejects invalid coordinates without consuming seeds
+	var inv_plant_cmd: PlantCropCommand = PlantCropCommandClass.new(Vector2i(4, 1), &"carrot", player_pos, plot_pos, false)
+	var inv_plant_res: CommandResult = runtime.execute_command(inv_plant_cmd)
+	_assert_true(not inv_plant_res.success, "FarmingGrid 13c: PlantCropCommand on (4, 1) fails validation")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"seed_carrot"), seeds_before, "FarmingGrid 13c: Seeds strictly preserved on invalid plant attempt")
+	_assert_equal(runtime.game_state.progression_state.farming_xp, xp_before, "FarmingGrid 13c: Zero XP awarded on invalid plant attempt")
+	
+	# WaterCropCommand rejects invalid coordinates
+	var inv_water_cmd: WaterCropCommand = WaterCropCommandClass.new(Vector2i(0, -1), player_pos, plot_pos, false)
+	var inv_water_res: CommandResult = runtime.execute_command(inv_water_cmd)
+	_assert_true(not inv_water_res.success, "FarmingGrid 13c: WaterCropCommand on (0, -1) fails validation")
+	_assert_equal(runtime.game_state.progression_state.farming_xp, xp_before, "FarmingGrid 13c: Zero XP awarded on invalid water attempt")
+	
+	# HarvestCropCommand rejects invalid coordinates
+	var inv_harvest_cmd: HarvestCropCommand = HarvestCropCommandClass.new(Vector2i(100, 100), player_pos, plot_pos, false)
+	var inv_harvest_res: CommandResult = runtime.execute_command(inv_harvest_cmd)
+	_assert_true(not inv_harvest_res.success, "FarmingGrid 13c: HarvestCropCommand on (100, 100) fails validation")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"crop_carrot"), crops_before, "FarmingGrid 13c: Crops strictly preserved on invalid harvest attempt")
+	_assert_equal(runtime.game_state.progression_state.farming_xp, xp_before, "FarmingGrid 13c: Zero XP awarded on invalid harvest attempt")
+	
+	# 13d: Permitted boundary cell execution
+	var valid_boundary_coord: Vector2i = Vector2i(3, 2)
+	var valid_boundary_world: Vector2 = FarmingGridClass.get_cell_world_position(valid_boundary_coord)
+	var valid_till_cmd: TillSoilCommand = TillSoilCommandClass.new(valid_boundary_coord, valid_boundary_world, valid_boundary_world, false)
+	var valid_till_res: CommandResult = runtime.execute_command(valid_till_cmd)
+	_assert_true(valid_till_res.success, "FarmingGrid 13d: TillSoilCommand on max boundary (3, 2) succeeds")
+	_assert_true(runtime.game_state.farming_state.get_plot(valid_boundary_coord) != null, "FarmingGrid 13d: Plot state created on valid boundary (3, 2)")
+	_assert_equal(runtime.game_state.progression_state.farming_xp, xp_before + 2, "FarmingGrid 13d: Farming XP incremented by exactly 2")
+	
 	runtime.shutdown_runtime()
 	runtime.queue_free()
+
