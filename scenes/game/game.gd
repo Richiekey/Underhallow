@@ -39,6 +39,8 @@ func _initialize_technical_spine() -> void:
 
 func _process(delta: float) -> void:
 	if runtime != null and runtime.current_state == GameRuntime.LifecycleState.RUNNING:
+		# Feeds variable render-frame delta into runtime accumulator;
+		# GameRuntime executes discrete simulation steps decoupled from render cadence.
 		runtime.update_simulation(delta)
 
 func _exit_tree() -> void:

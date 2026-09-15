@@ -23,6 +23,7 @@ func _init() -> void:
 	print("==================================================")
 	
 	_run_gametime_tests()
+	_run_simulation_step_boundary_tests()
 	_run_command_pipeline_tests()
 	_run_state_and_persistence_tests()
 	_run_runtime_lifecycle_tests()
@@ -112,7 +113,120 @@ func _run_gametime_tests() -> void:
 	_assert_equal(run1.total_ticks, run2.total_ticks, "GameTime 6: Identical steps produce identical tick count")
 
 # -----------------------------------------------------------------------------
-# 2. Command Pipeline Tests
+# 2. Simulation Step Boundary Tests
+# -----------------------------------------------------------------------------
+func _run_simulation_step_boundary_tests() -> void:
+	print("\n--- Testing Simulation Step Boundary (GameRuntime) ---")
+	
+	var runtime: GameRuntime = GameRuntimeClass.new()
+	runtime.initialize_runtime()
+	runtime.start_runtime()
+	runtime.simulation_step = 0.02 # 50 Hz test step
+	
+	# Test A: Explicit simulation step
+	var steps_a: int = runtime.update_simulation(0.02)
+	_assert_equal(steps_a, 1, "SimStep A: Exact step delta produces exactly 1 simulation step")
+	_assert_approx(runtime.game_time.elapsed_seconds, 0.02, "SimStep A: GameTime elapsed matches 1 step (0.02s)")
+	_assert_approx(runtime.time_accumulator, 0.0, "SimStep A: Accumulator is 0.0 after exact consumption")
+	
+	# Test B: Multiple steps and accumulator remainder
+	# Passing 0.065s with step 0.02s should consume 3 steps (0.06s) and leave 0.005s in accumulator
+	var steps_b: int = runtime.update_simulation(0.065)
+	_assert_equal(steps_b, 3, "SimStep B: Frame delta 0.065s consumes exactly 3 steps (0.06s)")
+	_assert_approx(runtime.game_time.elapsed_seconds, 0.08, "SimStep B: Total elapsed is 0.08s (0.02 + 0.06)")
+	_assert_approx(runtime.time_accumulator, 0.005, "SimStep B: Remainder 0.005s is retained in accumulator")
+	
+	# Next frame passes 0.015s; accumulator becomes 0.005 + 0.015 = 0.020s -> exactly 1 step
+	var steps_b2: int = runtime.update_simulation(0.015)
+	_assert_equal(steps_b2, 1, "SimStep B: Sub-step delta 0.015s + remainder 0.005s consumes 1 step")
+	_assert_approx(runtime.game_time.elapsed_seconds, 0.10, "SimStep B: Total elapsed reaches 0.10s")
+	_assert_approx(runtime.time_accumulator, 0.0, "SimStep B: Accumulator is now 0.0")
+	
+	runtime.free()
+	
+	# Test C: Render cadence independence
+	# Two runs representing identical elapsed real time (0.10s) across different frame rates:
+	# Run 1: 6 frames @ ~60 FPS (approx 0.0166667s each, sum = 0.10s)
+	# Run 2: 3 frames @ ~30 FPS (approx 0.0333333s each, sum = 0.10s)
+	var run1: GameRuntime = GameRuntimeClass.new()
+	run1.initialize_runtime()
+	run1.start_runtime()
+	run1.simulation_step = 0.02
+	
+	var run2: GameRuntime = GameRuntimeClass.new()
+	run2.initialize_runtime()
+	run2.start_runtime()
+	run2.simulation_step = 0.02
+	
+	var steps_run1: int = 0
+	for i in range(5):
+		steps_run1 += run1.update_simulation(0.02) # 5 frames @ 50 FPS
+	
+	var steps_run2: int = 0
+	steps_run2 += run2.update_simulation(0.04)
+	steps_run2 += run2.update_simulation(0.04)
+	steps_run2 += run2.update_simulation(0.02) # 3 irregular frames totaling 0.10s
+	
+	_assert_equal(steps_run1, 5, "SimStep C: Run 1 executed exactly 5 simulation steps")
+	_assert_equal(steps_run2, 5, "SimStep C: Run 2 executed exactly 5 simulation steps despite different frame cadence")
+	_assert_approx(run1.game_time.elapsed_seconds, run2.game_time.elapsed_seconds, 
+		"SimStep C: Both runs reached identical simulation time (0.10s)")
+	_assert_approx(run1.game_state.game_time_elapsed, run2.game_state.game_time_elapsed, 
+		"SimStep C: Both runtimes synchronized identical GameState time")
+	
+	run1.free()
+	run2.free()
+	
+	# Test D: Time scale through runtime
+	var runtime_scale: GameRuntime = GameRuntimeClass.new()
+	runtime_scale.initialize_runtime()
+	runtime_scale.start_runtime()
+	runtime_scale.simulation_step = 0.02
+	runtime_scale.game_time.set_time_scale(2.0)
+	
+	runtime_scale.update_simulation(0.02)
+	_assert_approx(runtime_scale.game_time.elapsed_seconds, 0.04, 
+		"SimStep D: Time scale 2.0x through runtime advances simulation time by 2x (0.04s)")
+	_assert_approx(runtime_scale.game_state.game_time_elapsed, 0.04, 
+		"SimStep D: GameState reflects scaled simulation time (0.04s)")
+	
+	runtime_scale.free()
+	
+	# Test E: Pause through runtime
+	var runtime_pause: GameRuntime = GameRuntimeClass.new()
+	runtime_pause.initialize_runtime()
+	runtime_pause.start_runtime()
+	runtime_pause.simulation_step = 0.02
+	runtime_pause.game_time.pause()
+	
+	var paused_steps: int = runtime_pause.update_simulation(0.10)
+	_assert_equal(paused_steps, 5, "SimStep E: Controlled steps are processed while paused")
+	_assert_approx(runtime_pause.game_time.elapsed_seconds, 0.0, 
+		"SimStep E: Simulation time does NOT advance while paused")
+	_assert_approx(runtime_pause.game_state.game_time_elapsed, 0.0, 
+		"SimStep E: GameState time remains 0.0 while paused")
+	
+	runtime_pause.free()
+	
+	# Test F: Step cap / anti-spiral-of-death
+	var runtime_cap: GameRuntime = GameRuntimeClass.new()
+	runtime_cap.initialize_runtime()
+	runtime_cap.start_runtime()
+	runtime_cap.simulation_step = 0.02
+	runtime_cap.max_simulation_steps_per_frame = 8 # Max 8 steps per frame
+	
+	# Pass an extreme frame stall: 5.0 seconds (would be 250 steps without cap!)
+	var capped_steps: int = runtime_cap.update_simulation(5.0)
+	_assert_equal(capped_steps, 8, "SimStep F: Extreme frame stall (5.0s) is safely capped to 8 steps")
+	_assert_approx(runtime_cap.game_time.elapsed_seconds, 0.16, 
+		"SimStep F: Elapsed time corresponds strictly to 8 steps (0.16s)")
+	_assert_approx(runtime_cap.time_accumulator, 0.0, 
+		"SimStep F: Excess backlog is discarded to prevent spiral of death")
+	
+	runtime_cap.free()
+
+# -----------------------------------------------------------------------------
+# 3. Command Pipeline Tests
 # -----------------------------------------------------------------------------
 func _run_command_pipeline_tests() -> void:
 	print("\n--- Testing Command Pipeline ---")
@@ -159,7 +273,7 @@ func _run_command_pipeline_tests() -> void:
 	runtime.free()
 
 # -----------------------------------------------------------------------------
-# 3. State & Persistence Tests
+# 4. State & Persistence Tests
 # -----------------------------------------------------------------------------
 func _run_state_and_persistence_tests() -> void:
 	print("\n--- Testing GameState & Persistence Boundary ---")
@@ -210,7 +324,7 @@ func _run_state_and_persistence_tests() -> void:
 	_assert_true(not bad_success, "Persistence 12: Incompatible schema version 999 rejected")
 
 # -----------------------------------------------------------------------------
-# 4. Runtime Lifecycle Tests
+# 5. Runtime Lifecycle Tests
 # -----------------------------------------------------------------------------
 func _run_runtime_lifecycle_tests() -> void:
 	print("\n--- Testing GameRuntime Lifecycle ---")
@@ -227,16 +341,19 @@ func _run_runtime_lifecycle_tests() -> void:
 	runtime.start_runtime()
 	_assert_equal(runtime.current_state, GameRuntime.LifecycleState.RUNNING, "Lifecycle 13: start() transitions to RUNNING")
 	
-	runtime.update_simulation(1.5)
-	_assert_approx(runtime.game_time.elapsed_seconds, 1.5, "Lifecycle 13: update_simulation advances GameTime in RUNNING state")
-	_assert_approx(runtime.game_state.game_time_elapsed, 1.5, "Lifecycle 13: update_simulation syncs GameState time")
+	runtime.step_simulation(runtime.simulation_step)
+	_assert_approx(runtime.game_time.elapsed_seconds, runtime.simulation_step, 
+		"Lifecycle 13: step_simulation advances GameTime in RUNNING state")
+	_assert_approx(runtime.game_state.game_time_elapsed, runtime.simulation_step, 
+		"Lifecycle 13: step_simulation syncs GameState time")
 	
 	runtime.shutdown_runtime()
 	_assert_equal(runtime.current_state, GameRuntime.LifecycleState.SHUTDOWN, "Lifecycle 13: shutdown() transitions to SHUTDOWN")
 	
 	# Verify simulation does not advance when in SHUTDOWN
-	runtime.update_simulation(2.0)
-	_assert_approx(runtime.game_time.elapsed_seconds, 1.5, "Lifecycle 13: Simulation does not advance in SHUTDOWN state")
+	runtime.update_simulation(0.5)
+	_assert_approx(runtime.game_time.elapsed_seconds, runtime.simulation_step, 
+		"Lifecycle 13: Simulation does not advance in SHUTDOWN state")
 	
 	_assert_equal(observed_states.size(), 3, "Lifecycle 13: Emitted exactly 3 state transition signals")
 	

@@ -3,6 +3,7 @@ extends Node
 
 ## Central runtime lifecycle coordinator and authoritative mutation gateway for Underhallow.
 ## Owns core state, simulation time, persistence boundary, and input provider.
+## Establishes a controlled, deterministic simulation-step boundary decoupled from render cadence.
 ## Zero Autoload singletons; managed via explicit scene composition.
 
 enum LifecycleState {
@@ -13,8 +14,20 @@ enum LifecycleState {
 }
 
 signal lifecycle_changed(new_state: LifecycleState)
+signal simulation_stepped(step_delta: float)
 signal command_executed(command: Command, result: CommandResult)
 signal command_failed(command: Command, result: CommandResult)
+
+## Prototype default: 60Hz fixed simulation step (1/60s ~ 0.0166667s).
+## Configurable per runtime instance; not locked as final game design.
+const DEFAULT_SIMULATION_STEP: float = 1.0 / 60.0
+
+## Prototype safety cap: Maximum simulation steps allowed per rendered frame
+## to prevent spiral-of-death stalls during extreme frame hitches.
+const DEFAULT_MAX_STEPS_PER_FRAME: int = 8
+
+## Precision tolerance for float accumulator comparison
+const EPSILON: float = 0.000001
 
 var current_state: LifecycleState = LifecycleState.BOOT
 var game_state: GameState = null
@@ -22,12 +35,20 @@ var game_time: GameTime = null
 var persistence: PersistenceBoundary = null
 var input_provider: InputProvider = null
 
+## Controlled simulation stepping configuration
+var simulation_step: float = DEFAULT_SIMULATION_STEP
+var max_simulation_steps_per_frame: int = DEFAULT_MAX_STEPS_PER_FRAME
+var time_accumulator: float = 0.0
+
 func _init() -> void:
 	game_state = GameState.new()
 	game_time = GameTime.new()
 	persistence = PersistenceBoundary.new()
 	input_provider = InputProvider.new()
 	current_state = LifecycleState.BOOT
+	simulation_step = DEFAULT_SIMULATION_STEP
+	max_simulation_steps_per_frame = DEFAULT_MAX_STEPS_PER_FRAME
+	time_accumulator = 0.0
 
 ## Transitions runtime from BOOT to INITIALIZE.
 func initialize_runtime() -> void:
@@ -40,6 +61,7 @@ func initialize_runtime() -> void:
 	
 	game_state.reset()
 	game_time.reset()
+	time_accumulator = 0.0
 
 ## Transitions runtime from INITIALIZE to RUNNING.
 func start_runtime() -> void:
@@ -55,13 +77,46 @@ func shutdown_runtime() -> void:
 	current_state = LifecycleState.SHUTDOWN
 	lifecycle_changed.emit(current_state)
 
-## Advances deterministic simulation time when in RUNNING state.
-func update_simulation(delta: float) -> void:
-	if current_state != LifecycleState.RUNNING:
-		return
-	
-	game_time.advance(delta)
+## Executes exactly one discrete simulation step of size `step_delta`.
+## Direct simulation advancement path independent of render frame accumulation.
+func step_simulation(step_delta: float) -> void:
+	game_time.advance(step_delta)
 	game_state.game_time_elapsed = game_time.elapsed_seconds
+	simulation_stepped.emit(step_delta)
+
+## Receives variable render/frame delta from engine loop, accumulates it, and executes
+## controlled discrete simulation steps of fixed size (`simulation_step`).
+## Protects against spiral-of-death by capping steps per frame.
+## Returns the number of discrete simulation steps executed.
+func update_simulation(render_delta: float) -> int:
+	if current_state != LifecycleState.RUNNING:
+		return 0
+	
+	if render_delta <= 0.0:
+		return 0
+	
+	time_accumulator += render_delta
+	
+	# Anti-spiral-of-death safeguard: clamp accumulated time if it exceeds maximum allowable window
+	var max_accumulated_time: float = simulation_step * float(max_simulation_steps_per_frame)
+	if time_accumulator > max_accumulated_time:
+		time_accumulator = max_accumulated_time
+	
+	var steps_taken: int = 0
+	var step_threshold: float = simulation_step - EPSILON
+	while time_accumulator >= step_threshold and steps_taken < max_simulation_steps_per_frame:
+		step_simulation(simulation_step)
+		time_accumulator -= simulation_step
+		steps_taken += 1
+	
+	if absf(time_accumulator) < EPSILON:
+		time_accumulator = 0.0
+	
+	return steps_taken
+
+## Resets accumulated unconsumed render time (e.g. after scene transition or pause).
+func reset_accumulator() -> void:
+	time_accumulator = 0.0
 
 ## Centralized authoritative mutation pathway.
 ## Enforces command validation before mutation can occur.

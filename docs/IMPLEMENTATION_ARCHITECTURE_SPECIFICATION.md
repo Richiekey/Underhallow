@@ -489,18 +489,21 @@ menu                # Pause / system menu
 
 ### 15.1 Deterministic Simulation Time `[ARCHITECTURAL RULE]`
 
-Simulation progression is governed by an authoritative `GameTime` service, never raw frame deltas (`_process` accumulation).
+Simulation progression is governed by an authoritative `GameTime` service and runtime accumulator, never direct raw frame deltas (`_process` accumulation).
 
 ```text
-Real Delta Time
+Rendering Frame Delta
       ↓
-GameTime Multiplier (Configurable)
+Runtime Accumulator (GameRuntime)
       ↓
-Authoritative GameTime (Tick / Elapsed Game Seconds)
+Controlled Simulation Steps
       ↓
-Gameplay Systems (Crops, Day/Night, Schedules, Production)
+Authoritative GameTime (Scaled by time_scale)
+      ↓
+Authoritative GameState / Gameplay Systems
 ```
 
+* Runtime accumulator consumes discrete simulation steps (prototype default: 60Hz / `1/60s`) with an anti-spiral-of-death step cap.
 * Supports configurable time acceleration (e.g., 1 real second = X game seconds).
 * Enables deterministic offline progression calculation upon save reload.
 * Provides deterministic time coordination for future dedicated server synchronization.
