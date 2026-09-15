@@ -187,6 +187,7 @@ The recommended format is:
 | :--- | :--- |
 | `NS` | North Star |
 | `AC` | Agent Constitution |
+| `SR` | Specification Reconciliation |
 | `TA` / `ETA` | Engine & Technical Architecture |
 | `CG` | Core Gameplay |
 | `PC` | Player Control |
@@ -194,6 +195,7 @@ The recommended format is:
 | `PR` | Player Progression |
 | `FA` / `FB` | Farming |
 | `HC` / `HU` | Hunting & Combat |
+| `MS` | Multiplayer & Social Systems |
 | `BI` | Building & Personal Island |
 | `NQ` | NPC / Quest |
 | `EX` | Exploration |
@@ -420,14 +422,16 @@ Maintains: Document ID, Document Name, Version, Status, Authority Level, Purpose
 | :--- | :--- | :---: | :--- | :--- |
 | **NS-001** | North Star | 0 | LOCKED | [docs/NORTH_STAR.md](file:///c:/Users/HP/Documents/Underhallow/docs/NORTH_STAR.md) |
 | **AC-001** | Agent Constitution | 0 | LOCKED | [docs/AGENT_CONSTITUTION.md](file:///c:/Users/HP/Documents/Underhallow/docs/AGENT_CONSTITUTION.md) |
+| **SR-001** | Specification Reconciliation | 0 | APPROVED | [docs/SPECIFICATION_RECONCILIATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md) |
 | **ETA-001** | Engine & Technical Architecture | 1 | APPROVED | [docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md) |
 | **TA-001** | Technical Architecture (Browser/Phaser Prototype Baseline) | 1 | SUPERSEDED | [docs/TECHNICAL_ARCHITECTURE.md](file:///c:/Users/HP/Documents/Underhallow/docs/TECHNICAL_ARCHITECTURE.md) |
 | **CG-001** | Core Gameplay | 1 | LOCKED | [docs/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md) |
-| **PC-001** | Player Control, Movement & Interaction | 1 | LOCKED | [docs/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md) |
+| **PC-001** | Player Control, Movement & Interaction | 1 | DRAFT | [docs/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md) |
 | **WM-001** | World & Map Architecture | 1 | DRAFT | [docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md) |
 | **PR-001** | Player Progression | 2 | DRAFT | [docs/PLAYER_PROGRESSION_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_PROGRESSION_SPECIFICATION.md) |
 | **FB-001** | Farming | 2 | DRAFT | [docs/FARMING_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/FARMING_SYSTEM_SPECIFICATION.md) |
 | **HU-001** | Hunting & Combat | 2 | DRAFT | [docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md) |
+| **MS-001** | Multiplayer & Social Systems | 2 | Planned | Planned |
 | **BI-001** | Building & Personal Island | 2 | Planned | Planned |
 | **NQ-001** | NPC, Dialogue & Quest | 2 | Planned | Planned |
 | **EX-001** | Exploration & Secrets | 2 | Planned | Planned |
@@ -515,12 +519,14 @@ The MSI is the primary navigation and governance layer for humans and AI agents.
 
 ## 38. Current Roadmap Status
 
+- **SR-001 — Specification Reconciliation V1.0:** Approved baseline established at [`docs/SPECIFICATION_RECONCILIATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md) (reconciled platform to Windows PC, engine to Godot, mode to single-player-first/multiplayer-native, added Guild Islands, fixed camera orientation, and updated MSI governance).
 - **ETA-001 — Engine & Technical Architecture Specification V1:** Approved foundation architecture established at [`docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md) (supersedes initial browser/Phaser baseline `TA-001`; establishes Godot + GDScript + Dedicated Game Servers + Supabase for Windows PC).
 - **WM-001 — World & Map Architecture Specification V1.0:** Drafted and established at [`docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md).
 - **PR-001 — Player Progression Specification V1.0:** Drafted and established at [`docs/PLAYER_PROGRESSION_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_PROGRESSION_SPECIFICATION.md).
 - **FB-001 — Farming System Specification V1.0:** Drafted and established at [`docs/FARMING_SYSTEM_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/FARMING_SYSTEM_SPECIFICATION.md).
 - **HU-001 — Hunting & Combat System Specification V1.0:** Drafted and established at [`docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md).
 - **Next Planned Specification (Phase 3):**
+  - **MS-001 — Multiplayer & Social Systems Specification V1.0**
   - **II-001 — Inventory, Items, Tools & Crafting Specification V1.0**
   - **BI-001 — Building & Personal Island Specification V1.0**
 

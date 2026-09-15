@@ -2,9 +2,9 @@
 
 ## PLAYER CONTROL, MOVEMENT & INTERACTION SPECIFICATION V1.0
 
-**Document Status:** Draft  
+**Document Status:** DRAFT (Reconciled with SR-001 & ETA-001)  
 **Version:** 1.0  
-**Parent Specification:** [Core Gameplay Systems Specification V1.0](file:///c:/Users/HP/Documents/Underhallow/docs/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md)  
+**Parent Specification:** [Core Gameplay Systems Specification V1.0](file:///c:/Users/HP/Documents/Underhallow/docs/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md), [Engine & Technical Architecture Specification V1 (ETA-001)](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)  
 **Project:** Underhallow  
 
 ---
@@ -665,11 +665,11 @@ Underhallow uses a controlled isometric camera.
 
 The camera supports:
 
-* Isometric presentation
+* Fixed isometric presentation
 * Player following
 * Limited look-ahead
 * Player-controlled zoom
-* Player-controlled rotation
+* Smooth follow
 
 The camera should preserve the game's pixel-art composition while providing sufficient visibility for exploration.
 
@@ -677,9 +677,9 @@ The camera should preserve the game's pixel-art composition while providing suff
 
 # 36. Camera Rotation
 
-Camera rotation occurs in **90-degree increments**.
+Camera rotation is **disabled in V1**.
 
-The player can rotate between the supported isometric orientations.
+The game uses one consistent, fixed isometric orientation.
 
 This keeps:
 
@@ -687,8 +687,9 @@ This keeps:
 * Tile orientation predictable
 * Building orientation understandable
 * World presentation coherent
+* Asset production streamlined
 
-Continuous free rotation is not required.
+Camera rotation is deferred beyond V1.
 
 ---
 
@@ -1315,9 +1316,9 @@ Defines placement, rotation and construction interaction.
 
 Defines the relationship between movement, menus, world time and day/night.
 
-### Technical Architecture Specification
+### Engine & Technical Architecture Specification
 
-Defines the actual implementation architecture behind these behaviors.
+Defines the actual client/server simulation, authoritative movement validation, and network replication architecture behind these behaviors. Reference: [Engine & Technical Architecture Specification V1 (ETA-001)](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md).
 
 ---
 
@@ -1362,8 +1363,8 @@ The Player Control, Movement & Interaction system is considered ready for implem
 * Building preview/rotation is supported.
 * Hybrid collision is implemented.
 * NPC collision cannot easily trap the player.
-* Isometric camera follows the player.
-* 90° camera rotation works.
+* Isometric camera follows the player smoothly with look-ahead.
+* Camera rotation is disabled in V1 for consistent orientation.
 * Limited zoom works.
 * Camera boundaries work.
 * Interaction feedback is standardized.

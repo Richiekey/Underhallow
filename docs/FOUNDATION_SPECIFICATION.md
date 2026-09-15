@@ -8,8 +8,8 @@
 **Status:** Initial foundation baseline  
 **Supersedes:** None  
 **Parent document:** Underhallow North Star V1.0  
-**Initial Platform:** Browser  
-**Initial Game Mode:** Single-player  
+**Initial Platform:** Windows PC (architecture open to Linux/macOS; browser-first baseline superseded per SR-001)  
+**Initial Game Mode:** Single-player-first, multiplayer-native (Godot Engine / Dedicated Server / Supabase)  
 **Development Philosophy:** AI-agent-assisted, human-directed, human-QA-gated  
 
 ---
@@ -1794,10 +1794,12 @@ This is the structure I want us to maintain throughout the rebuild.
 * Isometric pixel-art direction
 * Cozy/nostalgic visual identity
 * Dark underlying mystery
-* Main Island
-* Personal Island
-* Single-player initial experience
-* Browser initial platform
+* Main Island (shared + instanced)
+* Personal Island (player-owned persistent property)
+* Guild Islands (guild-owned persistent islands)
+* Single-player-first, multiplayer-native experience
+* Windows PC initial platform (Godot Engine)
+* Authoritative dedicated game servers + Supabase persistence
 * Farming
 * Hunting
 * Building
@@ -1807,7 +1809,8 @@ This is the structure I want us to maintain throughout the rebuild.
 * Unlockable personal-island grids
 * Major milestones rather than forced ending
 * Optional competition
-* Future multiplayer
+* Native real-time cooperative multiplayer, parties, and guilds
+* Fixed isometric camera with zoom (no V1 rotation)
 * Optional Web3
 * Game must function without Web3
 * Medium-sized polished scope
@@ -1819,35 +1822,31 @@ This is the structure I want us to maintain throughout the rebuild.
 
 ### 🟡 Defined but not fully specified
 
-* Character progression
-* Skill progression
-* NPC routines
-* Quest architecture
-* Building system
-* Farming system
-* Hunting system
-* Exploration system
-* Inventory
-* Items
-* World simulation
-* Save state
+* Character progression (PR-001)
+* Skill progression (PR-001)
+* Farming system (FB-001)
+* Hunting & combat system (HU-001)
+* Building & personal island system (BI-001)
+* Multiplayer & social systems (MS-001)
+* NPC routines (NQ-001)
+* Quest architecture (NQ-001)
+* Exploration system (EX-001)
+* Inventory, items & crafting (II-001)
+* World simulation & time (TS-001)
+* Save state & persistence (SV-001)
 * Island expansion
 
 ### ⚪ Explicitly deferred
 
-* Exact economy
+* Exact economy & marketplace formulas
 * Blockchain
 * Token
 * Real-world economic mechanics
-* Multiplayer architecture
-* Guild system
 * Exact island grid dimensions
-* Camera behavior
 * Pixel resolution
 * Tile dimensions
-* Final technology stack
-* Complete crafting system
-* Advanced combat
+* Complete crafting recipes
+* Advanced combat VFX/animations
 * Monetization
 
 ---

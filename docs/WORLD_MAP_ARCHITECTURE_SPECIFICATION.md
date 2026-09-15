@@ -9,7 +9,7 @@
 **Authority Level:** Level 1 — Foundation Specification  
 **Parent Documents:**  
 * [North Star V1.0 (NS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/NORTH_STAR.md)  
-* [Technical Architecture Specification V1.0 (TA-001)](file:///c:/Users/HP/Documents/Underhallow/docs/TECHNICAL_ARCHITECTURE.md)  
+* [Engine & Technical Architecture Specification V1 (ETA-001)](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)  
 * [Core Gameplay Systems Specification V1.0 (CG-001)](file:///c:/Users/HP/Documents/Underhallow/docs/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md)  
 * [Player Control, Movement & Interaction Specification V1.0 (PC-001)](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md)  
 **Primary Domain:** World Architecture  
@@ -145,22 +145,35 @@ The Personal Island therefore functions as both:
 
 ---
 
-# 6. Main Island vs Personal Island
+# 5.1 Guild Islands
 
-| Characteristic | Main Island | Personal Island |
-| :--- | :--- | :--- |
-| **Purpose** | Adventure/world | Home/personal space |
-| **Ownership** | Shared world | Individual player |
-| **Scale** | Medium | Expandable |
-| **NPCs** | Major role | Limited/specialized |
-| **Exploration** | High | Moderate |
-| **Farming** | Possible | Major |
-| **Building** | Limited/controlled | Major |
-| **Customization** | Low/moderate | High |
-| **Story** | Major | Supporting |
-| **Secrets** | Major | Possible |
-| **Expansion** | World updates | Player unlocks |
-| **Visitors** | Shared by default | Player-controlled/social system later |
+Guild Islands are formal, persistent, guild-owned properties within the broader Underhallow archipelago.
+
+In accordance with [SR-001](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md) and [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md):
+
+* **Ownership:** The guild owns the island as a collective entity, independent of whether the guild leader is online.
+* **Layout:** Contains shared guild infrastructure (buildings, bank storage, communal farms, crafting stations) and limited individual member plots.
+* **Access & Permissions:** Controlled via the hierarchical guild-rank system.
+* **Instancing:** Managed as persistent server instances accessible via island ferry/dock gateways.
+
+---
+
+# 6. Main Island vs Personal Island vs Guild Island
+
+| Characteristic | Main Island | Personal Island | Guild Island |
+| :--- | :--- | :--- | :--- |
+| **Purpose** | Adventure/world | Home/personal space | Communal guild base |
+| **Ownership** | Shared world | Individual player | Guild organization |
+| **Scale** | Medium (regional) | Expandable grids | Expandable via guild progression |
+| **NPCs** | Major role | Limited/specialized | Service/specialized NPCs |
+| **Exploration** | High | Moderate | Focused on projects/plots |
+| **Farming** | Possible | Major | Communal farms + plot farming |
+| **Building** | Limited/controlled | Major (player-owned) | Shared projects + member plots |
+| **Customization** | Low/moderate | High | High (communal + plot) |
+| **Story** | Major | Supporting | Guild narrative & milestones |
+| **Secrets** | Major | Possible | Possible (guild discoveries) |
+| **Expansion** | World updates | Player unlocks | Guild renown / tier unlocks |
+| **Visitors** | Shared public | Player-controlled | Guild members + invited guests |
 
 ---
 
@@ -959,33 +972,32 @@ The player should experience a coherent world even where underlying systems use 
 
 # 47. Camera Compatibility
 
-The world must support the established camera architecture:
+The world is designed around the established camera architecture:
 
-* isometric presentation;
-* 90-degree camera rotation;
-* limited zoom;
+* fixed isometric presentation;
+* player-controlled zoom;
 * smooth player following;
-* small look-ahead;
+* small look-ahead where appropriate;
 * camera boundaries.
 
-World assets and layouts should therefore be designed to remain readable under the supported orientations.
+World assets and layouts are optimized around one consistent isometric orientation, streamlining art production and maximizing terrain and architectural readability.
 
 ---
 
-# 48. Four-Direction World Presentation
+# 48. Single-Orientation World Consistency
 
-The world should support all four camera orientations.
+The world layout is optimized around one fixed isometric viewing direction for V1.
 
-This requirement applies to:
+This requirement streamlines:
 
 * terrain readability;
-* buildings;
-* paths;
+* buildings and entrance orientations;
+* pathways;
 * major landmarks;
-* environmental composition;
+* environmental composition and depth layering;
 * navigation.
 
-The asset pipeline must account for the visual consequences of camera rotation.
+Full camera rotation is deferred beyond V1 per [SR-001](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md).
 
 ---
 
@@ -1310,16 +1322,17 @@ WM-001 should be considered successfully implemented when:
 
 * the Main Island can be represented as multiple coherent authored regions;
 * the Personal Island can be instantiated and expanded through grids;
+* Guild Islands are supported as persistent guild-owned properties;
 * major world boundaries function correctly;
 * boat/dock transitions work;
-* camera rotation remains readable;
+* fixed isometric orientation remains visually readable;
 * world regions have recognizable identities;
 * hidden spaces can exist;
 * resources and wildlife can follow appropriate persistence rules;
 * time can affect world presentation;
 * world loading does not require one monolithic map;
 * architecture permits future regions and islands;
-* the world remains performant in the target browser environment.
+* the world remains performant on the target PC platform.
 
 ---
 
@@ -1351,7 +1364,7 @@ Changes to the fundamental world architecture require review against:
 
 * NS-001;
 * CG-001;
-* TA-001;
+* ETA-001;
 * PC-001;
 * all directly dependent system specifications.
 

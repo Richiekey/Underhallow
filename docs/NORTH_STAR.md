@@ -5,8 +5,8 @@
 **Purpose:** Establish the immutable creative and product direction for Underhallow before technical and gameplay foundation specifications begin.  
 **Authority:** This document is the highest-level product and creative source of truth.  
 **Development Model:** AI-agent-assisted, human-directed development  
-**Initial Platform:** Browser  
-**Initial Mode:** Single-player  
+**Initial Platform:** Windows PC (architecture open to Linux/macOS; browser-first baseline superseded per SR-001)  
+**Initial Mode:** Single-player-first, multiplayer-native  
 
 ---
 
@@ -552,8 +552,8 @@ Underhallow is not intended to become:
 
 ---
 
-## 36. Long-Term Multiplayer Vision
-Multiplayer is a future layer (island visits, gifts, coop activities, events, markets) and intentionally a future possibility, not a V1 commitment.
+## 36. Cooperative Multiplayer & Social Vision
+Underhallow is architected as single-player-first, multiplayer-native. The game is fully complete and satisfying when played alone, but every system that naturally supports groups (farming, hunting, gathering, building, trading, exploration, guilds, parties) is natively capable of real-time cooperative multiplayer, guild islands, and shared-world interaction. Underhallow is not a mandatory MMO, but a living world built to be experienced alone or together.
 
 ---
 
@@ -633,10 +633,10 @@ If the answer is no, it does not belong.
 
 ## 46. North Star Summary
 - Cozy, open-ended, isometric pixel-art game.
-- Dual-world structure: Shared Main Island (hub/social/exploration) + Personal Island (player-owned farm/build/expand).
+- Dual-world structure: Shared Main Island (hub/social/exploration) + Personal Island (player-owned farm/build/expand) + Guild Islands.
 - Core loop: Farm → Hunt → Build → Explore → Trade → Progress → Discover.
 - Peaceful surface layer with a deep, unsettling mystery underneath.
-- Browser-first, single-player first, fun and polish before scale.
+- Windows PC-first, single-player-first, multiplayer-native, fun and polish before scale.
 
 ---
 
@@ -650,6 +650,7 @@ If the answer is no, it does not belong.
 | Open-ended gameplay | 🔒 LOCKED |
 | Main Island | 🔒 LOCKED |
 | Personal Island | 🔒 LOCKED |
+| Guild Islands | 🔒 LOCKED |
 | Unlockable island grids | 🔒 LOCKED |
 | Farming | 🔒 LOCKED |
 | Hunting | 🔒 LOCKED |
@@ -658,24 +659,25 @@ If the answer is no, it does not belong.
 | Character-driven narrative | 🔒 LOCKED |
 | Major milestones without forced ending | 🔒 LOCKED |
 | Optional competition | 🔒 LOCKED |
-| Single-player initial release | 🔒 LOCKED |
-| Browser initial platform | 🔒 LOCKED |
-| Future multiplayer | 🟡 PLANNED |
-| Future player island visits | 🟡 PLANNED |
+| Single-player-first, multiplayer-native mode | 🔒 LOCKED |
+| Windows PC initial platform (Godot Engine) | 🔒 LOCKED |
+| Native real-time cooperative multiplayer | 🔒 LOCKED |
+| Dedicated server authoritative simulation | 🔒 LOCKED |
+| Supabase persistent application backend | 🔒 LOCKED |
 | Real-world-connected economy | 🟡 LONG-TERM VISION |
 | Blockchain | 🟡 OPTIONAL / UNDECIDED |
 | Exact economy | 🟡 UNDECIDED |
 | Exact grid system | 🟡 UNDECIDED |
 | Exact progression architecture | 🟡 UNDECIDED |
-| Exact camera implementation | 🟡 UNDECIDED |
+| Fixed isometric camera with zoom (no V1 rotation) | 🔒 LOCKED |
 | Exact pixel resolution | 🟡 UNDECIDED |
 | Exact Main Island geography | 🟡 UNDECIDED |
 | Exact combat system | 🟡 UNDECIDED |
 | Crafting system | 🟡 UNDECIDED |
 | Monetization | 🟡 UNDECIDED |
-| Multiplayer architecture | 🟡 UNDECIDED |
-| Agent hierarchy | 🟡 TO BE SPECIFIED |
-| Technical stack | 🟡 TO BE SPECIFIED |
+| Multiplayer architecture (ETA-001 / MS-001) | 🔒 LOCKED |
+| Agent hierarchy | 🔒 LOCKED (AC-001) |
+| Technical stack (Godot / GDScript / Supabase) | 🔒 LOCKED (ETA-001) |
 
 ---
 

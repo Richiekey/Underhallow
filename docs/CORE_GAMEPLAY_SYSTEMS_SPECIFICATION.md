@@ -9,7 +9,7 @@
 **Parent Documents:**  
 * [Underhallow North Star V1.0](file:///c:/Users/HP/Documents/Underhallow/docs/NORTH_STAR.md)  
 * [Underhallow Foundation Specification V1.0](file:///c:/Users/HP/Documents/Underhallow/docs/FOUNDATION_SPECIFICATION.md)  
-* [Underhallow Technical Architecture Specification V1.0](file:///c:/Users/HP/Documents/Underhallow/docs/TECHNICAL_ARCHITECTURE.md)  
+* [Engine & Technical Architecture Specification V1 (ETA-001)](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)  
 * [Underhallow Agent Constitution V1.0](file:///c:/Users/HP/Documents/Underhallow/docs/AGENT_CONSTITUTION.md)  
 
 ---
@@ -22,7 +22,7 @@ This document translates the high-level vision established in the:
 
 * North Star V1.0
 * Foundation Specification V1.0
-* Technical Architecture Specification V1.0
+* Engine & Technical Architecture Specification V1 (ETA-001)
 * Agent Constitution V1.0
 
 into a concrete gameplay foundation.
@@ -1322,15 +1322,26 @@ This keeps the architecture modular and allows future systems to be added safely
 
 ---
 
+# 54.1 Multiplayer Compatibility Principle
+
+In accordance with [SR-001](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md) and [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md), Underhallow is **single-player-first, multiplayer-native**.
+
+Every core gameplay system (farming, hunting, gathering, building, trading, exploration) functions completely and satisfyingly for a solo player. When playing cooperatively:
+
+* Systems naturally support group participation (shared farming assistance, party hunting, joint exploration, guild projects).
+* Ownership remains explicit (participation does not automatically transfer ownership).
+* Multiplayer expands the player experience without ever making multiplayer mandatory.
+
+---
+
 # 55. Deferred Systems
 
 The following are explicitly deferred from this specification:
 
 * Final economy design
 * Real-world economic integration
-* Multiplayer architecture
-* Guilds
-* Chat
+* Guilds & detailed social structures (MS-001)
+* Chat architecture (MS-001)
 * Blockchain integration, if eventually used
 * Monetization
 * Detailed NPC relationship systems
@@ -1354,20 +1365,20 @@ These systems will receive dedicated specifications when appropriate.
 
 The Core Gameplay Systems Specification establishes the foundation for the following documents:
 
-1. **Player Controller, Movement & Interaction Specification**
-2. **Time & World Simulation Specification**
-3. **Exploration & World Systems Specification**
-4. **Farming Systems Specification**
-5. **Hunting & Combat Specification**
-6. **Building & Personal Island Specification**
-7. **Inventory, Items & Resources Specification**
-8. **Crafting & Tool Systems Specification**
-9. **Fishing Specification**
-10. **Player Progression Specification**
-11. **NPC & Quest Systems Specification**
-12. **Narrative & Mystery Specification**
-13. **Economy Specification**
-14. **Social & Multiplayer Specification**
+1. **Player Controller, Movement & Interaction Specification** (PC-001)
+2. **Time & World Simulation Specification** (TS-001)
+3. **Exploration & World Systems Specification** (EX-001)
+4. **Farming Systems Specification** (FB-001)
+5. **Hunting & Combat Specification** (HU-001)
+6. **Building & Personal Island Specification** (BI-001)
+7. **Inventory, Items & Resources Specification** (II-001)
+8. **Crafting & Tool Systems Specification** (II-001)
+9. **Fishing Specification** (FI-001)
+10. **Player Progression Specification** (PR-001)
+11. **NPC & Quest Systems Specification** (NQ-001)
+12. **Narrative & Mystery Specification** (ST-001)
+13. **Economy Specification** (EC-001)
+14. **Multiplayer & Social Systems Specification** (MS-001)
 
 The order may be adjusted when dependencies require it.
 
@@ -1405,7 +1416,7 @@ The major decisions currently locked are:
 
 | System                | Decision                                     |
 | --------------------- | -------------------------------------------- |
-| Game structure        | Two-island open world                        |
+| Game structure        | Two-island open world + Guild Islands        |
 | Main world            | Main Island                                  |
 | Player world          | Personal Island                              |
 | Primary roles         | Farming + Hunting                            |
@@ -1427,7 +1438,7 @@ The major decisions currently locked are:
 | Mystery               | Dark underlying mystery                      |
 | Progression           | Character + skills + house + island + wealth |
 | Economy               | Labor + markets + ownership eventually       |
-| Multiplayer           | Later                                        |
+| Multiplayer           | Single-player-first, native co-op (ETA-001/MS-001) |
 | Competition           | Optional                                     |
 | Tutorial              | Narrative-driven first 10–15 minutes         |
 | Long-term gameplay    | Open-ended                                   |
