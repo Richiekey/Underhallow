@@ -132,14 +132,20 @@ Planned examples include:
 * Personal Island Design (`PI-001`)
 * Player Progression (`PR-001`)
 * Farming (`FB-001`)
+* Livestock & Animal Husbandry (`LA-001`)
 * Hunting & Combat (`HU-001`)
-* Multiplayer & Social Systems (`MS-001`)
-* Building & Construction (`BI-001`)
-* NPCs, Dialogue & Quests (`NQ-001`)
-* Exploration & Secrets (`EX-001`)
-* Inventory, Items, Tools & Crafting (`II-001`)
 * Fishing (`FI-001`)
+* Foraging & Wild Resources (`FR-001`)
+* Resource Gathering, Forestry & Mining (`RG-001`)
+* Cooking & Food (`CK-001`)
+* Building & Construction (`BI-001`)
+* Inventory, Items, Tools & Crafting (`II-001`)
+* Exploration & Secrets (`EX-001`)
+* Transportation & Travel (`TR-001`)
 * Time, Day/Night & Simulation (`TS-001`)
+* Weather & Environmental Systems (`WE-001`)
+* NPCs, Dialogue & Quests (`NQ-001`)
+* Multiplayer & Social Systems (`MS-001`)
 * Economy (`EC-001`)
 * Story/Narrative Architecture (`ST-001`)
 
@@ -205,17 +211,23 @@ The recommended format is:
 | `NB` | Narrative Bible |
 | `CB` | Character Bible |
 | `MI` | Main Island |
+| `PI` | Personal Island |
 | `PR` | Player Progression |
 | `FB` | Farming |
+| `LA` | Livestock & Animal Husbandry |
 | `HU` | Hunting & Combat |
-| `MS` | Multiplayer & Social Systems |
-| `BI` | Building & Construction |
-| `PI` | Personal Island |
-| `NQ` | NPC / Quest |
-| `EX` | Exploration |
-| `II` | Inventory / Items |
 | `FI` | Fishing |
+| `FR` | Foraging & Wild Resources |
+| `RG` | Resource Gathering, Forestry & Mining |
+| `CK` | Cooking & Food |
+| `BI` | Building & Construction |
+| `II` | Inventory / Items |
+| `EX` | Exploration |
+| `TR` | Transportation & Travel |
 | `TS` | Time / Simulation |
+| `WE` | Weather & Environmental Systems |
+| `NQ` | NPC / Quest |
+| `MS` | Multiplayer & Social Systems |
 | `EC` | Economy |
 | `ST` | Story / Narrative |
 | `UI` | UI / UX |
@@ -450,17 +462,23 @@ Maintains: Document ID, Document Name, Version, Status, Authority Level, Purpose
 | **NB-001** | Narrative Bible | 1 | DRAFT | [docs/NARRATIVE_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/NARRATIVE_BIBLE.md) |
 | **CB-001** | Character Bible | 1 | DRAFT | [docs/CHARACTER_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/CHARACTER_BIBLE.md) |
 | **MI-001** | Main Island Design | 2 | DRAFT | [docs/MAIN_ISLAND_DESIGN_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/MAIN_ISLAND_DESIGN_SPECIFICATION.md) |
+| **PI-001** | Personal Island Design | 2 | DRAFT | [docs/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md) |
 | **PR-001** | Player Progression | 2 | DRAFT | [docs/PLAYER_PROGRESSION_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_PROGRESSION_SPECIFICATION.md) |
 | **FB-001** | Farming | 2 | DRAFT | [docs/FARMING_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/FARMING_SYSTEM_SPECIFICATION.md) |
+| **LA-001** | Livestock & Animal Husbandry | 2 | PLANNED | Not yet drafted |
 | **HU-001** | Hunting & Combat | 2 | DRAFT | [docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md) |
-| **MS-001** | Multiplayer & Social Systems | 2 | DRAFT | [docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md) |
-| **BI-001** | Building & Construction | 2 | DRAFT | [docs/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md) |
-| **PI-001** | Personal Island Design | 2 | DRAFT | [docs/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md) |
-| **NQ-001** | NPC, Dialogue & Quest | 2 | PLANNED | Not yet drafted |
-| **EX-001** | Exploration & Secrets | 2 | PLANNED | Not yet drafted |
-| **II-001** | Inventory, Items, Tools & Crafting | 2 | PLANNED | Not yet drafted |
 | **FI-001** | Fishing | 2 | PLANNED | Not yet drafted |
+| **FR-001** | Foraging & Wild Resources | 2 | PLANNED | Not yet drafted |
+| **RG-001** | Resource Gathering, Forestry & Mining | 2 | PLANNED | Not yet drafted |
+| **CK-001** | Cooking & Food | 2 | PLANNED | Not yet drafted |
+| **BI-001** | Building & Construction | 2 | DRAFT | [docs/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md) |
+| **II-001** | Inventory, Items, Tools & Crafting | 2 | PLANNED | Not yet drafted |
+| **EX-001** | Exploration & Secrets | 2 | PLANNED | Not yet drafted |
+| **TR-001** | Transportation & Travel | 2 | PLANNED | Not yet drafted |
 | **TS-001** | Time, Day/Night & Simulation | 2 | PLANNED | Not yet drafted |
+| **WE-001** | Weather & Environmental Systems | 2 | PLANNED | Not yet drafted |
+| **NQ-001** | NPCs, Dialogue & Quests | 2 | PLANNED | Not yet drafted |
+| **MS-001** | Multiplayer & Social Systems | 2 | DRAFT | [docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md) |
 | **EC-001** | Economy | 2 | PLANNED | Not yet drafted |
 | **ST-001** | Story & Narrative Architecture | 2 | PLANNED | Not yet drafted |
 | **UI-001** | UI / UX | 3 | PLANNED | Not yet drafted |
@@ -477,8 +495,8 @@ Maintains: Document ID, Document Name, Version, Status, Authority Level, Purpose
 
 - **Phase 1 — Authority:** North Star (`NS-001`), Creative Direction (`CD-001`), Art Direction Bible (`AD-001`), World Bible (`WB-001`), Agent Constitution (`AC-001`), Master Specification Index (`MSI-001`), Specification Reconciliation (`SR-001`).
 - **Phase 2 — Foundation:** Engine & Technical Architecture (`ETA-001`), Core Gameplay (`CG-001`), Player Control (`PC-001`), World & Map Architecture (`WM-001`), Narrative Bible (`NB-001`), Character Bible (`CB-001`).
-- **Phase 3 — Player, World & Social Systems:** Main Island Design (`MI-001`), Personal Island Design (`PI-001`), Player Progression (`PR-001`), Farming (`FB-001`), Hunting & Combat (`HU-001`), Multiplayer & Social Systems (`MS-001`), Building & Construction (`BI-001`), Inventory/Items/Tools/Crafting (`II-001`), Exploration & Secrets (`EX-001`), Time & Simulation (`TS-001`).
-- **Phase 4 — World Population:** NPC/Dialogue/Quest (`NQ-001`), Story/Narrative (`ST-001`), Fishing (`FI-001`).
+- **Phase 3 — Player, World & Social Systems:** Main Island Design (`MI-001`), Personal Island Design (`PI-001`), Player Progression (`PR-001`), Farming (`FB-001`), Livestock & Animal Husbandry (`LA-001`), Hunting & Combat (`HU-001`), Fishing (`FI-001`), Foraging & Wild Resources (`FR-001`), Resource Gathering, Forestry & Mining (`RG-001`), Cooking & Food (`CK-001`), Building & Construction (`BI-001`), Inventory/Items/Tools/Crafting (`II-001`), Exploration & Secrets (`EX-001`), Transportation & Travel (`TR-001`), Time & Simulation (`TS-001`), Weather & Environmental Systems (`WE-001`), Multiplayer & Social Systems (`MS-001`).
+- **Phase 4 — World Population:** NPC/Dialogue/Quest (`NQ-001`), Story/Narrative (`ST-001`).
 - **Phase 5 — Meta Systems:** Economy (`EC-001`), Save System (`SV-001`), UI/UX (`UI-001`), Audio (`AU-001`), Accessibility (`AX-001`), Input/Settings (`IS-001`).
 - **Phase 6 — Implementation Governance:** Implementation Specs (`IA-001`), QA & Testing (`QA-001`), Performance, Production Readiness.
 
@@ -487,6 +505,52 @@ Maintains: Document ID, Document Name, Version, Status, Authority Level, Purpose
 # 30. Documentation Dependency Principle
 
 A specification should only be considered production-ready when its major dependencies are sufficiently defined.
+
+### 30.1 Level 2 Core System Dependency Map
+
+The following authoritative dependency mapping establishes the inter-system relationships across Underhallow's Level 2 gameplay systems:
+
+```text
+MI-001 (Main Island)
+ ├── RG-001 (Resource Gathering, Forestry & Mining)
+ ├── FR-001 (Foraging & Wild Resources)
+ ├── WE-001 (Weather & Environmental Systems)
+ └── TR-001 (Transportation & Travel)
+
+FB-001 (Farming)
+ ├── LA-001 (Livestock & Animal Husbandry)
+ └── CK-001 (Cooking & Food)
+
+RG-001 (Resource Gathering, Forestry & Mining)
+ ├── BI-001 (Building & Construction)
+ ├── II-001 (Inventory, Items, Tools & Crafting)
+ ├── EC-001 (Economy)
+ └── EX-001 (Exploration & Secrets)
+
+FR-001 (Foraging & Wild Resources)
+ ├── CK-001 (Cooking & Food)
+ ├── EX-001 (Exploration & Secrets)
+ └── EC-001 (Economy)
+
+LA-001 (Livestock & Animal Husbandry)
+ ├── FB-001 (Farming)
+ ├── BI-001 (Building & Construction)
+ ├── CK-001 (Cooking & Food)
+ └── EC-001 (Economy)
+
+WE-001 (Weather & Environmental Systems)
+ ├── TS-001 (Time, Day/Night & Simulation)
+ ├── FB-001 (Farming)
+ ├── LA-001 (Livestock & Animal Husbandry)
+ ├── FI-001 (Fishing)
+ └── EX-001 (Exploration & Secrets)
+
+TR-001 (Transportation & Travel)
+ ├── WM-001 (World & Map Architecture)
+ ├── MI-001 (Main Island Design)
+ ├── PI-001 (Personal Island Design)
+ └── MS-001 (Multiplayer & Social Systems)
+```
 
 ---
 
@@ -562,4 +626,10 @@ The MSI is the primary navigation and governance layer for humans and AI agents.
   - **II-001 — Inventory, Items, Tools & Crafting Specification V1.0**
   - **TS-001 — Time, Day/Night & Simulation Specification V1.0**
   - **EX-001 — Exploration & Secrets Specification V1.0**
+  - **RG-001 — Resource Gathering, Forestry & Mining Specification V1.0**
+  - **FR-001 — Foraging & Wild Resources Specification V1.0**
+  - **LA-001 — Livestock & Animal Husbandry Specification V1.0**
+  - **CK-001 — Cooking & Food Specification V1.0**
+  - **WE-001 — Weather & Environmental Systems Specification V1.0**
+  - **TR-001 — Transportation & Travel Specification V1.0**
 
