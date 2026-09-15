@@ -79,7 +79,14 @@ func shutdown_runtime() -> void:
 
 ## Executes exactly one discrete simulation step of size `step_delta`.
 ## Direct simulation advancement path independent of render frame accumulation.
+## Protected by lifecycle state: only executes when in RUNNING state with valid positive step_delta.
 func step_simulation(step_delta: float) -> void:
+	if current_state != LifecycleState.RUNNING:
+		return
+	
+	if step_delta <= 0.0 or is_nan(step_delta) or is_inf(step_delta):
+		return
+	
 	game_time.advance(step_delta)
 	game_state.game_time_elapsed = game_time.elapsed_seconds
 	simulation_stepped.emit(step_delta)
@@ -87,12 +94,16 @@ func step_simulation(step_delta: float) -> void:
 ## Receives variable render/frame delta from engine loop, accumulates it, and executes
 ## controlled discrete simulation steps of fixed size (`simulation_step`).
 ## Protects against spiral-of-death by capping steps per frame.
+## Hardened against floating-point precision loss, negative drift, and invalid deltas.
 ## Returns the number of discrete simulation steps executed.
 func update_simulation(render_delta: float) -> int:
 	if current_state != LifecycleState.RUNNING:
 		return 0
 	
-	if render_delta <= 0.0:
+	if render_delta <= 0.0 or is_nan(render_delta) or is_inf(render_delta):
+		return 0
+	
+	if simulation_step <= 0.0 or is_nan(simulation_step) or is_inf(simulation_step):
 		return 0
 	
 	time_accumulator += render_delta
@@ -109,7 +120,8 @@ func update_simulation(render_delta: float) -> int:
 		time_accumulator -= simulation_step
 		steps_taken += 1
 	
-	if absf(time_accumulator) < EPSILON:
+	# Hardened boundary: eliminate negative float underflow or sub-epsilon residue
+	if time_accumulator < EPSILON:
 		time_accumulator = 0.0
 	
 	return steps_taken

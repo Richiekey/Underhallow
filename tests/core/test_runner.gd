@@ -224,6 +224,76 @@ func _run_simulation_step_boundary_tests() -> void:
 		"SimStep F: Excess backlog is discarded to prevent spiral of death")
 	
 	runtime_cap.free()
+	
+	# Test G: step_simulation() lifecycle and input validation protection
+	var runtime_lc: GameRuntime = GameRuntimeClass.new()
+	# In BOOT:
+	runtime_lc.step_simulation(0.02)
+	_assert_approx(runtime_lc.game_time.elapsed_seconds, 0.0, 
+		"SimStep G: step_simulation() in BOOT does not advance simulation")
+	
+	# In INITIALIZE:
+	runtime_lc.initialize_runtime()
+	runtime_lc.step_simulation(0.02)
+	_assert_approx(runtime_lc.game_time.elapsed_seconds, 0.0, 
+		"SimStep G: step_simulation() in INITIALIZE does not advance simulation")
+	
+	# Transition to RUNNING:
+	runtime_lc.start_runtime()
+	
+	# Non-positive / invalid step deltas in RUNNING:
+	runtime_lc.step_simulation(0.0)
+	_assert_approx(runtime_lc.game_time.elapsed_seconds, 0.0, 
+		"SimStep G: step_simulation(0.0) does not advance simulation")
+	runtime_lc.step_simulation(-0.02)
+	_assert_approx(runtime_lc.game_time.elapsed_seconds, 0.0, 
+		"SimStep G: step_simulation(-0.02) does not advance simulation")
+	runtime_lc.step_simulation(NAN)
+	_assert_approx(runtime_lc.game_time.elapsed_seconds, 0.0, 
+		"SimStep G: step_simulation(NAN) does not advance simulation")
+	
+	# Valid positive step delta in RUNNING:
+	runtime_lc.step_simulation(0.02)
+	_assert_approx(runtime_lc.game_time.elapsed_seconds, 0.02, 
+		"SimStep G: step_simulation(0.02) in RUNNING advances simulation")
+	_assert_approx(runtime_lc.game_state.game_time_elapsed, 0.02, 
+		"SimStep G: step_simulation() syncs GameState time")
+	
+	# In SHUTDOWN:
+	runtime_lc.shutdown_runtime()
+	runtime_lc.step_simulation(0.02)
+	_assert_approx(runtime_lc.game_time.elapsed_seconds, 0.02, 
+		"SimStep G: step_simulation() in SHUTDOWN does not advance simulation")
+	
+	runtime_lc.free()
+	
+	# Test H: Hardened accumulator boundary edge cases
+	var runtime_harden: GameRuntime = GameRuntimeClass.new()
+	runtime_harden.initialize_runtime()
+	runtime_harden.start_runtime()
+	runtime_harden.simulation_step = 0.02
+	
+	# Invalid render deltas:
+	var invalid_steps_1: int = runtime_harden.update_simulation(0.0)
+	_assert_equal(invalid_steps_1, 0, "SimStep H: update_simulation(0.0) produces 0 steps")
+	_assert_approx(runtime_harden.time_accumulator, 0.0, "SimStep H: Accumulator remains 0.0 on 0.0 delta")
+	
+	var invalid_steps_2: int = runtime_harden.update_simulation(-0.05)
+	_assert_equal(invalid_steps_2, 0, "SimStep H: update_simulation(-0.05) produces 0 steps")
+	_assert_approx(runtime_harden.time_accumulator, 0.0, "SimStep H: Accumulator remains 0.0 on negative delta")
+	
+	var invalid_steps_3: int = runtime_harden.update_simulation(NAN)
+	_assert_equal(invalid_steps_3, 0, "SimStep H: update_simulation(NAN) produces 0 steps")
+	_assert_approx(runtime_harden.time_accumulator, 0.0, "SimStep H: Accumulator remains 0.0 on NAN delta")
+	
+	# Float underflow / non-negative guarantee:
+	runtime_harden.update_simulation(0.0199999999)
+	_assert_true(runtime_harden.time_accumulator >= 0.0, 
+		"SimStep H: Accumulator is guaranteed non-negative (>= 0.0)")
+	_assert_approx(runtime_harden.time_accumulator, 0.0, 
+		"SimStep H: Sub-epsilon micro-residue snaps cleanly to 0.0")
+	
+	runtime_harden.free()
 
 # -----------------------------------------------------------------------------
 # 3. Command Pipeline Tests
