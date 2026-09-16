@@ -3,13 +3,15 @@ extends CharacterBody2D
 
 ## Primary player controller for Underhallow.
 ## Responsible for input interpretation, continuous movement, diagonal normalization,
-## acceleration/friction, 8-directional facing, and interaction triggering.
+## acceleration/friction, 8-directional facing, interaction triggering, and
+## non-authoritative construction preview/placement confirmation per PC-001 & BI-001.
 ##
 ## ARCHITECTURAL CONSTRAINTS:
 ## - No stamina system; no sprint system (Invariant 5 & PC-001).
 ## - Direct screen-space movement is a Tier B Prototype Default.
 ## - Click-to-move is deferred beyond V0.1 Phase 2 per PC-001.
 ## - Does not own inventory, farming, combat, persistence, or world simulation.
+## - Construction preview is non-authoritative and never mutates BuildingState directly.
 
 ## Tier B Prototype Tuning Values
 @export_group("Movement Tuning")
@@ -18,16 +20,28 @@ extends CharacterBody2D
 @export var friction: float = 1600.0
 
 signal equipped_item_changed(new_item_id: StringName)
+signal building_preview_started(building_id: StringName, coord: Vector2i)
+signal building_preview_cancelled()
+signal building_placement_confirmed(instance_id: StringName, building_id: StringName, coord: Vector2i)
 
 @onready var interaction_detector: PlayerInteraction = $InteractionDetector
 @onready var facing_indicator: Node2D = $Visual/FacingIndicator
 
 var player_state: PlayerState = null
+var runtime: GameRuntime = null
+
 var facing_direction: Vector2 = Vector2.DOWN
 var facing_cardinal: int = PlayerState.FacingDirection.SOUTH
 var input_vector: Vector2 = Vector2.ZERO
 var is_moving: bool = false
 var equipped_item_id: StringName = &"tool_hoe"
+
+# Non-authoritative building placement preview state
+var is_in_building_preview: bool = false
+var preview_building_id: StringName = &""
+var preview_coord: Vector2i = Vector2i.ZERO
+var preview_orientation: int = 0
+var _instance_counter: int = 0
 
 func _ready() -> void:
 	# If no state was assigned externally by runtime, initialize default
@@ -45,8 +59,13 @@ func _physics_process(delta: float) -> void:
 	_sync_state()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("interact"):
-		if interaction_detector != null:
+	if event.is_action_pressed("cancel"):
+		if is_in_building_preview:
+			cancel_building_preview()
+	elif event.is_action_pressed("interact"):
+		if is_in_building_preview:
+			confirm_placement()
+		elif interaction_detector != null:
 			interaction_detector.trigger_interaction(self)
 	elif event.is_action_pressed("hotbar_1"):
 		set_equipped_item(&"tool_hoe")
@@ -59,6 +78,72 @@ func set_equipped_item(item_id: StringName) -> void:
 	if equipped_item_id != item_id:
 		equipped_item_id = item_id
 		equipped_item_changed.emit(equipped_item_id)
+		
+		# If a buildable structure is equipped, enter non-authoritative preview
+		var bld_def: BuildingDefinition = BuildingDatabase.get_definition(item_id)
+		if bld_def != null:
+			start_building_preview(item_id, preview_coord)
+		elif is_in_building_preview:
+			cancel_building_preview()
+
+## Starts non-authoritative building preview. Does not mutate BuildingState or InventoryState.
+func start_building_preview(building_id: StringName, initial_coord: Vector2i = Vector2i.ZERO) -> bool:
+	if building_id == &"":
+		return false
+	
+	var def: BuildingDefinition = BuildingDatabase.get_definition(building_id)
+	if def == null:
+		return false
+	
+	is_in_building_preview = true
+	preview_building_id = building_id
+	preview_coord = initial_coord
+	preview_orientation = 0
+	building_preview_started.emit(building_id, preview_coord)
+	return true
+
+func set_preview_coord(coord: Vector2i) -> void:
+	preview_coord = coord
+
+func rotate_building_preview() -> void:
+	preview_orientation = (preview_orientation + 1) % 4
+
+func cancel_building_preview() -> void:
+	if is_in_building_preview:
+		is_in_building_preview = false
+		preview_building_id = &""
+		building_preview_cancelled.emit()
+
+## Confirms placement by dispatching PlaceBuildingCommand through GameRuntime.
+## Validation, mutation, material deduction, and BuildingState updates are strictly authoritative.
+func confirm_placement(custom_instance_id: StringName = &"") -> CommandResult:
+	if not is_in_building_preview or preview_building_id == &"":
+		return CommandResult.fail("Not currently in building preview mode.")
+	
+	if runtime == null:
+		_find_runtime()
+	if runtime == null:
+		return CommandResult.fail("GameRuntime unavailable for placement confirmation.")
+	
+	var inst_id: StringName = custom_instance_id
+	if inst_id == &"":
+		_instance_counter += 1
+		inst_id = StringName("%s_%d" % [preview_building_id, _instance_counter])
+	
+	var cmd: PlaceBuildingCommand = PlaceBuildingCommand.new(inst_id, preview_building_id, preview_coord, preview_orientation)
+	var result: CommandResult = runtime.execute_command(cmd)
+	if result.success:
+		building_placement_confirmed.emit(inst_id, preview_building_id, preview_coord)
+		cancel_building_preview()
+	
+	return result
+
+func _find_runtime() -> void:
+	if runtime == null and is_inside_tree():
+		var root: Node = get_tree().root
+		var game_node: Node = root.get_node_or_null("Game")
+		if game_node != null:
+			runtime = game_node.get_node_or_null("Systems/Runtime") as GameRuntime
 
 ## Computes normalized input vector from logical actions.
 ## Screen-space mapping (Tier B Prototype Default):

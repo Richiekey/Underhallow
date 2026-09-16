@@ -109,9 +109,11 @@ func _spawn_player(marker_name: String) -> void:
 		player_instance = PlayerScene.instantiate() as PlayerController
 		world_container.add_child(player_instance)
 		
-		# Wire player domain state to authoritative GameState
-		if runtime != null and runtime.game_state != null:
-			player_instance.player_state = runtime.game_state.player_state
+		# Wire player domain state and runtime to player instance
+		if runtime != null:
+			player_instance.runtime = runtime
+			if runtime.game_state != null:
+				player_instance.player_state = runtime.game_state.player_state
 		
 		# Setup interaction listeners
 		if player_instance.interaction_detector != null:

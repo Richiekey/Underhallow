@@ -1543,4 +1543,101 @@ func _run_construction_slice_tests() -> void:
 	_assert_true(new_state.building_state.has_instance(&"fence_01"), "Construction 13: Deserialized state preserves fence_01")
 	_assert_true(new_state.building_state.has_instance(&"shop_01"), "Construction 13: Deserialized state preserves shop_01")
 	_assert_equal(new_state.building_state.get_instance(&"shop_01").grid_coord, Vector2i(20, 20), "Construction 13: Deserialized grid coord matches")
+	
+	# --- Targeted Surgical Verification: Player-Facing Construction Interaction Path ---
+	var player: PlayerController = PlayerControllerClass.new()
+	player.runtime = runtime
+	
+	# 1. Building can enter preview through existing player-facing interaction path
+	var wood_before_preview: int = runtime.game_state.inventory_state.get_quantity(&"resource_wood")
+	var preview_started: bool = player.start_building_preview(&"rustic_fence", Vector2i(15, 15))
+	_assert_true(preview_started, "Interaction 1: Building enters preview through player controller")
+	_assert_true(player.is_in_building_preview, "Interaction 1: Player marked in preview mode")
+	_assert_equal(player.preview_building_id, &"rustic_fence", "Interaction 1: Preview building ID matches")
+	
+	# 2. Preview does not mutate BuildingState
+	_assert_true(not runtime.game_state.building_state.has_building_at(Vector2i(15, 15)), "Interaction 2: Preview does NOT mutate BuildingState")
+	_assert_true(not runtime.game_state.building_state.has_instance(&"fence_preview_01"), "Interaction 2: No instance created during preview")
+	
+	# 3. Preview does not consume inventory
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wood"), wood_before_preview, "Interaction 3: Preview does NOT consume inventory")
+	
+	# 4 & 6. Invalid confirmation leaves inventory and BuildingState unchanged
+	var confirm_invalid: CommandResult = player.confirm_placement(&"fence_preview_01")
+	_assert_true(not confirm_invalid.success, "Interaction 6: Invalid confirmation fails (insufficient wood)")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wood"), wood_before_preview, "Interaction 6: Inventory wood unchanged on invalid confirmation")
+	_assert_true(not runtime.game_state.building_state.has_instance(&"fence_preview_01"), "Interaction 6: BuildingState unchanged on invalid confirmation")
+	
+	# 4 & 5. Valid confirmation routes through PlaceBuildingCommand and creates authoritative BuildingInstance
+	runtime.game_state.inventory_state.add_item(&"resource_wood", 3)
+	var confirm_valid: CommandResult = player.confirm_placement(&"fence_preview_01")
+	_assert_true(confirm_valid.success, "Interaction 4: Confirming placement routes through PlaceBuildingCommand")
+	_assert_true(not player.is_in_building_preview, "Interaction 4: Preview mode ends upon confirmation")
+	_assert_true(runtime.game_state.building_state.has_instance(&"fence_preview_01"), "Interaction 5: Valid confirmation creates authoritative BuildingInstance")
+	_assert_true(runtime.game_state.building_state.has_building_at(Vector2i(15, 15)), "Interaction 5: Coordinate occupied in BuildingState")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wood"), wood_before_preview, "Interaction 5: Exactly 3 wood consumed on confirmed placement")
+	
+	# 7. Presentation reflects authoritative placed building
+	var preview_display: BuildingDisplay = BuildingDisplayClass.new()
+	preview_display.initialize_from_state(runtime.game_state.building_state)
+	_assert_true(preview_display.get_rendered_count() >= 3, "Interaction 7: BuildingDisplay reflects authoritative placed building")
+	preview_display.queue_free()
+	player.queue_free()
+
+	# --- Targeted Surgical Verification: Footprint-Aware Placement ---
+	# 1. 1x1 building occupies its expected cell
+	var bld_1x1: BuildingInstance = runtime.game_state.building_state.get_instance(&"fence_preview_01")
+	_assert_true(bld_1x1 != null, "Footprint 1: 1x1 building instance retrieved")
+	_assert_equal(bld_1x1.footprint, Vector2i(1, 1), "Footprint 1: 1x1 building has footprint (1, 1)")
+	_assert_equal(bld_1x1.get_occupied_cells().size(), 1, "Footprint 1: 1x1 building occupies exactly 1 cell")
+	_assert_equal(bld_1x1.get_occupied_cells()[0], Vector2i(15, 15), "Footprint 1: Occupied cell matches origin (15, 15)")
+	
+	# Register multi-cell definition (2x2 footprint)
+	var shed_def: BuildingDefinition = BuildingDefinitionClass.new()
+	shed_def.id = &"test_shed"
+	shed_def.display_name = "Storage Shed"
+	shed_def.footprint = Vector2i(2, 2)
+	shed_def.material_requirements = { &"resource_wood": 4 }
+	BuildingDatabaseClass.register_definition(shed_def)
+	
+	# Place an obstacle at (31, 31)
+	runtime.game_state.inventory_state.add_item(&"resource_stone", 1)
+	var blocker_cmd: PlaceBuildingCommand = PlaceBuildingCommandClass.new(&"blocker_path", &"stone_path", Vector2i(31, 31))
+	_assert_true(runtime.execute_command(blocker_cmd).success, "Footprint Setup: Blocker stone path placed at (31, 31)")
+	
+	# 2. Multi-cell footprint cannot overlap an existing building
+	# Shed at (30, 30) covers (30,30), (31,30), (30,31), (31,31) -> (31,31) is blocked!
+	runtime.game_state.inventory_state.add_item(&"resource_wood", 4)
+	var shed_overlap_cmd: PlaceBuildingCommand = PlaceBuildingCommandClass.new(&"shed_overlap", &"test_shed", Vector2i(30, 30))
+	var shed_overlap_res: CommandResult = runtime.execute_command(shed_overlap_cmd)
+	_assert_true(not shed_overlap_res.success, "Footprint 2: Multi-cell footprint cannot overlap existing building")
+	
+	# 4. Failed footprint validation consumes no materials
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wood"), 4, "Footprint 4: Failed footprint validation consumes zero materials")
+	_assert_true(not runtime.game_state.building_state.has_instance(&"shed_overlap"), "Footprint 4: BuildingState unchanged on failed footprint validation")
+	
+	# 3. Multi-cell footprint cannot overlap a farming plot
+	# (0, 0) is a farm plot. Try placing shed at (-1, 0) which covers (-1,0), (0,0), (-1,1), (0,1)
+	var shed_farm_cmd: PlaceBuildingCommand = PlaceBuildingCommandClass.new(&"shed_farm", &"test_shed", Vector2i(-1, 0))
+	var shed_farm_res: CommandResult = runtime.execute_command(shed_farm_cmd)
+	_assert_true(not shed_farm_res.success, "Footprint 3: Multi-cell footprint cannot overlap farming plot")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wood"), 4, "Footprint 3: Wood strictly preserved on farm plot collision")
+	
+	# 5. Successful footprint placement records all occupied cells
+	var shed_valid_cmd: PlaceBuildingCommand = PlaceBuildingCommandClass.new(&"shed_valid", &"test_shed", Vector2i(40, 40))
+	var shed_valid_res: CommandResult = runtime.execute_command(shed_valid_cmd)
+	_assert_true(shed_valid_res.success, "Footprint 5: Valid multi-cell placement succeeds")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wood"), 0, "Footprint 5: Exactly 4 wood consumed on valid placement")
+	_assert_true(runtime.game_state.building_state.has_building_at(Vector2i(40, 40)), "Footprint 5: Cell (40, 40) occupied")
+	_assert_true(runtime.game_state.building_state.has_building_at(Vector2i(41, 40)), "Footprint 5: Cell (41, 40) occupied")
+	_assert_true(runtime.game_state.building_state.has_building_at(Vector2i(40, 41)), "Footprint 5: Cell (40, 41) occupied")
+	_assert_true(runtime.game_state.building_state.has_building_at(Vector2i(41, 41)), "Footprint 5: Cell (41, 41) occupied")
+	
+	# 6. Serialization/deserialization preserves footprint placement correctly
+	var footprint_saved_dict: Dictionary = runtime.game_state.to_dictionary()
+	var footprint_new_state: GameState = GameStateClass.new()
+	footprint_new_state.from_dictionary(footprint_saved_dict)
+	_assert_true(footprint_new_state.building_state.has_instance(&"shed_valid"), "Footprint 6: Restored state preserves shed_valid")
+	_assert_equal(footprint_new_state.building_state.get_instance(&"shed_valid").footprint, Vector2i(2, 2), "Footprint 6: Restored instance footprint is (2, 2)")
+	_assert_true(footprint_new_state.building_state.has_building_at(Vector2i(41, 41)), "Footprint 6: Restored state preserves corner cell (41, 41)")
 

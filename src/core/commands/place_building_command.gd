@@ -38,12 +38,15 @@ func validate(state: GameState) -> CommandResult:
 	if state.building_state.has_instance(instance_id):
 		return CommandResult.fail("Building instance '%s' already exists." % str(instance_id))
 	
-	# Collision / overlap checks
-	if state.building_state.has_building_at(grid_coord):
-		return CommandResult.fail("Placement coordinate %s is already occupied by another building." % str(grid_coord))
-	
-	if state.farming_state != null and state.farming_state.has_plot(grid_coord):
-		return CommandResult.fail("Placement coordinate %s collides with an existing farm plot." % str(grid_coord))
+	# Footprint-aware collision / overlap checks
+	var fp: Vector2i = Vector2i(maxi(1, def.footprint.x), maxi(1, def.footprint.y))
+	for dx in range(fp.x):
+		for dy in range(fp.y):
+			var cell: Vector2i = Vector2i(grid_coord.x + dx, grid_coord.y + dy)
+			if state.building_state.has_building_at(cell):
+				return CommandResult.fail("Placement coordinate %s is already occupied by another building." % str(cell))
+			if state.farming_state != null and state.farming_state.has_plot(cell):
+				return CommandResult.fail("Placement coordinate %s collides with an existing farm plot." % str(cell))
 	
 	# Materials check: verify all required resources exist in inventory
 	for mat_id: Variant in def.material_requirements.keys():
@@ -58,6 +61,7 @@ func validate(state: GameState) -> CommandResult:
 
 func _execute_mutation(state: GameState) -> CommandResult:
 	var def: BuildingDefinition = BuildingDatabase.get_definition(building_id)
+	var fp: Vector2i = Vector2i(maxi(1, def.footprint.x), maxi(1, def.footprint.y))
 	
 	# Atomic mutation: 1. Deduct all required materials
 	for mat_id: Variant in def.material_requirements.keys():
@@ -66,6 +70,6 @@ func _execute_mutation(state: GameState) -> CommandResult:
 		state.inventory_state.remove_item(item_id, req_qty)
 	
 	# Atomic mutation: 2. Record authoritative building in BuildingState
-	state.building_state.place_building(instance_id, building_id, grid_coord, orientation)
+	state.building_state.place_building(instance_id, building_id, grid_coord, orientation, fp)
 	
 	return CommandResult.ok("Constructed %s." % def.display_name)

@@ -20,13 +20,28 @@ func reset() -> void:
 	_occupied_coords.clear()
 	building_state_cleared.emit()
 
-func place_building(instance_id: StringName, building_id: StringName, coord: Vector2i, orientation: int = 0) -> BuildingInstance:
+func place_building(
+	instance_id: StringName,
+	building_id: StringName,
+	coord: Vector2i,
+	orientation: int = 0,
+	custom_footprint: Vector2i = Vector2i.ZERO
+) -> BuildingInstance:
 	if instance_id == &"" or building_id == &"":
 		return null
 	
-	var instance: BuildingInstance = BuildingInstance.new(instance_id, building_id, coord, orientation)
+	var fp: Vector2i = custom_footprint
+	if fp == Vector2i.ZERO:
+		var def: BuildingDefinition = BuildingDatabase.get_definition(building_id)
+		fp = def.footprint if def != null else Vector2i(1, 1)
+	fp = Vector2i(maxi(1, fp.x), maxi(1, fp.y))
+	
+	var instance: BuildingInstance = BuildingInstance.new(instance_id, building_id, coord, orientation, fp)
 	_instances[instance_id] = instance
-	_occupied_coords[coord] = instance_id
+	
+	for cell: Vector2i in instance.get_occupied_cells():
+		_occupied_coords[cell] = instance_id
+	
 	building_placed.emit(instance)
 	return instance
 
@@ -44,6 +59,12 @@ func get_building_at(coord: Vector2i) -> BuildingInstance:
 	if inst_id != null:
 		return _instances.get(inst_id, null)
 	return null
+
+func get_occupied_cells() -> Array[Vector2i]:
+	var cells: Array[Vector2i] = []
+	for c: Variant in _occupied_coords.keys():
+		cells.append(c as Vector2i)
+	return cells
 
 func get_all_buildings() -> Dictionary:
 	return _instances.duplicate()
@@ -64,5 +85,6 @@ func from_dictionary(dict: Dictionary) -> void:
 		if b_dict != null:
 			var inst: BuildingInstance = BuildingInstance.from_dictionary(b_dict)
 			_instances[inst.instance_id] = inst
-			_occupied_coords[inst.grid_coord] = inst.instance_id
+			for cell: Vector2i in inst.get_occupied_cells():
+				_occupied_coords[cell] = inst.instance_id
 	building_state_cleared.emit()

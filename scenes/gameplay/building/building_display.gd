@@ -47,8 +47,11 @@ func _render_building_instance(instance: BuildingInstance) -> void:
 	node.position = origin_offset + Vector2(float(instance.grid_coord.x) * CELL_SIZE, float(instance.grid_coord.y) * CELL_SIZE)
 	node.rotation = float(instance.orientation) * (PI / 2.0)
 	
+	var width: float = float(instance.footprint.x) * CELL_SIZE
+	var height: float = float(instance.footprint.y) * CELL_SIZE
+	
 	var rect: ColorRect = ColorRect.new()
-	rect.custom_minimum_size = Vector2(14, 14)
+	rect.custom_minimum_size = Vector2(maxf(14.0, width - 2.0), maxf(14.0, height - 2.0))
 	rect.position = Vector2(-7, -7)
 	
 	if instance.building_id == &"rustic_fence":
