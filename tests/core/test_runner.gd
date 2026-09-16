@@ -1077,6 +1077,16 @@ func _run_architecture_audit_a001_tests() -> void:
 	_assert_equal(runtime.game_state.time_state.current_day, 1, "A001-A: TimeState current_day starts at 1")
 	_assert_approx(runtime.game_state.time_state.get_day_progress(), 0.0, "A001-A: TimeState day progress starts at 0.0")
 	
+	# Constructor Divergence Invariant: p_day must never override day derived from elapsed seconds
+	var normal_duration: float = runtime.game_state.time_state.day_duration
+	var conflicting_ts_zero: TimeState = TimeStateClass.new(0.0, 99, normal_duration)
+	_assert_approx(conflicting_ts_zero.elapsed_seconds, 0.0, "A001-Constructor: Elapsed seconds is 0.0 despite conflicting day argument")
+	_assert_equal(conflicting_ts_zero.current_day, 1, "A001-Constructor: Current day derived as 1 from 0.0s elapsed, ignoring conflicting day 99")
+	
+	var conflicting_ts_adv: TimeState = TimeStateClass.new(normal_duration * 2.0, 99, normal_duration)
+	_assert_approx(conflicting_ts_adv.elapsed_seconds, normal_duration * 2.0, "A001-Constructor: Elapsed seconds matches supplied elapsed time")
+	_assert_equal(conflicting_ts_adv.current_day, 3, "A001-Constructor: Current day derived as 3 from (2 * day_duration), ignoring conflicting day 99")
+	
 	# Suite B: Normal Simulation Stepping & Monotonic Derivation
 	runtime.start_runtime()
 	runtime.step_simulation(10.0)

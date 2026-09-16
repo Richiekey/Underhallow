@@ -15,11 +15,9 @@ var elapsed_seconds: float = 0.0
 var current_day: int = 1
 var day_duration: float = DEFAULT_DAY_DURATION
 
-func _init(p_elapsed: float = 0.0, p_day: int = 1, p_duration: float = DEFAULT_DAY_DURATION) -> void:
+func _init(p_elapsed: float = 0.0, _p_day: int = 1, p_duration: float = DEFAULT_DAY_DURATION) -> void:
 	day_duration = maxf(1.0, p_duration)
 	sync_from_elapsed_seconds(p_elapsed)
-	if p_day > current_day:
-		current_day = p_day
 
 ## Synchronizes calendar state from canonical GameTime.
 func sync_from_game_time(game_time: GameTime) -> void:
