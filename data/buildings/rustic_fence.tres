@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="BuildingDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/gameplay/building/building_definition.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"rustic_fence"
+display_name = "Rustic Fence"
+category = "Fencing"
+material_requirements = {
+&"resource_wood": 3
+}
+footprint = Vector2i(1, 1)
+description = "A simple wooden fence assembled from split logs."

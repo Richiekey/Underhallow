@@ -63,6 +63,12 @@ func _initialize_technical_spine() -> void:
 		runtime.command_executed.connect(_on_command_executed)
 	if not runtime.command_failed.is_connected(_on_command_failed):
 		runtime.command_failed.connect(_on_command_failed)
+	
+	# Authoritative world creature setup for Phase 4 Vertical Slice
+	if runtime.game_state != null and runtime.game_state.hunting_state != null:
+		if not runtime.game_state.hunting_state.has_creature(&"hare_01"):
+			runtime.game_state.hunting_state.register_creature(&"hare_01", &"hare", Vector2(60, -120))
+	
 	print("Underhallow: Phase 1 Technical Spine initialized and running cleanly.")
 
 func _initialize_ui() -> void:
@@ -90,6 +96,7 @@ func _load_initial_world() -> void:
 	if not active_world.travel_requested.is_connected(_on_travel_requested):
 		active_world.travel_requested.connect(_on_travel_requested)
 	
+	_setup_world_building_display(active_world)
 	_spawn_player("SpawnMarker")
 	_show_location_banner(active_world.display_name)
 
@@ -158,7 +165,7 @@ func _on_command_failed(_cmd: Command, result: CommandResult) -> void:
 		_show_toast(result.message, 2.0)
 
 func _refresh_all_world_nodes() -> void:
-	# Refreshes FarmPlot and BerryBush visuals across active world
+	# Refreshes FarmPlot, BerryBush, and Hare visuals across active world
 	if active_world != null:
 		for plot: Node in active_world.find_children("*", "FarmPlot", true, false):
 			if plot.has_method("update_visuals"):
@@ -166,6 +173,9 @@ func _refresh_all_world_nodes() -> void:
 		for bush: Node in active_world.find_children("*", "BerryBushInteractable", true, false):
 			if bush.has_method("update_visuals"):
 				bush.update_visuals()
+		for hare: Node in active_world.find_children("*", "HareInteractable", true, false):
+			if hare.has_method("update_visuals"):
+				hare.update_visuals()
 
 ## Handles dock-to-dock travel transition between world spaces.
 func _on_travel_requested(destination_scene_path: String, arrival_marker: String) -> void:
@@ -194,6 +204,7 @@ func switch_world(destination_scene_path: String, arrival_marker: String) -> voi
 	active_world = new_world
 	world_container.add_child(active_world)
 	active_world.travel_requested.connect(_on_travel_requested)
+	_setup_world_building_display(active_world)
 	
 	# Reposition player at arrival marker
 	var arrival_pos: Vector2 = active_world.get_marker_position(arrival_marker)
@@ -207,6 +218,17 @@ func switch_world(destination_scene_path: String, arrival_marker: String) -> voi
 	
 	_show_location_banner(active_world.display_name)
 	_show_toast("Arrived at %s" % active_world.display_name, 3.0)
+
+func _setup_world_building_display(world: WorldSpace) -> void:
+	if world == null:
+		return
+	var building_display: BuildingDisplay = world.get_node_or_null("BuildingDisplay") as BuildingDisplay
+	if building_display == null:
+		building_display = BuildingDisplay.new()
+		building_display.name = "BuildingDisplay"
+		world.add_child(building_display)
+	if runtime != null and runtime.game_state != null:
+		building_display.initialize_from_state(runtime.game_state.building_state)
 
 func _on_interactable_focused(target: Node) -> void:
 	active_interaction_target = target

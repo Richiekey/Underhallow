@@ -45,6 +45,18 @@ const InspectableSignClass = preload("res://src/world/inspectable_sign.gd")
 const FarmPlotClass = preload("res://scenes/gameplay/farming/farm_plot.gd")
 const HuntingStateClass = preload("res://src/gameplay/hunting/hunting_state.gd")
 const BuildingStateClass = preload("res://src/gameplay/building/building_state.gd")
+const CreatureDefinitionClass = preload("res://src/gameplay/hunting/creature_definition.gd")
+const CreatureDatabaseClass = preload("res://src/gameplay/hunting/creature_database.gd")
+const CreatureStateClass = preload("res://src/gameplay/hunting/creature_state.gd")
+const DiscoverCreatureCommandClass = preload("res://src/core/commands/discover_creature_command.gd")
+const AttackCreatureCommandClass = preload("res://src/core/commands/attack_creature_command.gd")
+const HarvestCreatureCommandClass = preload("res://src/core/commands/harvest_creature_command.gd")
+const BuildingDefinitionClass = preload("res://src/gameplay/building/building_definition.gd")
+const BuildingDatabaseClass = preload("res://src/gameplay/building/building_database.gd")
+const BuildingInstanceClass = preload("res://src/gameplay/building/building_instance.gd")
+const PlaceBuildingCommandClass = preload("res://src/core/commands/place_building_command.gd")
+const BuildingDisplayClass = preload("res://scenes/gameplay/building/building_display.gd")
+const HareInteractableClass = preload("res://scenes/gameplay/hunting/hare_interactable.gd")
 
 var total_tests: int = 0
 var passed_tests: int = 0
@@ -66,6 +78,8 @@ func _init() -> void:
 	_run_interaction_prompt_persistence_tests()
 	_run_architecture_audit_a001_tests()
 	_run_hunting_and_building_state_tests()
+	_run_hunting_slice_tests()
+	_run_construction_slice_tests()
 	
 	print("==================================================")
 	print("Test Results: %d passed, %d failed of %d total tests." % [passed_tests, failed_tests, total_tests])
@@ -1308,4 +1322,225 @@ func _run_hunting_and_building_state_tests() -> void:
 	_assert_true(round_trip_restored.building_state != null, "Domain 6: Round-trip preserves non-null building_state")
 	_assert_equal(round_trip_restored.to_dictionary()["hunting"], {}, "Domain 6: Round-trip hunting payload matches")
 	_assert_equal(round_trip_restored.to_dictionary()["building"], {}, "Domain 6: Round-trip building payload matches")
+
+func _run_hunting_slice_tests() -> void:
+	print("\n--- Testing Phase 4 Hunting Slice (HU-001) ---")
+	var runtime: GameRuntime = GameRuntimeClass.new()
+	runtime.initialize_runtime()
+	
+	# 1. HuntingState initializes
+	_assert_true(runtime.game_state.hunting_state != null, "Hunting 1: HuntingState initializes")
+	_assert_equal(runtime.game_state.hunting_state.get_all_creatures().size(), 0, "Hunting 1: HuntingState starts empty")
+	
+	# 2. Hare can be registered/discovered (Authoritative registration)
+	var hare: CreatureState = runtime.game_state.hunting_state.register_creature(&"hare_01", &"hare", Vector2(10.0, 20.0))
+	_assert_true(hare != null, "Hunting 2: Hare registered successfully")
+	_assert_equal(hare.instance_id, &"hare_01", "Hunting 2: Instance ID matches")
+	_assert_equal(hare.definition_id, &"hare", "Hunting 2: Definition ID matches")
+	_assert_equal(hare.current_health, 10, "Hunting 2: Initial health matches definition")
+	_assert_true(not hare.is_discovered, "Hunting 2: Creature initially undiscovered")
+	_assert_true(not hare.is_defeated, "Hunting 2: Creature initially alive (not defeated)")
+	_assert_true(not hare.is_harvested, "Hunting 2: Creature initially unharvested")
+	_assert_true(runtime.game_state.hunting_state.has_creature(&"hare_01"), "Hunting 2: HuntingState reports has_creature true")
+	
+	# 3. Valid engagement / discovery succeeds through command pipeline
+	var disc_cmd: DiscoverCreatureCommand = DiscoverCreatureCommandClass.new(&"hare_01")
+	var disc_res: CommandResult = runtime.execute_command(disc_cmd)
+	_assert_true(disc_res.success, "Hunting 3: Valid discovery command succeeds")
+	_assert_true(hare.is_discovered, "Hunting 3: Hare is marked discovered")
+	
+	# 4. Invalid engagement fails without mutation
+	var invalid_disc_cmd: DiscoverCreatureCommand = DiscoverCreatureCommandClass.new(&"non_existent_creature")
+	var inv_disc_res: CommandResult = runtime.execute_command(invalid_disc_cmd)
+	_assert_true(not inv_disc_res.success, "Hunting 4: Discovery of nonexistent creature fails")
+	_assert_true(not runtime.game_state.hunting_state.has_creature(&"non_existent_creature"), "Hunting 4: No creature created on invalid discovery")
+	
+	# 5. Attack succeeds through the command pipeline
+	var atk_cmd1: AttackCreatureCommand = AttackCreatureCommandClass.new(&"hare_01", 4)
+	var atk_res1: CommandResult = runtime.execute_command(atk_cmd1)
+	_assert_true(atk_res1.success, "Hunting 5: Attack command succeeds through pipeline")
+	
+	# 6. Attack changes authoritative hunting state
+	_assert_equal(hare.current_health, 6, "Hunting 6: Authoritative health updated to 6")
+	_assert_true(not hare.is_defeated, "Hunting 6: Creature remains alive at 6 HP")
+	
+	# 7. Creature health decreases deterministically
+	var atk_cmd2: AttackCreatureCommand = AttackCreatureCommandClass.new(&"hare_01", 3)
+	var atk_res2: CommandResult = runtime.execute_command(atk_cmd2)
+	_assert_true(atk_res2.success, "Hunting 7: Second attack succeeds")
+	_assert_equal(hare.current_health, 3, "Hunting 7: Health deterministically decreased to 3")
+	
+	# 8. Defeat occurs at zero health (non-lethal to player, non-lethal creature defeat)
+	var atk_cmd3: AttackCreatureCommand = AttackCreatureCommandClass.new(&"hare_01", 5) # 5 >= 3 remaining
+	var atk_res3: CommandResult = runtime.execute_command(atk_cmd3)
+	_assert_true(atk_res3.success, "Hunting 8: Fatal blow command succeeds")
+	_assert_equal(hare.current_health, 0, "Hunting 8: Health clamped at 0 HP")
+	
+	# 9. Defeat is recorded in HuntingState
+	_assert_true(hare.is_defeated, "Hunting 9: Defeat is recorded in HuntingState")
+	_assert_true(not hare.is_harvested, "Hunting 9: Defeat does NOT automatically harvest rewards")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_raw_hide"), 0, "Hunting 9: Inventory raw hide remains 0 upon defeat")
+	
+	# 10. Defeated creature cannot be attacked as alive
+	var atk_cmd_post: AttackCreatureCommand = AttackCreatureCommandClass.new(&"hare_01", 2)
+	var atk_res_post: CommandResult = runtime.execute_command(atk_cmd_post)
+	_assert_true(not atk_res_post.success, "Hunting 10: Attacking defeated creature fails validation")
+	_assert_equal(hare.current_health, 0, "Hunting 10: Defeated creature health unchanged")
+	
+	# 11. Living creature cannot be harvested
+	var living_hare: CreatureState = runtime.game_state.hunting_state.register_creature(&"hare_02", &"hare", Vector2(30.0, 40.0))
+	var harv_living_cmd: HarvestCreatureCommand = HarvestCreatureCommandClass.new(&"hare_02")
+	var harv_living_res: CommandResult = runtime.execute_command(harv_living_cmd)
+	_assert_true(not harv_living_res.success, "Hunting 11: Harvesting living creature fails validation")
+	_assert_true(not living_hare.is_harvested, "Hunting 11: Living creature is not marked harvested")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_raw_hide"), 0, "Hunting 11: No rewards granted from living creature harvest")
+	
+	# 12. Defeated creature can be harvested
+	var harv_cmd1: HarvestCreatureCommand = HarvestCreatureCommandClass.new(&"hare_01")
+	var harv_res1: CommandResult = runtime.execute_command(harv_cmd1)
+	_assert_true(harv_res1.success, "Hunting 12: Harvesting defeated creature succeeds")
+	
+	# 13. Harvest grants the configured inventory resource
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_raw_hide"), 1, "Hunting 13: Harvest granted 1 Raw Hide to inventory")
+	
+	# 14. Harvest marks the creature as harvested
+	_assert_true(hare.is_harvested, "Hunting 14: Creature marked as harvested in HuntingState")
+	
+	# 15. Repeated harvest fails
+	var harv_cmd2: HarvestCreatureCommand = HarvestCreatureCommandClass.new(&"hare_01")
+	var harv_res2: CommandResult = runtime.execute_command(harv_cmd2)
+	_assert_true(not harv_res2.success, "Hunting 15: Repeated harvest command fails validation")
+	
+	# 16. Repeated harvest does not duplicate inventory rewards
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_raw_hide"), 1, "Hunting 16: Raw Hide quantity unchanged on repeated harvest")
+	
+	# 17. Invalid hunting commands do not corrupt state
+	var invalid_atk_empty: AttackCreatureCommand = AttackCreatureCommandClass.new(&"")
+	_assert_true(not runtime.execute_command(invalid_atk_empty).success, "Hunting 17: Attack with empty ID fails")
+	var invalid_harv_empty: HarvestCreatureCommand = HarvestCreatureCommandClass.new(&"")
+	_assert_true(not runtime.execute_command(invalid_harv_empty).success, "Hunting 17: Harvest with empty ID fails")
+	
+	# 18. Hare presentation adapter reflects state changes
+	var hare_interactable: HareInteractable = HareInteractableClass.new()
+	hare_interactable.creature_instance_id = &"hare_01"
+	_assert_equal(hare_interactable.creature_instance_id, &"hare_01", "Hunting 18: HareInteractable instance ID matches")
+	hare_interactable.queue_free()
+
+func _run_construction_slice_tests() -> void:
+	print("\n--- Testing Phase 4 Construction Slice (BI-001) ---")
+	var runtime: GameRuntime = GameRuntimeClass.new()
+	runtime.initialize_runtime()
+	
+	# 1. BuildingState initializes
+	_assert_true(runtime.game_state.building_state != null, "Construction 1: BuildingState initializes")
+	_assert_equal(runtime.game_state.building_state.get_all_buildings().size(), 0, "Construction 1: BuildingState starts empty")
+	
+	# 2. Valid building definition can be selected/requested
+	var fence_def: BuildingDefinition = BuildingDatabaseClass.get_definition(&"rustic_fence")
+	_assert_true(fence_def != null, "Construction 2: rustic_fence definition exists in BuildingDatabase")
+	_assert_equal(fence_def.display_name, "Rustic Fence", "Construction 2: Definition display name matches")
+	_assert_equal(fence_def.material_requirements.get(&"resource_wood", 0), 3, "Construction 2: Rustic fence requires 3 wood")
+	
+	var path_def: BuildingDefinition = BuildingDatabaseClass.get_definition(&"stone_path")
+	_assert_true(path_def != null, "Construction 2: stone_path definition exists in BuildingDatabase")
+	_assert_equal(path_def.material_requirements.get(&"resource_stone", 0), 1, "Construction 2: Stone path requires 1 stone")
+	
+	# 3. Invalid building ID fails
+	var inv_id_cmd: PlaceBuildingCommand = PlaceBuildingCommandClass.new(&"bld_invalid", &"nonexistent_building", Vector2i(10, 10))
+	var inv_id_res: CommandResult = runtime.execute_command(inv_id_cmd)
+	_assert_true(not inv_id_res.success, "Construction 3: Placement of unknown building ID fails")
+	_assert_true(not runtime.game_state.building_state.has_instance(&"bld_invalid"), "Construction 3: No instance created on invalid building ID")
+	
+	# 4. Missing materials fail without consuming anything
+	runtime.game_state.inventory_state.add_item(&"resource_wood", 2) # Needs 3
+	var miss_mat_cmd: PlaceBuildingCommand = PlaceBuildingCommandClass.new(&"fence_01", &"rustic_fence", Vector2i(10, 10))
+	var miss_mat_res: CommandResult = runtime.execute_command(miss_mat_cmd)
+	_assert_true(not miss_mat_res.success, "Construction 4: Placement with insufficient materials fails")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wood"), 2, "Construction 4: Exactly 2 wood retained (no materials consumed on failure)")
+	_assert_true(not runtime.game_state.building_state.has_instance(&"fence_01"), "Construction 4: BuildingState unchanged on missing materials")
+	
+	# 5. Successful placement consumes exactly the required materials
+	runtime.game_state.inventory_state.add_item(&"resource_wood", 1) # Total 3 wood
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wood"), 3, "Construction 5: Inventory has exactly 3 wood")
+	var valid_place_cmd: PlaceBuildingCommand = PlaceBuildingCommandClass.new(&"fence_01", &"rustic_fence", Vector2i(10, 10))
+	var valid_place_res: CommandResult = runtime.execute_command(valid_place_cmd)
+	_assert_true(valid_place_res.success, "Construction 5: Valid placement command succeeds")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wood"), 0, "Construction 5: Exactly 3 wood consumed on placement")
+	
+	# 6. Successful placement creates an authoritative building instance
+	var bld_inst: BuildingInstance = runtime.game_state.building_state.get_instance(&"fence_01")
+	_assert_true(bld_inst != null, "Construction 6: BuildingInstance exists in BuildingState")
+	_assert_equal(bld_inst.instance_id, &"fence_01", "Construction 6: Instance ID matches")
+	_assert_equal(bld_inst.building_id, &"rustic_fence", "Construction 6: Building ID matches")
+	_assert_equal(bld_inst.grid_coord, Vector2i(10, 10), "Construction 6: Grid coordinate matches")
+	_assert_true(runtime.game_state.building_state.has_building_at(Vector2i(10, 10)), "Construction 6: Coordinate marked occupied in BuildingState")
+	
+	# 7. Collision/overlap fails (attempting to place at occupied cell)
+	runtime.game_state.inventory_state.add_item(&"resource_wood", 3)
+	var overlap_cmd: PlaceBuildingCommand = PlaceBuildingCommandClass.new(&"fence_02", &"rustic_fence", Vector2i(10, 10))
+	var overlap_res: CommandResult = runtime.execute_command(overlap_cmd)
+	_assert_true(not overlap_res.success, "Construction 7: Placement on occupied coordinate fails")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wood"), 3, "Construction 7: Wood unchanged on overlap failure")
+	_assert_true(not runtime.game_state.building_state.has_instance(&"fence_02"), "Construction 7: No duplicate instance created")
+	
+	# 8. Duplicate instance identity fails
+	var dup_id_cmd: PlaceBuildingCommand = PlaceBuildingCommandClass.new(&"fence_01", &"rustic_fence", Vector2i(11, 10))
+	var dup_id_res: CommandResult = runtime.execute_command(dup_id_cmd)
+	_assert_true(not dup_id_res.success, "Construction 8: Placement with duplicate instance ID fails")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wood"), 3, "Construction 8: Wood unchanged on duplicate ID failure")
+	_assert_true(not runtime.game_state.building_state.has_building_at(Vector2i(11, 10)), "Construction 8: Coordinate remains unoccupied")
+	
+	# 9. Collision with farm plot fails
+	runtime.game_state.farming_state.set_plot(Vector2i(0, 0), SoilPlotStateClass.new(Vector2i(0, 0), true))
+	var farm_collide_cmd: PlaceBuildingCommand = PlaceBuildingCommandClass.new(&"fence_farm_col", &"rustic_fence", Vector2i(0, 0))
+	var farm_collide_res: CommandResult = runtime.execute_command(farm_collide_cmd)
+	_assert_true(not farm_collide_res.success, "Construction 9: Placement colliding with farm plot fails")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wood"), 3, "Construction 9: Wood preserved on farm collision")
+	
+	# 10. Multi-material requirement atomicity test
+	var multi_def: BuildingDefinition = BuildingDefinitionClass.new()
+	multi_def.id = &"test_workshop"
+	multi_def.display_name = "Craft Workshop"
+	multi_def.category = "Structure"
+	multi_def.material_requirements = {
+		&"resource_wood": 3,
+		&"resource_stone": 2
+	}
+	BuildingDatabaseClass.register_definition(multi_def)
+	
+	# Player has 3 wood, but 0 stone (needs 2 stone)
+	var multi_fail_cmd: PlaceBuildingCommand = PlaceBuildingCommandClass.new(&"shop_01", &"test_workshop", Vector2i(20, 20))
+	var multi_fail_res: CommandResult = runtime.execute_command(multi_fail_cmd)
+	_assert_true(not multi_fail_res.success, "Construction 10: Multi-material placement fails when missing second material")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wood"), 3, "Construction 10: Wood strictly preserved when stone is missing")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_stone"), 0, "Construction 10: Stone quantity remains 0")
+	_assert_true(not runtime.game_state.building_state.has_instance(&"shop_01"), "Construction 10: No instance created on partial materials")
+	
+	# Now add 2 stone and place successfully
+	runtime.game_state.inventory_state.add_item(&"resource_stone", 2)
+	var multi_ok_cmd: PlaceBuildingCommand = PlaceBuildingCommandClass.new(&"shop_01", &"test_workshop", Vector2i(20, 20))
+	var multi_ok_res: CommandResult = runtime.execute_command(multi_ok_cmd)
+	_assert_true(multi_ok_res.success, "Construction 10: Multi-material placement succeeds with all materials")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wood"), 0, "Construction 10: Wood consumed atomically")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_stone"), 0, "Construction 10: Stone consumed atomically")
+	_assert_true(runtime.game_state.building_state.has_instance(&"shop_01"), "Construction 10: BuildingInstance created in BuildingState")
+	
+	# 11. Building instance has stable identity
+	var retrieved: BuildingInstance = runtime.game_state.building_state.get_instance(&"shop_01")
+	_assert_equal(retrieved.instance_id, &"shop_01", "Construction 11: Stable instance ID verified")
+	_assert_equal(retrieved.building_id, &"test_workshop", "Construction 11: Building definition ID verified")
+	
+	# 12. Presentation reconstruction from authoritative BuildingState
+	var display: BuildingDisplay = BuildingDisplayClass.new()
+	display.initialize_from_state(runtime.game_state.building_state)
+	_assert_equal(display.get_rendered_count(), 2, "Construction 12: BuildingDisplay derived 2 visual instances from BuildingState")
+	display.queue_free()
+	
+	# 13. State serialization / deserialization roundtrip preserves building instances
+	var saved_dict: Dictionary = runtime.game_state.to_dictionary()
+	var new_state: GameState = GameStateClass.new()
+	new_state.from_dictionary(saved_dict)
+	_assert_true(new_state.building_state.has_instance(&"fence_01"), "Construction 13: Deserialized state preserves fence_01")
+	_assert_true(new_state.building_state.has_instance(&"shop_01"), "Construction 13: Deserialized state preserves shop_01")
+	_assert_equal(new_state.building_state.get_instance(&"shop_01").grid_coord, Vector2i(20, 20), "Construction 13: Deserialized grid coord matches")
 

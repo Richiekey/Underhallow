@@ -20,7 +20,11 @@ static func initialize() -> void:
 		"tool_watering_can",
 		"seed_carrot",
 		"crop_carrot",
-		"resource_wild_berries"
+		"resource_wild_berries",
+		"resource_raw_hide",
+		"resource_meat",
+		"resource_wood",
+		"resource_stone"
 	]
 	
 	for item_name: String in known_items:

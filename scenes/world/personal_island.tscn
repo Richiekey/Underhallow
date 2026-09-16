@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://src/world/world_space.gd" id="1_world_space"]
 [ext_resource type="PackedScene" path="res://scenes/world/environment/cottage.tscn" id="2_cottage"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/environment/signpost.tscn" id="8_sign"]
 [ext_resource type="PackedScene" path="res://scenes/gameplay/farming/farm_plot.tscn" id="9_plot"]
 [ext_resource type="PackedScene" path="res://scenes/gameplay/resources/berry_bush.tscn" id="10_berry"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/hunting/hare.tscn" id="11_hare"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_water_north"]
 size = Vector2(900, 60)
@@ -252,3 +253,7 @@ grid_coord = Vector2i(3, 2)
 [node name="WildBerryBush" parent="Environment" instance=ExtResource("10_berry")]
 position = Vector2(120, -130)
 node_id = &"wild_berry_bush_1"
+
+[node name="ForestHare" parent="Environment" instance=ExtResource("11_hare")]
+position = Vector2(60, -120)
+creature_instance_id = &"hare_01"

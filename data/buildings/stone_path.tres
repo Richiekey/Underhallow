@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="BuildingDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/gameplay/building/building_definition.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"stone_path"
+display_name = "Stone Path"
+category = "Pathing"
+material_requirements = {
+&"resource_stone": 1
+}
+footprint = Vector2i(1, 1)
+description = "Smooth stone pavers that keep boots out of the damp mud."
