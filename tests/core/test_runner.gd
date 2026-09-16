@@ -56,6 +56,8 @@ const BuildingDatabaseClass = preload("res://src/gameplay/building/building_data
 const BuildingInstanceClass = preload("res://src/gameplay/building/building_instance.gd")
 const PlaceBuildingCommandClass = preload("res://src/core/commands/place_building_command.gd")
 const BuildingDisplayClass = preload("res://scenes/gameplay/building/building_display.gd")
+const BuildingPreviewDisplayClass = preload("res://scenes/gameplay/building/building_preview_display.gd")
+const HotbarUIClass = preload("res://scenes/gameplay/ui/hotbar_ui.gd")
 const HareInteractableClass = preload("res://scenes/gameplay/hunting/hare_interactable.gd")
 
 var total_tests: int = 0
@@ -1544,44 +1546,105 @@ func _run_construction_slice_tests() -> void:
 	_assert_true(new_state.building_state.has_instance(&"shop_01"), "Construction 13: Deserialized state preserves shop_01")
 	_assert_equal(new_state.building_state.get_instance(&"shop_01").grid_coord, Vector2i(20, 20), "Construction 13: Deserialized grid coord matches")
 	
-	# --- Targeted Surgical Verification: Player-Facing Construction Interaction Path ---
+	# --- Targeted Surgical Verification: Player-Facing Construction Interaction Path (Tests 1 - 8) ---
 	var player: PlayerController = PlayerControllerClass.new()
 	player.runtime = runtime
 	
-	# 1. Building can enter preview through existing player-facing interaction path
+	var preview_display = BuildingPreviewDisplayClass.new()
+	preview_display.bind_player(player, runtime)
+	
+	var hotbar: HotbarUI = HotbarUIClass.new()
+	hotbar.initialize(runtime, player)
+	
+	# Test 1 — Building selection: A buildable can be selected/equipped through existing player-facing mechanism
+	player.set_equipped_item(&"rustic_fence")
+	_assert_equal(player.equipped_item_id, &"rustic_fence", "Test 1: Building selection sets equipped_item_id")
+	_assert_equal(hotbar.active_slot_index, 3, "Test 1: HotbarUI activates slot 3 for rustic_fence")
+	
+	player.set_equipped_item(&"stone_path")
+	_assert_equal(player.equipped_item_id, &"stone_path", "Test 1: Building selection equips stone_path")
+	_assert_equal(hotbar.active_slot_index, 4, "Test 1: HotbarUI activates slot 4 for stone_path")
+	
+	# Test 2 — Preview activation: Selecting a building enters preview mode without mutation
 	var wood_before_preview: int = runtime.game_state.inventory_state.get_quantity(&"resource_wood")
-	var preview_started: bool = player.start_building_preview(&"rustic_fence", Vector2i(15, 15))
-	_assert_true(preview_started, "Interaction 1: Building enters preview through player controller")
-	_assert_true(player.is_in_building_preview, "Interaction 1: Player marked in preview mode")
-	_assert_equal(player.preview_building_id, &"rustic_fence", "Interaction 1: Preview building ID matches")
+	var select_ok: bool = player.select_building(&"rustic_fence")
+	_assert_true(select_ok, "Test 2: select_building succeeds")
+	_assert_true(player.is_in_building_preview, "Test 2: Preview state is active")
+	_assert_equal(player.preview_building_id, &"rustic_fence", "Test 2: Selected building ID is rustic_fence")
+	_assert_true(preview_display.is_preview_visible(), "Test 2: Preview representation is visibly displayed")
+	_assert_true(not runtime.game_state.building_state.has_instance(&"preview_fence_01"), "Test 2: Preview does NOT create BuildingInstance")
+	_assert_true(not runtime.game_state.building_state.has_building_at(Vector2i(15, 15)), "Test 2: Preview does NOT mutate BuildingState")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wood"), wood_before_preview, "Test 2: Preview does NOT consume inventory")
 	
-	# 2. Preview does not mutate BuildingState
-	_assert_true(not runtime.game_state.building_state.has_building_at(Vector2i(15, 15)), "Interaction 2: Preview does NOT mutate BuildingState")
-	_assert_true(not runtime.game_state.building_state.has_instance(&"fence_preview_01"), "Interaction 2: No instance created during preview")
+	# Test 3 — Preview movement: Changing target coordinate updates preview coordinate without mutating state
+	player.set_preview_coord(Vector2i(18, 18))
+	_assert_equal(player.preview_coord, Vector2i(18, 18), "Test 3: Preview coordinate updated to (18, 18)")
+	preview_display.update_preview()
+	var expected_world_pos: Vector2 = PlayerController.grid_to_world(Vector2i(18, 18))
+	_assert_equal(preview_display.position, expected_world_pos, "Test 3: Preview representation reflects updated grid coordinate")
+	_assert_true(not runtime.game_state.building_state.has_building_at(Vector2i(18, 18)), "Test 3: Target coordinate remains unoccupied in BuildingState")
+	_assert_true(not runtime.game_state.building_state.has_instance(&"preview_fence_01"), "Test 3: Movement does not create BuildingInstance")
 	
-	# 3. Preview does not consume inventory
-	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wood"), wood_before_preview, "Interaction 3: Preview does NOT consume inventory")
+	# Rotation in preview mode
+	player.rotate_building_preview()
+	_assert_equal(player.preview_orientation, 1, "Test 3: Preview orientation rotates to 1")
+	player.rotate_building_preview()
+	player.rotate_building_preview()
+	player.rotate_building_preview()
+	_assert_equal(player.preview_orientation, 0, "Test 3: Preview orientation cycles back to 0")
 	
-	# 4 & 6. Invalid confirmation leaves inventory and BuildingState unchanged
-	var confirm_invalid: CommandResult = player.confirm_placement(&"fence_preview_01")
-	_assert_true(not confirm_invalid.success, "Interaction 6: Invalid confirmation fails (insufficient wood)")
-	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wood"), wood_before_preview, "Interaction 6: Inventory wood unchanged on invalid confirmation")
-	_assert_true(not runtime.game_state.building_state.has_instance(&"fence_preview_01"), "Interaction 6: BuildingState unchanged on invalid confirmation")
+	# Test 4 — Preview validity: Blocked/invalid vs valid placement identified, strictly agreeing with PlaceBuildingCommand.validate()
+	# Current wood is 0, so placement at (18, 18) is invalid due to missing materials
+	_assert_true(not player.is_preview_valid(), "Test 4: Preview identifies placement with insufficient materials as invalid")
 	
-	# 4 & 5. Valid confirmation routes through PlaceBuildingCommand and creates authoritative BuildingInstance
+	# Add materials: now placement at empty (18, 18) is valid
 	runtime.game_state.inventory_state.add_item(&"resource_wood", 3)
-	var confirm_valid: CommandResult = player.confirm_placement(&"fence_preview_01")
-	_assert_true(confirm_valid.success, "Interaction 4: Confirming placement routes through PlaceBuildingCommand")
-	_assert_true(not player.is_in_building_preview, "Interaction 4: Preview mode ends upon confirmation")
-	_assert_true(runtime.game_state.building_state.has_instance(&"fence_preview_01"), "Interaction 5: Valid confirmation creates authoritative BuildingInstance")
-	_assert_true(runtime.game_state.building_state.has_building_at(Vector2i(15, 15)), "Interaction 5: Coordinate occupied in BuildingState")
-	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wood"), wood_before_preview, "Interaction 5: Exactly 3 wood consumed on confirmed placement")
+	_assert_true(player.is_preview_valid(), "Test 4: Preview identifies placement with sufficient materials as valid")
 	
-	# 7. Presentation reflects authoritative placed building
-	var preview_display: BuildingDisplay = BuildingDisplayClass.new()
-	preview_display.initialize_from_state(runtime.game_state.building_state)
-	_assert_true(preview_display.get_rendered_count() >= 3, "Interaction 7: BuildingDisplay reflects authoritative placed building")
+	# Move preview to (0, 0) which has a farming plot: invalid!
+	player.set_preview_coord(Vector2i(0, 0))
+	_assert_true(not player.is_preview_valid(), "Test 4: Preview identifies collision with farming plot as invalid")
+	
+	# Test 6 — Failed confirmation: Attempt invalid placement
+	# Attempting confirmation over farm plot at (0, 0)
+	var invalid_confirm_res: CommandResult = player.confirm_placement(&"fail_fence")
+	_assert_true(not invalid_confirm_res.success, "Test 6: Invalid confirmation fails command execution")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wood"), 3, "Test 6: Failed confirmation leaves inventory unchanged")
+	_assert_true(not runtime.game_state.building_state.has_instance(&"fail_fence"), "Test 6: Failed confirmation creates no BuildingInstance")
+	_assert_true(player.is_in_building_preview, "Test 6: Player remains in preview mode on failed confirmation")
+	
+	# Test 5 — Confirmation: Valid confirmation routes through PlaceBuildingCommand
+	player.set_preview_coord(Vector2i(18, 18))
+	_assert_true(player.is_preview_valid(), "Test 5: Target coordinate (18, 18) confirmed valid")
+	var valid_confirm_res: CommandResult = player.confirm_placement(&"fence_preview_01")
+	_assert_true(valid_confirm_res.success, "Test 5: Valid confirmation succeeds through command pipeline")
+	_assert_true(not player.is_in_building_preview, "Test 5: Preview mode ends upon confirmation")
+	_assert_true(not preview_display.is_preview_visible(), "Test 5: Preview representation hidden upon confirmation")
+	_assert_true(runtime.game_state.building_state.has_instance(&"fence_preview_01"), "Test 5: BuildingState gains authoritative BuildingInstance")
+	_assert_true(runtime.game_state.building_state.has_building_at(Vector2i(18, 18)), "Test 5: Grid coordinate (18, 18) is occupied")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wood"), 0, "Test 5: Required materials consumed exactly once")
+	
+	# Test 7 — Cancel: Enter preview, cancel it, verify state and inventory untouched
+	runtime.game_state.inventory_state.add_item(&"resource_stone", 1)
+	player.select_building(&"stone_path")
+	player.set_preview_coord(Vector2i(25, 25))
+	_assert_true(player.is_in_building_preview, "Test 7: Preview active before cancel")
+	_assert_true(preview_display.is_preview_visible(), "Test 7: Preview visible before cancel")
+	
+	player.cancel_building_preview()
+	_assert_true(not player.is_in_building_preview, "Test 7: Preview mode ended after cancel")
+	_assert_true(not preview_display.is_preview_visible(), "Test 7: Preview hidden after cancel")
+	_assert_true(not runtime.game_state.building_state.has_building_at(Vector2i(25, 25)), "Test 7: BuildingState unchanged after cancel")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_stone"), 1, "Test 7: Inventory stone unchanged after cancel")
+	
+	# Test 8 — Presentation: Authoritative state reconstructs placed buildings correctly
+	var authoritative_display: BuildingDisplay = BuildingDisplayClass.new()
+	authoritative_display.initialize_from_state(runtime.game_state.building_state)
+	_assert_true(authoritative_display.get_rendered_count() >= 3, "Test 8: BuildingDisplay reflects all placed buildings from BuildingState")
+	authoritative_display.queue_free()
+	
 	preview_display.queue_free()
+	hotbar.queue_free()
 	player.queue_free()
 
 	# --- Targeted Surgical Verification: Footprint-Aware Placement ---
@@ -1590,7 +1653,7 @@ func _run_construction_slice_tests() -> void:
 	_assert_true(bld_1x1 != null, "Footprint 1: 1x1 building instance retrieved")
 	_assert_equal(bld_1x1.footprint, Vector2i(1, 1), "Footprint 1: 1x1 building has footprint (1, 1)")
 	_assert_equal(bld_1x1.get_occupied_cells().size(), 1, "Footprint 1: 1x1 building occupies exactly 1 cell")
-	_assert_equal(bld_1x1.get_occupied_cells()[0], Vector2i(15, 15), "Footprint 1: Occupied cell matches origin (15, 15)")
+	_assert_equal(bld_1x1.get_occupied_cells()[0], Vector2i(18, 18), "Footprint 1: Occupied cell matches origin (18, 18)")
 	
 	# Register multi-cell definition (2x2 footprint)
 	var shed_def: BuildingDefinition = BuildingDefinitionClass.new()

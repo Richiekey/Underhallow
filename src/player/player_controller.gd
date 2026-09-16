@@ -23,6 +23,8 @@ signal equipped_item_changed(new_item_id: StringName)
 signal building_preview_started(building_id: StringName, coord: Vector2i)
 signal building_preview_cancelled()
 signal building_placement_confirmed(instance_id: StringName, building_id: StringName, coord: Vector2i)
+signal preview_coord_changed(new_coord: Vector2i)
+signal preview_orientation_changed(new_orientation: int)
 
 @onready var interaction_detector: PlayerInteraction = $InteractionDetector
 @onready var facing_indicator: Node2D = $Visual/FacingIndicator
@@ -67,12 +69,19 @@ func _unhandled_input(event: InputEvent) -> void:
 			confirm_placement()
 		elif interaction_detector != null:
 			interaction_detector.trigger_interaction(self)
+	elif event.is_action_pressed("rotate_building") or (event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R):
+		if is_in_building_preview:
+			rotate_building_preview()
 	elif event.is_action_pressed("hotbar_1"):
 		set_equipped_item(&"tool_hoe")
 	elif event.is_action_pressed("hotbar_2"):
 		set_equipped_item(&"tool_watering_can")
 	elif event.is_action_pressed("hotbar_3"):
 		set_equipped_item(&"seed_carrot")
+	elif event.is_action_pressed("hotbar_4"):
+		set_equipped_item(&"rustic_fence")
+	elif event.is_action_pressed("hotbar_5"):
+		set_equipped_item(&"stone_path")
 
 func set_equipped_item(item_id: StringName) -> void:
 	if equipped_item_id != item_id:
@@ -86,6 +95,11 @@ func set_equipped_item(item_id: StringName) -> void:
 		elif is_in_building_preview:
 			cancel_building_preview()
 
+## Selects and equips a buildable structure, activating non-authoritative preview.
+func select_building(building_id: StringName) -> bool:
+	set_equipped_item(building_id)
+	return is_in_building_preview and preview_building_id == building_id
+
 ## Starts non-authoritative building preview. Does not mutate BuildingState or InventoryState.
 func start_building_preview(building_id: StringName, initial_coord: Vector2i = Vector2i.ZERO) -> bool:
 	if building_id == &"":
@@ -97,22 +111,65 @@ func start_building_preview(building_id: StringName, initial_coord: Vector2i = V
 	
 	is_in_building_preview = true
 	preview_building_id = building_id
-	preview_coord = initial_coord
 	preview_orientation = 0
+	
+	if initial_coord == Vector2i.ZERO and facing_direction != Vector2.ZERO:
+		var target_pos: Vector2 = global_position + facing_direction.normalized() * 24.0
+		preview_coord = world_to_grid(target_pos)
+	else:
+		preview_coord = initial_coord
+	
 	building_preview_started.emit(building_id, preview_coord)
 	return true
 
 func set_preview_coord(coord: Vector2i) -> void:
-	preview_coord = coord
+	if preview_coord != coord:
+		preview_coord = coord
+		preview_coord_changed.emit(preview_coord)
 
 func rotate_building_preview() -> void:
 	preview_orientation = (preview_orientation + 1) % 4
+	preview_orientation_changed.emit(preview_orientation)
 
 func cancel_building_preview() -> void:
 	if is_in_building_preview:
 		is_in_building_preview = false
 		preview_building_id = &""
 		building_preview_cancelled.emit()
+
+## Updates the non-authoritative preview target coordinate to match player facing and position.
+func update_preview_target_from_facing() -> void:
+	if not is_in_building_preview:
+		return
+	var target_pos: Vector2 = global_position + facing_direction.normalized() * 24.0
+	var coord: Vector2i = world_to_grid(target_pos)
+	set_preview_coord(coord)
+
+static func world_to_grid(world_pos: Vector2) -> Vector2i:
+	var local: Vector2 = world_pos - Vector2(-130.0, -20.0)
+	return Vector2i(roundi(local.x / 16.0), roundi(local.y / 16.0))
+
+static func grid_to_world(coord: Vector2i) -> Vector2:
+	return Vector2(-130.0, -20.0) + Vector2(float(coord.x) * 16.0, float(coord.y) * 16.0)
+
+## Queries whether the current preview placement would pass PlaceBuildingCommand validation.
+## Strictly non-authoritative query for presentation feedback only.
+func is_preview_valid() -> bool:
+	if not is_in_building_preview or preview_building_id == &"":
+		return false
+	if runtime == null:
+		_find_runtime()
+	if runtime == null or runtime.game_state == null:
+		return false
+	
+	var check_cmd: PlaceBuildingCommand = PlaceBuildingCommand.new(
+		&"__preview_check__",
+		preview_building_id,
+		preview_coord,
+		preview_orientation
+	)
+	var result: CommandResult = check_cmd.validate(runtime.game_state)
+	return result.success
 
 ## Confirms placement by dispatching PlaceBuildingCommand through GameRuntime.
 ## Validation, mutation, material deduction, and BuildingState updates are strictly authoritative.
@@ -175,6 +232,8 @@ func _process_movement(delta: float) -> void:
 		if interaction_detector != null:
 			interaction_detector.update_facing(facing_direction)
 		_update_visual_facing()
+		if is_in_building_preview:
+			update_preview_target_from_facing()
 	else:
 		# Apply friction when no input is received; retain last facing direction
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)

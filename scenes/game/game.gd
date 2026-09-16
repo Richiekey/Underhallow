@@ -7,6 +7,7 @@ extends Node2D
 
 const PlayerScene = preload("res://scenes/player/player.tscn")
 const DefaultWorldScene = preload("res://scenes/world/personal_island.tscn")
+const BuildingPreviewDisplay = preload("res://scenes/gameplay/building/building_preview_display.gd")
 
 @onready var world_container: Node2D = $World
 @onready var camera: CameraController = $Camera
@@ -41,7 +42,8 @@ func _verify_input_actions() -> void:
 	var required_actions: Array[String] = [
 		"move_up", "move_down", "move_left", "move_right",
 		"interact", "cancel", "zoom_in", "zoom_out",
-		"hotbar_1", "hotbar_2", "hotbar_3", "toggle_inventory", "debug_advance_day"
+		"hotbar_1", "hotbar_2", "hotbar_3", "hotbar_4", "hotbar_5", "rotate_building",
+		"toggle_inventory", "debug_advance_day"
 	]
 	var all_actions_valid: bool = true
 	for action: String in required_actions:
@@ -126,11 +128,18 @@ func _spawn_player(marker_name: String) -> void:
 		
 		if not player_instance.equipped_item_changed.is_connected(_on_player_equipped_changed):
 			player_instance.equipped_item_changed.connect(_on_player_equipped_changed)
+		if not player_instance.building_preview_started.is_connected(_on_building_preview_started):
+			player_instance.building_preview_started.connect(_on_building_preview_started)
+		if not player_instance.building_preview_cancelled.is_connected(_on_building_preview_cancelled):
+			player_instance.building_preview_cancelled.connect(_on_building_preview_cancelled)
 	
 	# Position player at specified world marker
 	var target_pos: Vector2 = Vector2.ZERO
 	if active_world != null:
 		target_pos = active_world.get_marker_position(marker_name)
+		var preview_display: BuildingPreviewDisplay = active_world.get_node_or_null("BuildingPreviewDisplay") as BuildingPreviewDisplay
+		if preview_display != null:
+			preview_display.bind_player(player_instance, runtime)
 	
 	player_instance.global_position = target_pos
 	if player_instance.player_state != null:
@@ -231,6 +240,25 @@ func _setup_world_building_display(world: WorldSpace) -> void:
 		world.add_child(building_display)
 	if runtime != null and runtime.game_state != null:
 		building_display.initialize_from_state(runtime.game_state.building_state)
+	
+	var preview_display: BuildingPreviewDisplay = world.get_node_or_null("BuildingPreviewDisplay") as BuildingPreviewDisplay
+	if preview_display == null:
+		preview_display = BuildingPreviewDisplay.new()
+		preview_display.name = "BuildingPreviewDisplay"
+		world.add_child(preview_display)
+	if player_instance != null:
+		preview_display.bind_player(player_instance, runtime)
+
+func _on_building_preview_started(building_id: StringName, _coord: Vector2i) -> void:
+	var def: BuildingDefinition = BuildingDatabase.get_definition(building_id)
+	var bld_name: String = def.display_name if def != null else str(building_id)
+	_show_interaction_prompt("Build %s: [E] Confirm | [R] Rotate | [Esc] Cancel" % bld_name)
+
+func _on_building_preview_cancelled() -> void:
+	if active_interaction_target != null:
+		_update_interaction_prompt()
+	else:
+		_hide_interaction_prompt()
 
 func _on_interactable_focused(target: Node) -> void:
 	active_interaction_target = target
