@@ -2,10 +2,21 @@
 
 ## PLAYER CONTROL, MOVEMENT & INTERACTION SPECIFICATION V1.0
 
-**Document Status:** DRAFT (Reconciled with SR-001 & ETA-001)  
+**Document ID:** PC-001  
 **Version:** 1.0  
-**Parent Specification:** [Core Gameplay Systems Specification V1.0](file:///c:/Users/HP/Documents/Underhallow/docs/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md), [Engine & Technical Architecture Specification V1 (ETA-001)](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)  
+**Document Status:** APPROVED (Level 1 Foundation Specification)  
+**Authority Level:** Level 1 — Foundation Specification  
+**Parent Specifications:**  
+* [North Star V1.0 (NS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/NORTH_STAR.md)
+* [Creative Direction V1.0 (CD-001)](file:///c:/Users/HP/Documents/Underhallow/docs/CREATIVE_DIRECTION.md)
+* [Art Direction Bible V1.0 (AD-001)](file:///c:/Users/HP/Documents/Underhallow/docs/ART_DIRECTION_BIBLE.md)
+* [Core Gameplay Systems Specification V1.0 (CG-001)](file:///c:/Users/HP/Documents/Underhallow/docs/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md)
+* [Engine & Technical Architecture Specification V1 (ETA-001)](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)
+* [World & Map Architecture Specification V1.0 (WM-001)](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md)
+* [Master Specification Index & Build Governance V1.0 (MSI-001)](file:///c:/Users/HP/Documents/Underhallow/docs/MASTER_SPECIFICATION_INDEX.md)
+
 **Project:** Underhallow  
+**Primary Domain:** Player Controller, Movement, Camera & Interaction  
 
 ---
 
@@ -15,25 +26,24 @@ This specification defines how the player physically controls, navigates, intera
 
 It establishes the foundation for:
 
-* Player movement
-* Keyboard and mouse controls
-* Interaction
-* Facing direction
-* Tool usage
-* Environmental interaction
-* Collision
-* Camera behavior
-* Building and farming targeting
-* Combat controls
-* World transitions
-* Interior transitions
-* Player states
-* Hotbar behavior
-* Input architecture
-* Accessibility
-* Interaction feedback
+* Player movement and locomotion
+* Keyboard, mouse, and abstract action inputs
+* Contextual and directional interaction
+* Facing direction and orientation
+* Tool usage activation interface
+* Environmental and object interaction
+* Player-facing collision philosophy
+* Fixed isometric camera behavior and zoom
+* Building and farming targeting interfaces
+* Real-time directional combat control interface
+* World, island, and interior transitions
+* Player state categories and exclusivity
+* Hotbar selection and inventory interaction interfaces
+* Input abstraction and accessibility
+* Non-lethal defeat control flow
+* Multiplayer player-to-player interaction interface
 
-This document defines **player-facing behavior and system rules**, not implementation-specific code.
+This document defines **player-facing behavior, control contracts, and system rules**, not engine-specific implementation code.
 
 ---
 
@@ -50,1350 +60,542 @@ The player should feel:
 * Able to explore naturally
 * Able to interact with the environment without fighting the controls
 
-The game should combine:
+The game combines:
 
-> **Free-feeling movement + contextual interaction + simple action combat + environmental interaction**
+> **Free continuous movement + contextual interaction + simple directional combat + intuitive environmental interaction**
 
-The player should never feel that the underlying systems are unnecessarily getting in the way of the world.
+The player should never feel that the underlying systems are getting in the way of experiencing the world. Controls must feel crisp, immediate, and predictable.
 
 ---
 
-# 3. Primary Control Model
+# 3. System Boundaries: What PC-001 Owns vs What It Does Not Own
 
-Underhallow supports both:
+To maintain single-source-of-truth integrity across Underhallow's documentation hierarchy, PC-001 establishes clear architectural boundaries:
 
-### Direct Movement
+### What PC-001 Owns:
+* Player movement mechanics, locomotion feel, acceleration, friction, and diagonal normalization.
+* Input abstraction layers and logical actions.
+* Contextual interaction targeting rules and resolution hierarchies.
+* 8-directional player facing orientation and auto-facing logic.
+* Action commitment, interruption rules, and movement locking.
+* Player controller state machine categories and state mutual exclusivity.
+* Isometric camera behavior, tracking, look-ahead, boundaries, and zoom clamping.
+* Player-facing collision philosophy and response rules.
+* The activation and targeting interfaces for tools, farming tiles, building previews, and weapons.
+* Player control handling during world transitions, interior entries, and defeat sequences.
+* Player-facing interaction interface with other players in multiplayer.
 
-Keyboard movement using:
+### What PC-001 Does NOT Own:
+* Farming economics, crop growth algorithms, seed definitions, or soil degradation (owned by [FB-001](file:///c:/Users/HP/Documents/Underhallow/docs/FARMING_SYSTEM_SPECIFICATION.md)).
+* Physical resource node spawning, regeneration, or depletion (owned by [RG-001](file:///c:/Users/HP/Documents/Underhallow/docs/MASTER_SPECIFICATION_INDEX.md)).
+* Naturally occurring wild plant/berry foraging generation (owned by [FR-001](file:///c:/Users/HP/Documents/Underhallow/docs/MASTER_SPECIFICATION_INDEX.md)).
+* Livestock welfare, care, feeding, or animal product simulation (owned by [LA-001](file:///c:/Users/HP/Documents/Underhallow/docs/MASTER_SPECIFICATION_INDEX.md)).
+* Cooking recipes, station processing, or food buff formulas (owned by [CK-001](file:///c:/Users/HP/Documents/Underhallow/docs/MASTER_SPECIFICATION_INDEX.md)).
+* Hunting creature stats, combat damage formulas, weapon balance, or creature AI (owned by [HU-001](file:///c:/Users/HP/Documents/Underhallow/docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md)).
+* Item data schemas, inventory capacity, stack limits, or crafting recipes (owned by [II-001](file:///c:/Users/HP/Documents/Underhallow/docs/MASTER_SPECIFICATION_INDEX.md)).
+* Constructible building catalogs, construction timers, or material recovery formulas (owned by [BI-001](file:///c:/Users/HP/Documents/Underhallow/docs/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md)).
+* Island geography, layout, or regional borders (owned by [MI-001](file:///c:/Users/HP/Documents/Underhallow/docs/MAIN_ISLAND_DESIGN_SPECIFICATION.md) and [PI-001](file:///c:/Users/HP/Documents/Underhallow/docs/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md)).
+* Traversal vehicle mechanics, ferry scheduling, or transit networks (owned by [TR-001](file:///c:/Users/HP/Documents/Underhallow/docs/MASTER_SPECIFICATION_INDEX.md)).
+* Weather states, atmospheric effects, or rain simulation (owned by [WE-001](file:///c:/Users/HP/Documents/Underhallow/docs/MASTER_SPECIFICATION_INDEX.md)).
+* Day/night cycles, simulation time, or game clocks (owned by [TS-001](file:///c:/Users/HP/Documents/Underhallow/docs/MASTER_SPECIFICATION_INDEX.md)).
+* Economy, pricing, currency, or merchant trading rules (owned by [EC-001](file:///c:/Users/HP/Documents/Underhallow/docs/MASTER_SPECIFICATION_INDEX.md)).
+* Server network authority, replication protocols, or client-side prediction algorithms (owned by [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)).
+* Party structures, guilds, permissions, or social systems (owned by [MS-001](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md)).
 
-* WASD
-* Arrow keys
+---
 
-### Mouse Movement
+# 4. Multiplayer Authority & Control Pipeline
 
-Click-to-move functionality is supported.
+Underhallow is **single-player-first, multiplayer-native**.
 
-The input system therefore supports:
+PC-001 defines the player-facing feel and intent; [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md) defines technical network authority.
+
+The control pipeline operates strictly as:
 
 ```text
-Keyboard
-   ↓
-Direct Player Movement
-
-Mouse
-   ↓
-Click-to-Move
+Physical Input (Keyboard / Mouse)
+        ↓
+Logical Input Action
+        ↓
+Local Player Intent & Controller Prediction
+        ↓
+Command Execution Request (Command Pipeline)
+        ↓
+Authoritative Validation (Server / Host Runtime)
+        ↓
+State Mutation (GameState / PlayerState)
+        ↓
+Network Replication & Event Emission
+        ↓
+Presentation & Animation Confirmation
 ```
 
-Both methods control the same underlying player movement system.
+In single-player mode, validation executes immediately within the local runtime. In multiplayer mode, the client predicts local movement for responsiveness, while authoritative validation guarantees placement, inventory consumption, and interaction legality without client-side spoofing.
 
 ---
 
-# 4. Input Abstraction
+# 5. Primary Control Model
 
-Movement and interaction systems must not be directly coupled to individual physical input devices.
+Underhallow supports dual movement modalities:
 
-The architecture should conceptually operate through actions:
+### Direct Movement (Primary)
+Direct keyboard control using:
+* **WASD**
+* **Arrow keys**
+
+### Mouse Movement (Supported)
+Click-to-move functionality allowing players to click a destination or interactable.
+
+Both input streams feed into the same unified logical movement system:
 
 ```text
-MoveUp
-MoveDown
-MoveLeft
-MoveRight
-Interact
-UseTool
-Attack
-OpenInventory
-OpenMap
-HotbarSelect
-Cancel
-```
-
-Keyboard and mouse inputs map to those actions.
-
-This allows future input methods to be added without rewriting the gameplay systems.
-
----
-
-# 5. Diagonal Movement
-
-Diagonal movement is supported.
-
-The movement system must normalize diagonal velocity so that:
-
-> Moving diagonally does not make the player move faster than moving horizontally or vertically.
-
-The player's maximum movement speed remains consistent regardless of direction.
-
----
-
-# 6. Movement Speed
-
-Underhallow uses **context-dependent movement speed**.
-
-Movement speed can change depending on the current movement context.
-
-Examples may include:
-
-* Normal terrain
-* Difficult terrain
-* Special environmental conditions
-* Temporary movement effects
-
-However, movement speed changes must remain readable and should not make basic navigation frustrating.
-
----
-
-# 7. Sprinting
-
-There is **no sprint system in V1.0**.
-
-The player has a standard movement speed.
-
-This is consistent with the broader decision to remove stamina/energy restrictions.
-
-There should therefore be no:
-
-* Sprint stamina
-* Sprint meter
-* Energy drain
-* Sprint cooldown
-
-introduced into the V1 player controller.
-
-Future movement abilities may be introduced independently if justified.
-
----
-
-# 8. Movement During Actions
-
-Movement behavior depends on the action being performed.
-
-Some actions temporarily commit the player to an animation or state.
-
-Others can be interrupted by movement.
-
-Examples:
-
-| Action             | Movement             |
-| ------------------ | -------------------- |
-| Walking            | Allowed              |
-| Talking            | Restricted/committed |
-| Tool use           | Action-dependent     |
-| Harvesting         | Action-dependent     |
-| Fishing            | Restricted           |
-| Attacking          | Action-dependent     |
-| Building placement | Restricted           |
-| Reading dialogue   | Restricted           |
-
-The individual systems may define more specific rules.
-
-The player controller must therefore support **action-specific movement locking** rather than using one universal rule.
-
----
-
-# 9. Player Facing Direction
-
-Facing direction is a meaningful part of the player controller.
-
-The player's orientation affects:
-
-* Tool usage
-* Combat
-* Environmental interaction
-* NPC interaction
-* Fishing
-* Directional actions
-* Animation
-
-The player should naturally face the direction of movement.
-
----
-
-# 10. Auto-Facing
-
-Auto-facing is **context-dependent**.
-
-For example:
-
-* NPC conversation may automatically face the NPC.
-* Tool actions may orient toward the target.
-* Combat may preserve deliberate player orientation.
-* Environmental interactions may orient the player toward the object.
-
-Automatic orientation should make interactions feel natural without taking control away from the player during skill-based actions.
-
----
-
-# 11. Interaction Philosophy
-
-Underhallow uses a **hybrid interaction model**.
-
-The primary interaction model is:
-
-> Approach → contextual interaction becomes available → interact.
-
-However, direct clicking can also be used where appropriate.
-
-The system should not require the player to precisely click tiny pixel-art objects.
-
----
-
-# 12. Universal Interaction Key
-
-**E** is the primary interaction key.
-
-Examples:
-
-```text
-E → Talk
-E → Open
-E → Harvest
-E → Read
-E → Enter
-E → Inspect
-E → Pick Up
-```
-
-The action performed by E depends on the current interaction context.
-
----
-
-# 13. Contextual Interaction
-
-The interaction system determines the most appropriate action based on:
-
-* Distance
-* Facing direction
-* Object type
-* Player state
-* Equipped item
-* Interaction priority
-* World context
-
-The player should not need a separate key for every object type.
-
----
-
-# 14. Interaction Range
-
-Interaction range is **context-sensitive**.
-
-Different interactions can have different valid ranges.
-
-For example:
-
-* NPC conversation
-* Picking up an item
-* Opening a chest
-* Harvesting
-* Inspecting an object
-
-may each have different ranges.
-
-The player should generally need to be reasonably close to the object.
-
-The system should also incorporate directional awareness so that objects behind the player do not unnecessarily become the active interaction target.
-
----
-
-# 15. Interaction Targeting
-
-When several interactables are nearby, the system selects an appropriate target using contextual priority.
-
-Target selection can consider:
-
-1. Interaction validity
-2. Distance
-3. Player facing direction
-4. Object priority
-5. Current player state
-6. Current equipped tool
-
-The exact priority table should be maintained centrally rather than duplicated across gameplay systems.
-
----
-
-# 16. Multiple Nearby Interactables
-
-When multiple valid targets exist simultaneously, the player can cycle/select between available interaction targets where necessary.
-
-This prevents ambiguous situations where the game chooses an unexpected object.
-
-The system should make the currently selected interaction clear to the player.
-
----
-
-# 17. Interaction Feedback
-
-All interactable objects should use a standardized interaction-feedback framework.
-
-Feedback can include:
-
-* Interaction prompt
-* Animation
-* Sound
-* Particle effects
-* UI notification
-* Item popup
-* Dialogue
-* Object state change
-
-The exact feedback depends on the interaction.
-
-This provides consistency across:
-
-* NPCs
-* Crops
-* Trees
-* Containers
-* Doors
-* Buildings
-* Furniture
-* Quest objects
-* Mystery objects
-
----
-
-# 18. Interaction UI
-
-Interaction UI should appear primarily when the player is close enough to interact.
-
-Example:
-
-> **E — Talk**
-
-or:
-
-> **E — Harvest**
-
-The UI should remain unobtrusive.
-
-Underhallow should not fill the screen with interaction labels.
-
----
-
-# 19. Environmental Interaction
-
-Environmental interaction is a major part of the Underhallow experience.
-
-Players should be able to interact with appropriate world objects for both gameplay and immersion.
-
-Examples:
-
-* Read signs
-* Inspect objects
-* Open containers
-* Sit on benches
-* Examine statues
-* Interact with furniture
-* Investigate unusual objects
-* Enter buildings
-* Activate mechanisms
-
-Environmental interaction is especially important for the game's mystery layer.
-
----
-
-# 20. Hidden Interactions
-
-Some interactions may intentionally lack obvious prompts.
-
-These are primarily reserved for:
-
-* Mystery content
-* Secrets
-* Lore
-* Special discoveries
-
-Ordinary gameplay interactions should remain discoverable.
-
-Hidden interactions should reward curiosity rather than create arbitrary frustration.
-
----
-
-# 21. Item Pickup
-
-Underhallow uses a **context-sensitive pickup system**.
-
-Ordinary ground resources can be picked up through contextual interaction.
-
-Important or unique objects may require deliberate interaction.
-
-The pickup system must respect:
-
-* Inventory capacity
-* Item type
-* Current player state
-* Interaction range
-
----
-
-# 22. Dropped Items
-
-Dropped items exist as **physical world objects**.
-
-They can therefore:
-
-* Occupy space
-* Be visually represented
-* Be picked up
-* Participate in world interactions
-
-The system should avoid creating excessive numbers of persistent objects that could negatively affect client rendering performance.
-
----
-
-# 23. Tool Usage
-
-Tools use a direct directional interaction model.
-
-The player:
-
-1. Equips the tool.
-2. Faces the intended target.
-3. Activates the tool.
-4. The tool performs its action.
-
-Example:
-
-```text
-Equip Axe
-   ↓
-Face Tree
-   ↓
-Use Tool
-   ↓
-Axe Animation
-   ↓
-Tree State Changes
-   ↓
-Resources Produced
+Keyboard Input ──┐
+                 ├──► Unified Movement & Navigation System ──► Player Character
+Mouse Click    ──┘
 ```
 
 ---
 
-# 24. Tool Targeting
+# 6. Input Abstraction & Action Mapping
 
-Tool targeting is contextual.
+Gameplay systems must never depend directly on physical hardware codes. All control logic interfaces through standardized logical actions:
 
-Some tools may use a visible target indicator.
+| Logical Action | Default Primary Binding (PC V1) | Default Secondary Binding | Purpose |
+| :--- | :--- | :--- | :--- |
+| `move_up` | `W` | `Up Arrow` | Direct vertical screen-space up movement |
+| `move_down` | `S` | `Down Arrow` | Direct vertical screen-space down movement |
+| `move_left` | `A` | `Left Arrow` | Direct horizontal screen-space left movement |
+| `move_right` | `D` | `Right Arrow` | Direct horizontal screen-space right movement |
+| `interact` | `E` | `Space` | Universal contextual interaction trigger |
+| `use_tool` | `Left Mouse Button` | `F` | Activate equipped tool or targeted action |
+| `attack` | `Left Mouse Button` / `J` | `Ctrl` | Directional combat attack action |
+| `hotbar_1` – `hotbar_9` | `1` – `9` | — | Select hotbar slot |
+| `open_inventory` | `Tab` | `I` | Open inventory container screen |
+| `open_map` | `M` | — | Open world map view |
+| `cancel` | `Escape` | `Right Mouse Button` | Close modal screen / cancel placement |
+| `zoom_in` | `Mouse Wheel Up` | `PageUp` / `+` | Increment camera zoom level |
+| `zoom_out` | `Mouse Wheel Down` | `PageDown` / `-` | Decrement camera zoom level |
 
-Others can rely primarily on:
-
-* Facing
-* Range
-* Collision
-* Target validity
-
-Target indicators should be used when they materially improve precision.
-
-They should not clutter ordinary exploration.
-
----
-
-# 25. Farming Targeting
-
-Farming interactions use the underlying world grid.
-
-The player can select the appropriate farming action and target a valid tile.
-
-The system should clearly communicate:
-
-* Valid tile
-* Invalid tile
-* Selected action
-* Expected placement
-
-Exact farming mechanics belong to the Farming Systems Specification.
+This abstraction ensures that future controller or custom keybinding support can be introduced without modifying underlying gameplay mechanics.
 
 ---
 
-# 26. Grid Visibility
+# 7. Diagonal Movement & Normalization
 
-The underlying grid is **not permanently visible**.
+Diagonal movement is fully supported.
 
-The grid becomes visible when relevant, particularly during:
+The movement system must normalize composite directional vectors:
 
-* Farming
-* Building
-* Placement
-* Other grid-dependent activities
+$$\vec{v}_{\text{normalized}} = \frac{\vec{v}}{\|\vec{v}\|} \quad \text{for } \|\vec{v}\| > 0$$
 
-This preserves the natural visual appearance of the isometric world.
-
-The player should experience the world as a physical environment rather than as a constantly visible grid.
+Moving diagonally must never allow a player to travel at $\sqrt{2} \approx 1.414\times$ speed. Maximum velocity remains identical whether moving along cardinal or diagonal vectors.
 
 ---
 
-# 27. Building Placement
+# 8. Locomotion Dynamics & Movement Speed
 
-Building uses a **ghost/preview placement system**.
+Underhallow uses continuous, responsive 2D movement with crisp acceleration and friction.
 
-The player selects a structure and receives a visual preview showing where it would be placed.
-
-The preview communicates:
-
-* Position
-* Size
-* Orientation
-* Validity
-* Collision
-* Occupied tiles
-
-Invalid placements must be clearly distinguishable.
+### Movement Parameters:
+* **Continuous Locomotion:** Player movement is continuous in world space, not locked to discrete tile hops.
+* **Acceleration & Friction:** Motion ramps up quickly and stops cleanly without sluggish sliding.
+* **Context-Dependent Speed:** Base movement speed may be modified contextually by:
+  * Normal pathway terrain
+  * Difficult wilderness terrain (dense brush, deep snow, mud)
+  * Temporary status conditions
+* **Readability Invariant:** Speed modifications must remain subtle and readable. Navigation must never feel frustratingly bogged down.
 
 ---
 
-# 28. Building Rotation
+# 9. Sprinting & Stamina Invariant
 
-Buildings support multiple orientations.
+There is **no sprint system and no stamina/energy meter in Underhallow V1.0**.
 
-Rotation is available during placement.
+This embodies **Core Operating Invariant 5 (No Stamina)**:
+* Player activity is never artificially restricted by an energy or stamina meter.
+* Players do not run out of breath while walking, farming, or exploring.
+* Constraints are physical time, inventory capacity, and expedition risk.
+* There is no sprint key, stamina bar, exhaustion state, or sprint cooldown.
 
-The system should ensure that rotation remains consistent with:
-
-* Grid alignment
-* Collision
-* Doors
-* Entrances
-* Building footprint
-* Pathing
+Future traversal speed upgrades may be unlocked through permanent progression or mounts, but basic locomotion is free from stamina micromanagement.
 
 ---
 
-# 29. Collision Philosophy
+# 10. Movement During Actions & Action Commitment
 
-Underhallow uses a **hybrid collision model**.
+To guarantee responsive gameplay without sacrificing animation weight, actions use a clear commitment framework:
 
-The world may use grid logic for:
-
-* Building placement
-* Farming
-* Structured world objects
-
-while physical movement uses natural collision shapes.
-
-This allows the world to remain visually organic while retaining predictable placement rules.
-
----
-
-# 30. Environmental Collision
-
-Objects that can meaningfully obstruct the player can have collision.
-
-Potential collision objects include:
-
-* Buildings
-* Trees
-* Rocks
-* Fences
-* Cliffs
-* Water
-* Furniture
-* Other environmental structures
-
-Collision should be designed to prevent frustration.
-
-Invisible or excessively large collision boundaries should be avoided.
+| Action Category | Movement Permitted? | Can Be Interrupted? | Resolution Behavior |
+| :--- | :--- | :--- | :--- |
+| **Locomotion (Walk)** | Yes | Yes (Immediate) | Directional velocity responds every frame |
+| **Basic Interaction** | Contextual | Contextual | Short inspects allow immediate step-away |
+| **Tool Usage** | Restricted | System-defined | Movement locked during swing/till/water animation |
+| **Crop Harvesting** | Restricted | No | Locks movement for short harvest animation |
+| **Combat Attack** | Contextual | Yes (Early cancel) | Movement restricted during active frames; dash/step out supported |
+| **Fishing** | Locked | Yes (Cancel rod) | Movement locked while line is cast; cancel reels in |
+| **Building Placement** | Free before placement | Yes (Cancel preview) | Movement allowed during preview; brief lock on confirm |
+| **Dialogue** | Locked | No | Movement locked while conversation window is active |
+| **World Transition** | Locked | No | Complete control lock during scene load / fade |
+| **Defeat State** | Disabled | No | Complete control lock until respawn at cottage |
 
 ---
 
-# 31. NPC Collision
+# 11. Player Facing Direction
 
-NPCs use **soft collision behavior**.
+Player facing direction is an authoritative component of `PlayerState`.
 
-NPCs should not behave like immovable walls.
-
-If the player approaches an NPC:
-
-* The NPC can shift appropriately.
-* The player should not become permanently trapped.
-* Crowded areas should remain navigable.
-
----
-
-# 32. Creature Collision
-
-Creatures also use contextual collision.
-
-Their collision behavior may vary according to whether they are:
-
-* Passive
-* Neutral
-* Hostile
-* Being hunted
-* In combat
-
-Combat encounters can use more deliberate collision rules than ordinary wildlife.
+* **8-Directional Facing:** Facing resolves to 8 cardinal and intercardinal directions (`NORTH`, `NORTHEAST`, `EAST`, `SOUTHEAST`, `SOUTH`, `SOUTHWEST`, `WEST`, `NORTHWEST`).
+* **Stationary Retention:** When the player stops moving, their facing direction is strictly preserved. Stationary players do not snap back to a default facing direction.
+* **Gameplay Relevance:** Facing direction dictates:
+  * Tool targeting tile selection
+  * Directional melee attack arcs
+  * Fishing cast direction
+  * Interaction cone priority
+  * Character sprite presentation
 
 ---
 
-# 33. Water
+# 12. Contextual Auto-Facing
 
-The player cannot freely walk into deep water.
+Auto-facing occurs contextually to assist player intent without overriding manual skill:
 
-Water acts as a world boundary where appropriate.
-
-Boats provide the primary mechanism for travelling between islands.
-
-Shallow-water behavior can be introduced where appropriate to specific environments without implying a full swimming system.
-
----
-
-# 34. Elevation and Cliffs
-
-Underhallow uses a **mostly visual elevation model**.
-
-The isometric world may contain:
-
-* Hills
-* Cliffs
-* Raised areas
-* Ledges
-* Terrain elevation
-
-but movement remains constrained to explicitly navigable spaces.
-
-There is no general-purpose fall-damage/falling system in V1.
+* **NPC Interaction:** Initiating dialogue automatically turns the player to face the NPC.
+* **Object Inspection:** Interacting with a sign, chest, or door orients the player toward the interactable.
+* **Tool Usage:** Activating a tool faces the targeted tile or node.
+* **Combat Exception:** During combat, auto-facing does not violently snap the player away from their intended attack direction. Player manual orientation is respected.
 
 ---
 
-# 35. Camera Philosophy
+# 13. Interaction Philosophy & Universal Key (E)
 
-Underhallow uses a controlled isometric camera.
+Underhallow uses a **hybrid contextual interaction model**:
 
-The camera supports:
+> **Approach → Contextual target detected → Prompt displayed → Press E (or click) to interact.**
 
-* Fixed isometric presentation
-* Player following
-* Limited look-ahead
-* Player-controlled zoom
-* Smooth follow
-
-The camera should preserve the game's pixel-art composition while providing sufficient visibility for exploration.
+* **The Universal Key:** **`E`** is the primary interaction action across the entire game world (`E — Talk`, `E — Harvest`, `E — Open`, `E — Read`, `E — Enter`, `E — Pick Up`).
+* **Accessibility Standard:** The player is never required to hunt for single-pixel collision shapes on detailed pixel art.
+* **Mouse Integration:** Direct clicking on an interactable within valid range executes the interaction command.
 
 ---
 
-# 36. Camera Rotation
+# 14. Canonical Interaction Targeting Hierarchy
 
-Camera rotation is **disabled in V1**.
-
-The game uses one consistent, fixed isometric orientation.
-
-This keeps:
-
-* Pixel-art composition consistent
-* Tile orientation predictable
-* Building orientation understandable
-* World presentation coherent
-* Asset production streamlined
-
-Camera rotation is deferred beyond V1.
-
----
-
-# 37. Camera Following
-
-The camera smoothly follows the player.
-
-A limited look-ahead can shift the camera slightly toward the direction the player is travelling.
-
-This helps the player see where they are going without allowing the camera to drift excessively away from the character.
-
----
-
-# 38. Camera Boundaries
-
-The camera respects world boundaries.
-
-It should not expose:
-
-* Empty space
-* Outside-map areas
-* Unintended hidden content
-* Unfinished world geometry
-
-Camera constraints may vary by world location where necessary.
-
----
-
-# 39. Camera Zoom
-
-The player can control camera zoom within a limited range.
-
-Zoom should never:
-
-* Break the intended composition
-* Reveal unfinished content
-* Make characters unreadably small
-* Create excessive rendering cost
-
-The available zoom range should be tuned through playtesting.
-
----
-
-# 40. Camera and Pixel Art
-
-The camera system must preserve the visual integrity of Underhallow's pixel-art style.
-
-Particular care must be taken to prevent:
-
-* Unnecessary pixel shimmering
-* Blurry sprites
-* Unstable scaling
-* Sub-pixel artifacts
-* Inconsistent sprite sizes
-
-The exact rendering solution belongs to the Technical Architecture and Art/Rendering specifications.
-
----
-
-# 41. Movement Animation
-
-The player controller should support appropriate animation states including:
-
-* Idle
-* Walking
-* Tool use
-* Attacking
-* Fishing
-* Harvesting
-* Interaction
-* Hurt
-* Defeat
-* Other future contextual actions
-
-Running animation is not required in V1 because sprinting has been removed.
-
-Animation should communicate player state clearly.
-
----
-
-# 42. Player State Machine
-
-The player controller should use explicit movement/action states.
-
-A conceptual state model is:
+When multiple interactables exist near the player, the target is resolved through a strict deterministic priority sequence:
 
 ```text
-                ┌────────────┐
-                │    IDLE    │
-                └─────┬──────┘
-                      │
-                  Movement
-                      │
-                      ▼
-                ┌────────────┐
-                │  MOVING    │
-                └─────┬──────┘
-                      │
-              ┌───────┼────────┐
-              ▼       ▼        ▼
-          INTERACT   TOOL     ATTACK
-              │       │        │
-              └───────┼────────┘
-                      ▼
-                    IDLE
-                      │
-                    EVENT
-                      ▼
-                  DEFEATED
+Step 1: Interaction Validity Check (Is object currently interactable?)
+                  ↓
+Step 2: Proximity Range Check (Is object within its valid interaction radius?)
+                  ↓
+Step 3: Directional Cone Filter (Is object within the player's front 180° facing arc?)
+                  ↓
+Step 4: Priority Tier Evaluation:
+        Tier 1: Active Dialogue / Quest NPCs
+        Tier 2: Harvestable Crops / Depletable Resource Nodes
+        Tier 3: Doors / Portal Transitions / Containers (Chests)
+        Tier 4: Loose Physical Dropped Items (Pickup)
+        Tier 5: Immersive / Inspectable Objects (Signs, Statues, Furniture)
+                  ↓
+Step 5: Distance Tie-Breaker (If same tier, choose closest Euclidean distance)
+                  ↓
+Step 6: Display Targeted Feedback & Bind Universal Key (E)
 ```
 
-Additional states may include:
-
-* Fishing
-* Building
-* Transitioning
-* Dialogue
-* Menu
-* Stunned
-* Entering/Exiting
-
-The state system must prevent incompatible actions from executing simultaneously.
+### Multiple Nearby Targets (Cycling)
+If two high-priority targets are adjacent, the player can press `Tab` or reposition slightly to cycle the active contextual focus. The active target is always clearly indicated.
 
 ---
 
-# 43. Action Commitment
+# 15. Interaction Feedback & UI Standardization
 
-Actions can have different commitment levels.
+All interactables share a standardized presentation language:
 
-Some actions can be immediately interrupted.
-
-Others must complete their current animation/action.
-
-This allows the game to maintain responsive controls without making every action cancellable.
-
-Combat, tool use, fishing and interactions can define their own commitment behavior.
+* **Contextual Prompt:** A clean, readable prompt anchored above or near the object (`[E] Talk to Rowan`, `[E] Harvest Carrot`, `[E] Enter Cottage`).
+* **Prompt Suppression:** Prompts appear only when the player enters the interaction trigger volume, preventing screen clutter.
+* **Sound & Visual Confirmation:** Successful interactions emit clear audio feedback and contextual visual changes (e.g. chest lid opens, bush berries disappear, NPC turns to face player).
 
 ---
 
-# 44. Tool vs Interaction
+# 16. Environmental & Hidden Interactions
 
-The player controller separates:
-
-**Interact**
-
-from:
-
-**Use Equipped Tool**
-
-This is important.
-
-For example:
-
-> Player equips axe → approaches NPC → pressing E can still talk to the NPC.
-
-The equipped tool should not automatically override contextual interactions.
+* **Immersive World Objects:** Players can sit on benches, read signposts, examine ruins, inspect curious carvings, and activate mechanisms.
+* **Subtle Mystery Discoveries:** In accordance with the mystery layer, some world secrets do not show bold UI prompts from a distance. They reveal themselves through subtle environmental anomalies (a discolored stone, strange sound, faint light) that yield an interaction only when approached and closely inspected.
 
 ---
 
-# 45. Control Separation
+# 17. Physical Item Pickup & Dropped Items
 
-The core actions are conceptually separated into:
+* **Dropped Items as Physical Entities:** Discarded items or harvested resources dropped in the world exist as physical entities with feet-level collision and Y-sorting.
+* **Contextual Pickup:** Walking near dropped items displays a pickup prompt or automatically gathers them if inventory space permits and auto-pickup is enabled.
+* **Capacity Safeguard:** If inventory capacity is full, the item remains safely on the ground and displays an *"Inventory Full"* notification without consuming or destroying the item.
+
+---
+
+# 18. Tool Usage Activation Interface
+
+PC-001 governs the **activation and targeting interface** for tools:
 
 ```text
-Movement
-Interaction
-Tool Use
-Combat
-Inventory
-Hotbar
-Camera
-Menus
+Equip Tool from Hotbar
+          ↓
+Facing & Directional Target Selected
+          ↓
+Press UseTool (Left Mouse / F)
+          ↓
+Movement Locked for Tool Action Duration
+          ↓
+Command Dispatched to Tool System
+          ↓
+Tool System Validates & Applies Mutation
+          ↓
+Animation & Sound Complete → Player Control Restored
 ```
 
-This prevents individual gameplay systems from hijacking unrelated controls.
+* **Tool vs. Interaction Independence:** Holding a tool never disables contextual interaction (`E`). A player holding a hoe approaching an NPC will see `[E] Talk`, not an accidental hoe strike.
+* **No Resource Calculations:** Tool durability, damage numbers, and harvest yields are owned by [II-001](file:///c:/Users/HP/Documents/Underhallow/docs/MASTER_SPECIFICATION_INDEX.md), [RG-001](file:///c:/Users/HP/Documents/Underhallow/docs/MASTER_SPECIFICATION_INDEX.md), and [FB-001](file:///c:/Users/HP/Documents/Underhallow/docs/FARMING_SYSTEM_SPECIFICATION.md).
 
 ---
 
-# 46. Hotbar
+# 19. Farming Tile Targeting Interface
 
-Underhallow uses a hotbar.
+PC-001 defines the player interface for farming interactions:
 
-The hotbar provides rapid access to commonly used:
-
-* Tools
-* Seeds
-* Items
-* Consumables
-* Other usable objects
-
-The exact number of slots is deferred to the Inventory Specification.
+* **Grid Alignment:** When a farming tool (hoe, watering can, seeds) is equipped, the system projects an active tile targeting cursor on the nearest valid farm grid coordinate in front of the player.
+* **Target Feedback:**
+  * Green / highlighted border: Valid untilled ground (for hoe) or tilled ground (for seeds/water).
+  * Red / disabled border: Invalid tile, out-of-bounds, or occupied plot.
+* **Execution:** Activating the tool dispatches `TillSoilCommand`, `PlantCropCommand`, or `WaterCropCommand` to the authoritative runtime.
+* **Grid Cleanliness:** The tile grid is hidden when non-farming tools are equipped.
 
 ---
 
-# 47. Quick Use
+# 20. Building Placement & Ghost Preview Interface
 
-The player does **not** have unrestricted quick-use behavior for every inventory item.
+PC-001 defines the player interface for construction placement:
 
-Quick-use behavior is reserved for item categories where it improves gameplay.
-
-This prevents the control scheme from becoming overloaded.
-
----
-
-# 48. Combat Control Philosophy
-
-Combat uses **simple directional real-time combat**.
-
-The player controls movement directly and attacks through a dedicated action.
-
-Combat should feel:
-
-* Responsive
-* Readable
-* Simple
-* Accessible
-
-It should not become a complex ability-rotation system.
+* **Ghost Preview:** Selecting a structure from the building catalog displays a translucent ghost preview following the cursor.
+* **Snapping & Rotation:**
+  * Major buildings snap to the structural construction grid.
+  * Pressing `R` (or scroll wheel) rotates the preview through supported orientations.
+  * Furniture and decorative objects support fine, expressive placement.
+* **Validation Communicator:** Ghost tints green when placement is valid (unobstructed, valid terrain, within property boundary) and red when invalid.
+* **Confirmation:** Left Click confirms placement; Escape / Right Click cancels without consuming materials.
+* **Rule Authority:** Placement validation rules and persistence are governed by [BI-001](file:///c:/Users/HP/Documents/Underhallow/docs/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md).
 
 ---
 
-# 49. Combat Targeting
+# 21. Player-Facing Collision Philosophy
 
-Combat uses **soft targeting** rather than a hard lock-on system.
+Underhallow utilizes a hybrid physical-presentation collision architecture:
 
-The player remains responsible for positioning and facing.
-
-Target assistance may help determine which nearby creature an attack connects with, but the player should retain meaningful directional control.
-
----
-
-# 50. Attack Commitment
-
-Attacks are **interruptible**.
-
-The player can move out of an attack sequence rather than being completely locked into a long animation.
-
-This supports responsive combat and prevents simple encounters from feeling unnecessarily sluggish.
-
-Attack animations must still provide enough commitment and timing to make combat meaningful.
+* **Ground-Footprint Collision:** The player's collision shape is an isometric capsule or ellipse placed strictly at the character's feet (`CapsuleShape2D` at base), not a full-body bounding box. This prevents head/shoulder clipping on trees, fences, and roofs.
+* **Environmental Obstacles:** Solid terrain, cliffs, trees, large boulders, building walls, and closed gates block movement cleanly without sticky sliding artifacts.
+* **NPC Soft Collision:** NPCs use soft collision volumes. An NPC will gently nudge or yield to the player; the player can never be permanently trapped or griefed in corners by NPCs.
+* **Multiplayer Player Collision:** Other players use soft avoidance collision. Players cannot physically block doors, docks, or narrow paths to grief other players.
+* **Impassable Water:** Deep water is a strict physical barrier. Players cannot walk into deep water; crossing waterways requires bridges or boats.
+* **Elevation & Cliffs:** Cliffs represent impassable elevation boundaries. Movement remains strictly constrained to navigable authored paths; there is no freeform falling or fall damage.
 
 ---
 
-# 51. Player Interaction with NPCs While Equipped
+# 22. Fixed Isometric Camera Model
 
-The interaction system remains contextual.
-
-If the player is carrying a tool and approaches an NPC:
-
-> **E → Talk**
-
-rather than:
-
-> **E → swing tool**
-
-unless the specific context explicitly requires tool use.
-
-This protects the social/cozy identity of the game.
-
----
-
-# 52. Mouse Controls
-
-Mouse input is context-sensitive.
-
-Mouse actions can be used for:
-
-* Click-to-move
-* Selecting targets
-* Placement
-* UI interaction
-* Other contextual actions
-
-The mouse should not be permanently assigned to one world action.
-
----
-
-# 53. Pause Behavior
-
-Opening major menus pauses the single-player world where appropriate.
-
-This includes menus such as:
-
-* Inventory
-* Major configuration screens
-* Other full-screen management interfaces
-
-The exact list of pause-sensitive interfaces should be defined by the relevant systems.
-
----
-
-# 54. Time During Interaction
-
-The game clock **pauses during major interaction states** where the player is effectively removed from active world simulation.
-
-This includes appropriate cases such as:
-
-* Dialogue
-* Inventory
-* Major menus
-* Certain interaction screens
-
-World-time-sensitive activities such as active exploration continue normally outside these paused states.
-
----
-
-# 55. World Transitions
-
-Travel between islands uses a **hybrid diegetic transition**.
-
-The intended flow is:
+The camera presentation is governed by strict architectural rules:
 
 ```text
-Walk to Dock
-     ↓
-Interact
-     ↓
-Board / Travel Sequence
-     ↓
-Transition
-     ↓
-Arrive at Destination
+Fixed Isometric Presentation (2:1 Dimetric standard)
+           +
+Smooth Exponential Target Tracking
+           +
+Directional Look-Ahead
+           +
+Clamped Player-Controlled Zoom
+           +
+World Boundary Clamping
+           +
+STRICTLY NO CAMERA ROTATION IN V1.0
 ```
 
-The player should feel that they travelled rather than simply selecting a menu option.
+* **No Camera Rotation:** Camera rotation is **strictly disabled in V1.0** (per [SR-001](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md), [AD-001](file:///c:/Users/HP/Documents/Underhallow/docs/ART_DIRECTION_BIBLE.md), and [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)). The camera orientation remains locked to a single fixed isometric angle. This protects 16-bit pixel-art hand-drawn sprite density, avoids costly 4-sided asset redundancy, and ensures spatial readability.
+* **Smooth Tracking:** The camera follows the player using an exponential smoothing lerp (`follow_smoothing_speed = 8.0`), avoiding jarring frame-to-frame snaps.
+* **Limited Look-Ahead:** When the player moves continuously, the camera gently biases slightly forward in the direction of travel to expand forward visibility, easing back to center when stationary.
+* **Controlled Zoom:** Players can adjust zoom within safe clamped limits (default `2.0x`, range `1.0x` to `3.0x`). Zoom increments maintain integer pixel scaling to eliminate pixel shimmering and distortion.
+* **Boundary Clamping:** The camera stops at authored region boundaries, preventing the rendering of empty outside-the-world space.
 
 ---
 
-# 56. Interior Transitions
+# 23. Player State Machine & Mutual Exclusivity
 
-Interior transitions are **building-dependent**.
+The player controller maintains an explicit state model to ensure **incompatible actions never execute simultaneously**:
 
-Different buildings may use:
+### Core State Categories:
+1. **`FREE` / `IDLE`:** Player is stationary, eligible to move, interact, equip, or activate tools.
+2. **`MOVING`:** Player is traversing world space. Directional input is active.
+3. **`INTERACTING`:** Player is executing a contextual interaction (opening chest, inspecting object).
+4. **`TOOL_ACTION`:** Player is executing a tool strike (hoeing, watering, chopping). Movement is restricted.
+5. **`ATTACKING`:** Player is executing a combat attack. Action commitment applies with early cancel support.
+6. **`FISHING`:** Player is engaged in fishing minigame/casting. Locomotion is locked.
+7. **`HARVESTING`:** Player is gathering a crop or wild node. Locomotion is locked for harvest duration.
+8. **`BUILDING`:** Player is in construction placement mode. Preview moves with cursor.
+9. **`DIALOGUE`:** Player is actively conversing with an NPC. All movement and tool actions are locked.
+10. **`TRANSITIONING`:** Player is traversing a world portal, boat route, or door. Controls disabled.
+11. **`MENU`:** Full-screen interface (Inventory, Map, Crafting) is open. World simulation is paused in single-player.
+12. **`DEFEATED`:** Health depleted during expedition. Controls disabled pending respawn.
 
-* Seamless entry
-* Short transitions
-* Separate interior scenes
-
-The decision depends on:
-
-* Building type
-* Interior complexity
-* World streaming requirements
-* Gameplay importance
-
-The player experience should remain consistent enough that entering a building never feels confusing.
-
----
-
-# 57. Doors
-
-Doors use an interaction-based model.
-
-The player approaches a door and uses:
-
-> **E — Enter**
-
-where appropriate.
-
-Automatic door opening is not the universal behavior.
-
-This gives important entrances a clear interaction point.
+### Mutual Exclusivity Invariant:
+* A player cannot attack while in `DIALOGUE` or `MENU`.
+* A player cannot use tools while `TRANSITIONING` or `DEFEATED`.
+* Opening a modal menu immediately cancels active tool previews and returns the controller to a clean resting state.
 
 ---
 
-# 58. Furniture Interaction
+# 24. Combat Control Interface
 
-Furniture can be interactive.
+Combat operates as **simple, readable, real-time directional action**:
 
-However, not every decorative object needs a gameplay interaction.
-
-The intended model is:
-
-> **Functional furniture + selected immersive interactions**
-
-Examples:
-
-* Bed → sleep/rest
-* Chest → storage
-* Crafting station → crafting
-* Chair → sit
-* Bookshelf → potentially inspect/read
-
-Decorative objects can remain purely visual where interaction adds no value.
+* **Direct Attack Action:** Left Click (or dedicated key) initiates a directional attack in the player's facing direction.
+* **Soft Targeting Assistance:** Combat uses soft cone detection to connect attacks with nearby hostile creatures without locking the player into an inflexible hard target camera lock.
+* **Responsive Evasion:** Attack animations have clear windup and active frames, but allow early movement recovery, ensuring combat feels fluid and mobile.
+* **System Independence:** Weapon stats, creature health, hitboxes, damage numbers, and combat progression are governed by [HU-001](file:///c:/Users/HP/Documents/Underhallow/docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md).
 
 ---
 
-# 59. Avatar Customization
+# 25. Click-to-Move Behavioral Boundary
 
-Full avatar customization is **not a V1 requirement**.
+Click-to-move provides an accessible alternative to keyboard navigation:
 
-The controller must nevertheless be designed so that player appearance can be expanded later.
-
-Potential future customization includes:
-
-* Hair
-* Clothing
-* Accessories
-* Equipment appearance
-* Other cosmetic elements
+* **Walkable Destination:** Left-clicking an unobstructed walkable point generates an authoritative path toward that coordinate.
+* **Interactable Destination:** Clicking directly on an interactable object moves the player into valid interaction range, automatically faces the object, and triggers the interaction upon arrival.
+* **Unreachable Target:** Clicking an impassable area (water, cliff, solid wall) navigates the character to the closest valid reachable point.
+* **Keyboard Override:** Any keyboard movement input (`W`, `A`, `S`, `D`) immediately cancels active click-to-move pathing and grants instant direct control to the keyboard.
+* **Interaction Precedence:** Pressing `E`, using a tool, or taking damage immediately halts click-to-move locomotion.
+* **Implementation Boundary:** Click-to-move pathfinding is an engine presentation service; underlying physics and collision validation remain identical for both input modes.
 
 ---
 
-# 60. Equipment Visibility
+# 26. World, Island & Interior Transitions
 
-Equipped equipment should be visible on the player where appropriate.
-
-This provides immediate visual feedback about what the player is carrying/equipping.
-
-Visual representation should remain consistent with the pixel-art style.
-
----
-
-# 61. Input Remapping
-
-V1 should architect the input system to support remapping.
-
-However, a complete control-remapping UI is not required immediately.
-
-The underlying system should separate:
-
-> **Input action**
-
-from:
-
-> **Physical key/button**
-
-This keeps future accessibility and controller support possible without major architectural changes.
-
----
-
-# 62. Controller Support
-
-Gamepad/controller support is **not a V1 requirement**.
-
-However, the input abstraction should avoid making future controller support impossible.
-
-The initial control target is:
-
-> **Windows PC desktop + keyboard + mouse**
-
----
-
-# 63. Mobile/Touch
-
-Mobile/touch is **not a V1 target**.
-
-Underhallow should not compromise the desktop control experience in order to support touch prematurely.
-
-However, the input architecture should remain sufficiently abstract that touch support can be explored later.
-
----
-
-# 64. Accessibility
-
-Basic accessibility is required from V1.
-
-The system should support appropriate accessibility features including:
-
-* Readable UI
-* Adjustable UI scale where feasible
-* Clear interaction feedback
-* Non-color-only interaction indicators
-* Reduced excessive visual effects where practical
-* Clear state communication
-
-Accessibility should be treated as part of the system design rather than a last-minute patch.
-
----
-
-# 65. AFK Behavior
-
-If the player remains inactive, the world does not automatically enter a special AFK state in V1.
-
-The game continues according to its normal rules unless the player explicitly pauses.
-
-This means players should not assume that standing still automatically freezes:
-
-* Time
-* NPCs
-* World simulation
-* Environmental activity
-
----
-
-# 66. Defeat State
-
-Defeat is a dedicated player state.
-
-The conceptual sequence is:
+PC-001 governs the player control experience during transitions:
 
 ```text
-Combat
-   ↓
-Defeat
-   ↓
-Defeat Feedback
-   ↓
-Resources From Current Expedition Lost
-   ↓
-Return to Personal Island
-   ↓
-Player Regains Control
+Player Enters Portal Trigger / Boards Dock Ferry / Interacts with Door
+                             ↓
+            Player Controls Disabled & Movement Zeroed
+                             ↓
+              Transition Presentation (Fade / Animation)
+                             ↓
+                New Map / Region Instantiated
+                             ↓
+           Player Positioned at Designated Target Marker
+                             ↓
+           Camera Snapped & Target Tracking Restored
+                             ↓
+                 Player Controls Fully Restored
 ```
 
-The player does not enter a traditional permanent-death state.
-
-Permanent progression remains intact.
-
----
-
-# 67. Control Invariants
-
-The following rules are protected.
-
-### Invariant 1 — Responsive Movement
-
-Basic movement must always feel responsive.
-
-### Invariant 2 — No V1 Stamina
-
-Movement is not restricted by an energy/stamina meter.
-
-### Invariant 3 — Contextual Interaction
-
-The player should not need a separate button for every world interaction.
-
-### Invariant 4 — E Is Primary Interaction
-
-E remains the default interaction action.
-
-### Invariant 5 — Facing Matters
-
-Orientation matters for tools, combat and relevant environmental interactions.
-
-### Invariant 6 — No Permanent Camera Chaos
-
-Camera rotation is disabled in V1; zoom remains controlled, smooth, and fixed to the isometric orientation.
-
-### Invariant 7 — No Permanent Grid Overlay
-
-The underlying grid is hidden during ordinary exploration.
-
-### Invariant 8 — Soft NPC Collision
-
-NPCs must not easily trap the player.
-
-### Invariant 9 — Combat Remains Simple
-
-Combat supports hunting and exploration rather than becoming the game's dominant system.
-
-### Invariant 10 — Input Is Abstracted
-
-Gameplay systems operate on actions rather than directly depending on physical input devices.
-
-### Invariant 11 — Desktop First
-
-V1 prioritizes Windows PC desktop controls (keyboard + mouse, with controller-ready input abstraction).
-
-### Invariant 12 — Future Expansion
-
-Controller, touch and expanded customization should remain technically possible.
+* **Doors:** Doors use contextual interaction (`[E] Enter Cottage`) rather than accidental proximity walk-ins.
+* **Travel:** Boarding boats at docks initiates a deliberate travel sequence; players do not teleport abruptly without diegetic context. Traversal mechanics belong to [TR-001](file:///c:/Users/HP/Documents/Underhallow/docs/MASTER_SPECIFICATION_INDEX.md).
 
 ---
 
-# 68. High-Level Player Control Loop
+# 27. Defeat State & Expedition Return Flow
 
-The resulting player-control architecture can be represented as:
+Underhallow operates on a **non-lethal defeat and expedition loss model** (Core Operating Invariant 6):
 
 ```text
-                   INPUT
-                     │
-          ┌──────────┼──────────┐
-          ▼          ▼          ▼
-       Keyboard     Mouse     Future Input
-          │          │
-          └─────┬────┘
-                ▼
-          INPUT ACTIONS
-                │
-       ┌────────┼────────┐
-       ▼        ▼        ▼
-   MOVEMENT  INTERACTION  CAMERA
-       │        │
-       │        ├──────────────┐
-       │        ▼              ▼
-       │      TOOLS          WORLD
-       │        │              │
-       ▼        ▼              ▼
-    PLAYER STATE / ACTION STATE
-                │
-                ▼
-             ANIMATION
-                │
-                ▼
-             FEEDBACK
+Health Reaches Zero in Dangerous Wilderness / Dungeon
+                          ↓
+              Player Controls Immediately Disabled
+                          ↓
+             Defeat Animation & Atmospheric Fade Presentation
+                          ↓
+    Authoritative Expedition Resource Loss Applied (Expedition Loss)
+                          ↓
+    Player Respawned Safely at Cottage Bed on Personal Island
+                          ↓
+      Health Restored to Safe Minimum & Player Controls Restored
 ```
 
-This structure should remain independent of the specific rendering implementation.
+* **Permanent Progression Intact:** Player skill levels, tool ownership, personal island structures, and equipped items are never permanently lost.
+* **Control Handover:** PC-001 ensures control disabling and restoration occur seamlessly without animation glitches or input lockups.
 
 ---
 
-# 69. Relationship to Other Specifications
+# 28. Multiplayer Player-to-Player Interaction
 
-This document establishes the player-facing control foundation for:
+In multiplayer environments (governed by [MS-001](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md)):
 
-### Inventory Specification
-
-Defines hotbar, item selection and inventory interaction.
-
-### Farming Specification
-
-Defines grid targeting, crop interaction and farming actions.
-
-### Hunting & Combat Specification
-
-Defines attack behavior, hit detection and combat states.
-
-### Building & Personal Island Specification
-
-Defines placement, rotation and construction interaction.
-
-### Time & World Simulation Specification
-
-Defines the relationship between movement, menus, world time and day/night.
-
-### Engine & Technical Architecture Specification
-
-Defines the actual client/server simulation, authoritative movement validation, and network replication architecture behind these behaviors. Reference: [Engine & Technical Architecture Specification V1 (ETA-001)](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md).
+* **Soft Avoidance Collision:** Players cannot form human walls or physically trap other players in cottages, shops, or narrow paths. Players gently slide past one another.
+* **Proximity Interaction:** Approaching another player displays a dedicated social prompt (`[E] Inspect / Trade / Party`).
+* **Non-Interference with Environment:** When another player stands near a crop or resource node, environmental interaction maintains clear targeting distinction to prevent misclicks.
 
 ---
 
-# 70. Deferred Decisions
+# 29. Control Invariants
 
-The following remain intentionally outside this specification:
+The following rules represent immutable requirements for the player control system:
 
-* Exact movement speed values
-* Exact interaction distances
-* Exact camera zoom values
-* Exact camera follow distance
-* Exact hotbar slot count
-* Exact collision shapes
-* Exact pathfinding algorithm
-* Exact animation frame counts
-* Exact attack ranges
-* Exact tool ranges
-* Exact farming grid dimensions
-* Exact building footprints
-* Exact controller mappings
-* Complete accessibility settings
-* Final mobile controls
-
-These should be resolved in the relevant detailed specifications or during implementation tuning.
+* **PC-I01 — Responsive Locomotion:** Movement must respond immediately on the first frame of input. Sluggishness or input delay is unacceptable.
+* **PC-I02 — No Stamina / No Sprint:** Movement speed is never governed by a draining stamina meter or sprint gauge.
+* **PC-I03 — Diagonal Velocity Normalization:** Diagonal locomotion velocity must strictly equal cardinal velocity ($\|\vec{v}\| = 1.0$).
+* **PC-I04 — Universal Contextual Interaction (E):** `E` is the universal interaction trigger. Distinct actions must not require separate ad-hoc keys.
+* **PC-I05 — Facing Direction Preservation:** Stopping movement preserves facing direction; stationary characters never reset to an arbitrary default orientation.
+* **PC-I06 — Fixed Isometric Camera:** Camera rotation is strictly disabled in V1.0. The camera maintains one fixed isometric orientation.
+* **PC-I07 — Integer Pixel-Art Zoom Safety:** Zoom levels are clamped and tuned to integer pixel scaling to prevent sprite shimmering.
+* **PC-I08 — Hidden Grid Invariant:** The tile placement grid is hidden during ordinary exploration and appears only during farming/building.
+* **PC-I09 — Soft NPC Collision:** NPCs use soft collision and must never physically trap the player.
+* **PC-I10 — Input Abstraction:** Gameplay logic operates exclusively on abstract input actions, never hardcoded hardware key codes.
+* **PC-I11 — Action Mutual Exclusivity:** Incompatible player actions (e.g. attacking while reading dialogue) are strictly prevented by the state machine.
+* **PC-I12 — Non-Lethal Defeat Continuity:** Defeat disables controls, triggers expedition return to Personal Island, and cleanly restores control without save corruption.
 
 ---
 
-# 71. Definition of Done
+# 30. Relationship to Other Specifications
 
-The Player Control, Movement & Interaction system is considered ready for implementation when:
+This specification serves as the foundational control layer for:
 
-* Keyboard movement works.
-* Click-to-move is supported.
-* Diagonal movement is normalized.
-* No stamina/sprint system exists.
-* Context-dependent movement locking works.
-* E functions as the primary interaction action.
-* Interaction targeting is contextual.
-* Facing direction is supported.
-* Tool targeting works.
-* Farming/building can use grid targeting.
-* Building preview/rotation is supported.
-* Hybrid collision is implemented.
-* NPC collision cannot easily trap the player.
-* Isometric camera follows the player smoothly with look-ahead.
-* Camera rotation is disabled in V1 for consistent orientation.
-* Limited zoom works.
-* Camera boundaries work.
-* Interaction feedback is standardized.
-* Player states are explicit.
-* Hotbar interaction exists.
-* Simple real-time directional combat can connect to the controller.
-* Island travel supports a diegetic transition.
-* Interior transitions can vary by building.
-* Basic accessibility considerations are included.
-* Input abstraction allows future controller/touch support.
+* **[Farming System Specification (FB-001)](file:///c:/Users/HP/Documents/Underhallow/docs/FARMING_SYSTEM_SPECIFICATION.md):** Consumes tile targeting and tool usage activations.
+* **[Hunting & Combat System Specification (HU-001)](file:///c:/Users/HP/Documents/Underhallow/docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md):** Consumes directional attack actions and soft target cones.
+* **[Building & Construction System Specification (BI-001)](file:///c:/Users/HP/Documents/Underhallow/docs/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md):** Consumes preview positioning, rotation inputs, and placement confirmation.
+* **[Main Island Design Specification (MI-001)](file:///c:/Users/HP/Documents/Underhallow/docs/MAIN_ISLAND_DESIGN_SPECIFICATION.md) & [Personal Island Design Specification (PI-001)](file:///c:/Users/HP/Documents/Underhallow/docs/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md):** Provide authored navigation boundaries, dock portals, and cottage transition targets.
+* **[Engine & Technical Architecture Specification (ETA-001)](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md):** Governs authoritative state management, simulation step boundaries, and network replication.
+* **[Multiplayer & Social Systems Specification (MS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md):** Governs social permissions, party mechanics, and multiplayer sessions.
 
 ---
 
-# 72. Final Design Principle
+# 31. Open Questions
 
-The player controller should disappear into the experience.
+### Blocking Questions:
+* *None.* All core foundation questions (camera orientation, no-stamina rule, input abstraction, continuous movement, contextual targeting hierarchy, action exclusivity, and defeat flow) are resolved and aligned with Level 0 and Level 1 authorities.
 
-The player should not be thinking:
+### Deferred Questions (To be tuned during implementation/playtesting):
+1. **Exact Locomotion Constants:** Final tuning of base movement speed ($150\text{ px/s}$ prototype baseline), acceleration ($1200\text{ px/s}^2$), and friction ($1600\text{ px/s}^2$).
+2. **Look-Ahead Lead Distance:** Exact pixel offset for camera lead during high-speed transit.
+3. **Gamepad Controller Schemes:** Specific button layouts for Xbox/PlayStation controllers when controller support is officially scheduled.
+4. **Targeting Cone Angles:** Optimal half-angle degrees for directional interaction prioritization ($90^\circ$ vs $120^\circ$ front arc).
 
-> *"How do I make the game do what I want?"*
+---
 
-They should simply think:
+# 32. Definition of Done
 
-> **"I want to walk over there."**  
-> **"I want to pick that up."**  
-> **"I want to talk to that person."**  
-> **"I want to investigate that strange thing."**  
-> **"I want to go deeper into this forest."**  
+PC-001 is considered ready to govern implementation when:
 
-And the game should respond naturally.
+* Keyboard direct movement (WASD/Arrows) is fully functional with normalized diagonal velocity.
+* Click-to-move is architecturally supported and cleanly overridable by keyboard.
+* Absence of stamina and sprint meters is strictly verified.
+* 8-directional player facing resolves cleanly and preserves orientation when stationary.
+* Universal `E` key triggers contextual interactions via the canonical targeting hierarchy.
+* Tool usage activation cleanly separates from contextual interaction.
+* Tile targeting for farming and ghost preview for building function without permanent grid clutter.
+* Hybrid collision footprints prevent head clipping and NPC corner trapping.
+* Fixed isometric camera smoothly follows the player with look-ahead, clamped zoom, and zero camera rotation.
+* Player state machine enforces mutual exclusivity across all action states.
+* World, dock, and interior transitions cleanly disable and restore player controls.
+* Non-lethal defeat sequence smoothly returns the player to the Personal Island cottage.
+* Input abstraction architecture supports full remapping and future gamepad integration.
+* Automated unit and integration tests validate all core invariants.
 
-That is the control standard for **Underhallow**.
+---
+
+# 33. Final Design Statement
+
+> **The player controller in Underhallow should disappear into the experience. The player should never be thinking about how to manipulate an interface. They should simply think: "I want to walk over there," "I want to harvest that crop," "I want to talk to Rowan," or "I want to explore what lies past that ruined wall." The game should respond immediately, gracefully, and naturally.**
