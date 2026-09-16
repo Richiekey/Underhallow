@@ -122,11 +122,11 @@ Current established documents include:
 * **Character Bible V1.0** (`CB-001`) — Living Population Architecture, NPC Tiers, & Community Relations
 * **Biome & Environment Bible V1.1** (`BE-001`) — Environmental Identity, 16 Canonical Environmental Laws, 6-Tier Hierarchy, Gameplay Affordance Matrix, & Mystery Density Model
 * **Creature & Wildlife Bible V1.0** (`CW-001`) — Wildlife Philosophy, 16 Wildlife Laws, 10 Taxonomies, & 4-Tier Spectrum
+* **Mystery & Lore Architecture Specification V1.0** (`ML-001`) — Mystery Architecture, 5 Mystery Layers, 20 Core Laws, & 7-Stage Revelations
 
 Planned Creative / World Foundations:
 
-* **Mystery & Lore Architecture V1.0** (`ML-001`) — **NEXT CREATIVE SPECIFICATION TO DRAFT**
-* **Narrative Content Framework V1.0** (`NC-001`) — Planned
+* **Narrative Content Framework V1.0** (`NC-001`) — **NEXT CREATIVE SPECIFICATION TO DRAFT**
 
 ---
 
@@ -304,10 +304,10 @@ To avoid unnecessary reading while ensuring absolute fidelity to established des
 
 | Domain / Work Area | Minimum Required Reading Sequence |
 | :--- | :--- |
-| **Creative / World / Lore** | `MSI-001` → `NS-001` → `CD-001` → `AD-001` → `WB-001` → `NB-001` → `BE-001` → `CW-001` → `WM-001` / `MI-001` |
-| **Character / Social / Quests** | `MSI-001` → `NS-001` → `CD-001` → `WB-001` → `NB-001` → `CB-001` → `MI-001` → `NQ-001` / `MS-001` |
-| **Main Island & Regional Exploration** | `MSI-001` → `NS-001` → `CD-001` → `AD-001` → `WB-001` → `NB-001` → `CB-001` → `BE-001` → `CW-001` → `WM-001` → `CG-001` → `MI-001` |
-| **Personal Island & Homestead** | `MSI-001` → `NS-001` → `CD-001` → `AD-001` → `WB-001` → `BE-001` → `CW-001` → `CG-001` → `WM-001` → `BI-001` → `PI-001` (+ `FB-001`) |
+| **Creative / World / Lore** | `MSI-001` → `NS-001` → `CD-001` → `AD-001` → `WB-001` → `NB-001` → `ML-001` → `BE-001` → `CW-001` → `WM-001` / `MI-001` |
+| **Character / Social / Quests** | `MSI-001` → `NS-001` → `CD-001` → `WB-001` → `NB-001` → `CB-001` → `ML-001` → `MI-001` → `NQ-001` / `MS-001` |
+| **Main Island & Regional Exploration** | `MSI-001` → `NS-001` → `CD-001` → `AD-001` → `WB-001` → `NB-001` → `CB-001` → `BE-001` → `CW-001` → `ML-001` → `WM-001` → `CG-001` → `MI-001` |
+| **Personal Island & Homestead** | `MSI-001` → `NS-001` → `CD-001` → `AD-001` → `WB-001` → `BE-001` → `CW-001` → `ML-001` → `CG-001` → `WM-001` → `BI-001` → `PI-001` (+ `FB-001`) |
 | **Building & Construction Systems** | `MSI-001` → `NS-001` → `CD-001` → `AD-001` → `CG-001` → `ETA-001` → `PC-001` → `BI-001` (universal) → `PI-001` (personal context) |
 | **Core Gameplay Loops (Farming, Hunting, Gathering)** | `MSI-001` → `NS-001` → `CG-001` → `PC-001` → `ETA-001` → `CW-001` → System Spec (`FB-001`, `HU-001`, etc.) → `PR-001` |
 | **Engine, State & Persistence Engineering** | `MSI-001` → `NS-001` → `AC-001` → `SR-001` → `FS-001` → `ETA-001` → `CG-001` → `IA-001` → `PP-001` |
@@ -482,8 +482,8 @@ The following table documents the active specification registry for the Underhal
 | **CB-001** | Character Bible | 1 | DRAFT | [docs/CHARACTER_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/CHARACTER_BIBLE.md) |
 | **BE-001** | Biome & Environment Bible | 1 | DRAFT | [docs/BIOME_ENVIRONMENT_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/BIOME_ENVIRONMENT_BIBLE.md) |
 | **CW-001** | Creature & Wildlife Bible | 1 | DRAFT | [docs/CREATURE_WILDLIFE_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/CREATURE_WILDLIFE_BIBLE.md) |
-| **ML-001** | Mystery & Lore Architecture | 1 | PLANNED | Not yet drafted *(Next Creative Specification)* |
-| **NC-001** | Narrative Content Framework | 1 | PLANNED | Not yet drafted |
+| **ML-001** | Mystery & Lore Architecture | 1 | DRAFT | [docs/MYSTERY_LORE_ARCHITECTURE_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/MYSTERY_LORE_ARCHITECTURE_SPECIFICATION.md) |
+| **NC-001** | Narrative Content Framework | 1 | PLANNED | Not yet drafted *(Next Creative Specification)* |
 | **MI-001** | Main Island Design | 2 | DRAFT | [docs/MAIN_ISLAND_DESIGN_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/MAIN_ISLAND_DESIGN_SPECIFICATION.md) |
 | **PI-001** | Personal Island Design | 2 | DRAFT | [docs/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md) |
 | **RW-001** | Regional World Specifications | 2 | PLANNED | Not yet drafted |
@@ -522,8 +522,8 @@ The following table documents the active specification registry for the Underhal
 # 29. Recommended Build Order
 
 - **Phase 1 — Authority:** North Star (`NS-001`), Creative Direction (`CD-001`), Art Direction Bible (`AD-001`), World Bible (`WB-001`), Agent Constitution (`AC-001`), Master Specification Index (`MSI-001`), Specification Reconciliation (`SR-001`).
-- **Phase 2 — Foundation Architecture & Creative Foundations:** Foundation Specification (`FS-001`), Engine & Technical Architecture (`ETA-001`), Core Gameplay (`CG-001`), Player Control (`PC-001`), World & Map Architecture (`WM-001`), Narrative Bible (`NB-001`), Character Bible (`CB-001`), Biome & Environment Bible (`BE-001`), Creature & Wildlife Bible (`CW-001`).
-  - *Upcoming Creative Foundations:* Mystery & Lore Architecture (`ML-001`), Narrative Content Framework (`NC-001`).
+- **Phase 2 — Foundation Architecture & Creative Foundations:** Foundation Specification (`FS-001`), Engine & Technical Architecture (`ETA-001`), Core Gameplay (`CG-001`), Player Control (`PC-001`), World & Map Architecture (`WM-001`), Narrative Bible (`NB-001`), Character Bible (`CB-001`), Biome & Environment Bible (`BE-001`), Creature & Wildlife Bible (`CW-001`), Mystery & Lore Architecture (`ML-001`).
+  - *Upcoming Creative Foundations:* Narrative Content Framework (`NC-001`).
 - **Phase 3 — Player, World & Social Systems:** Main Island Design (`MI-001`), Personal Island Design (`PI-001`), Player Progression (`PR-001`), Farming (`FB-001`), Livestock & Animal Husbandry (`LA-001`), Hunting & Combat (`HU-001`), Fishing (`FI-001`), Foraging & Wild Resources (`FR-001`), Resource Gathering, Forestry & Mining (`RG-001`), Cooking & Food (`CK-001`), Building & Construction (`BI-001`), Inventory/Items/Tools/Crafting (`II-001`), Exploration & Secrets (`EX-001`), Transportation & Travel (`TR-001`), Time & Simulation (`TS-001`), Weather & Environmental Systems (`WE-001`), Multiplayer & Social Systems (`MS-001`).
 - **Phase 4 — World Population & Communities:** NPCs, Dialogue & Quests (`NQ-001`), Story/Narrative Architecture (`ST-001`), Regional World Specifications (`RW-001`), Town Social Structure (`TC-001`), Major NPC / Character Roster (`CR-001`), World Events & Festival Direction (`EV-001`).
 - **Phase 5 — Meta Systems:** Economy (`EC-001`), Save System (`SV-001`), UI/UX (`UI-001`), Audio & Music Direction Bible (`AU-001`), Accessibility (`AX-001`), Input/Settings (`IS-001`).
@@ -600,8 +600,8 @@ NS-001 (North Star — Vision & Immutable Principles)
  │         │    ├── CB-001 (Character Bible — 30–50 NPCs, Living Memory, Invariant 15)
  │         │    │    ├── TC-001 (Town Social Structure — Planned)
  │         │    │    └── CR-001 (Major NPC / Character Roster — Planned)
- │         │    ├── ML-001 (Mystery & Lore Architecture — NEXT CREATIVE SPEC)
- │         │    └── NC-001 (Narrative Content Framework — Planned)
+ │         │    ├── ML-001 (Mystery & Lore Architecture — 20 Laws, 5 Layers, Invariant 21)
+ │         │    └── NC-001 (Narrative Content Framework — NEXT CREATIVE SPEC)
  │         │
  │         ├── WM-001 (World & Map Architecture — Coordinate Geometry, Isometric Tiles)
  │         ├── MI-001 (Main Island Design — Shared World, 7–9 Regions, Invariant 16)
@@ -700,6 +700,7 @@ The MSI is the primary navigation and governance layer for humans and AI agents.
 - **CB-001 — Character Bible V1.0:** Foundation character specification established at [`docs/CHARACTER_BIBLE.md`](file:///c:/Users/HP/Documents/Underhallow/docs/CHARACTER_BIBLE.md) (defines 30–50 memorable residents, 3-tier depth structure, independent routines, believable flaws, fragmented mystery knowledge, imperfect living memory, romance rules, and core philosophy: *"Underhallow's characters should feel like people who have their own lives, histories, and reasons for staying here rather than NPCs who exist only for the player"*).
 - **BE-001 — Biome & Environment Bible V1.1:** Foundation specification established at [`docs/BIOME_ENVIRONMENT_BIBLE.md`](file:///c:/Users/HP/Documents/Underhallow/docs/BIOME_ENVIRONMENT_BIBLE.md) (defines 16 Canonical Environmental Laws, 6-tier hierarchy: Family → Biome → Sub-Biome → Ecotone → Micro-Environment → Landmark, 7-layer design model, Gameplay Affordance Matrix, 4-tier Mystery Density Model Level 0–3, 5-tier Landmark Hierarchy, "The Wrong Thing" principle, environmental memory, 13 core environmental families, ordinary vs strange balance, and Invariant 19: *"Underhallow's environments should feel like places, not levels. Beautiful first. Strange second"*).
 - **CW-001 — Creature & Wildlife Bible V1.0:** Foundation specification established at [`docs/CREATURE_WILDLIFE_BIBLE.md`](file:///c:/Users/HP/Documents/Underhallow/docs/CREATURE_WILDLIFE_BIBLE.md) (defines 16 Core Wildlife Laws, 4-tier spectrum: Ordinary → Notable → Strange → Impossible, 10 creature taxonomies: Birds, Mammals, Reptiles, Amphibians, Fish, Insects, Domestic, Livestock, Strange, Impossible, hunting philosophy with optional processing and raw resource trading, observation as a valid non-extractive interaction, believable behavioral abstraction, field journal/bestiary framework, and Invariant 20: *"Wildlife should feel like the island has a life of its own, whether or not the player is there"*).
+- **ML-001 — Mystery & Lore Architecture Specification V1.0:** Foundation specification established at [`docs/MYSTERY_LORE_ARCHITECTURE_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/MYSTERY_LORE_ARCHITECTURE_SPECIFICATION.md) (defines 20 Core Mystery Laws, 5-layer mystery architecture: Ordinary, Local, Historical, Central Truth, Permanent Unknown, 5–8 major mystery families, 7-stage revelation progression, Grandparent's morally difficult decision, redundant clue paths, and Invariant 21: *"The mystery should make the world deeper, not make the world feel like a puzzle box. Understanding history is not the same thing as understanding Underhallow itself"*).
 - **MI-001 — Main Island Design Specification V1.0:** Draft design baseline established at [`docs/MAIN_ISLAND_DESIGN_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/MAIN_ISLAND_DESIGN_SPECIFICATION.md) (defines communal world identity, 7–9 major regional frameworks, ~50% early game accessibility, natural transitions, landmark navigation, intentional empty space/wilderness, non-lethal defeat returning to Personal Island, non-forced hunting processing, layered historical depth, and Invariant 16: *"The main island of Underhallow should feel like a place you could spend years getting to know rather than a map you are expected to complete"*).
 - **PI-001 — Personal Island Design Specification V1.0:** Draft design baseline established at [`docs/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md) (defines private sanctuary & emotional destination, functional inherited starting cottage with undeveloped land, gradual grid-based area expansion, organic 3-stage house evolution, balanced efficiency vs. expression, preserved wilderness without mandatory optimization, ecological wildlife attraction, persistent authoritative state, and Invariant 18: *"The Personal Island is where the player turns progress into place"*).
 - **PR-001 — Player Progression Specification V1.0:** Drafted and established at [`docs/PLAYER_PROGRESSION_SPECIFICATION.md`](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_PROGRESSION_SPECIFICATION.md).
@@ -716,23 +717,22 @@ The MSI is the primary navigation and governance layer for humans and AI agents.
 
 The next authoritative specification in the creative direction roadmap is:
 
-> **ML-001 — Mystery & Lore Architecture V1.0**
+> **NC-001 — Narrative Content Framework V1.0**
 
-This document will define the structural architecture of Underhallow's central mystery, ancient civilization lore layers, historical truth vs folklore distortion, fragmented clue distribution, environmental and narrative anomaly integration, and revelation gating.
+This document will define how narrative, lore, and mystery content are translated into concrete player experiences: quest archetypes, narrative beats, environmental storytelling rules, character dialogue structures, branching agency, and revelation delivery.
 
 ---
 
 ### 38.2 Sequenced Creative Roadmap
 
-Following `CW-001`, creative and world authoring proceeds in the following sequential order:
+Following `ML-001`, creative and world authoring proceeds in the following sequential order:
 
-1. **ML-001 — Mystery & Lore Architecture V1.0** *(Next Specification)*
-2. **NC-001 — Narrative Content Framework V1.0**
-3. **RW-001 — Regional World Specifications V1.0**
-4. **TC-001 — Town Social Structure Specification V1.0**
-5. **CR-001 — Major NPC / Character Roster V1.0**
-6. **EV-001 — World Events & Festival Direction V1.0**
-7. **AU-001 — Audio & Music Direction Bible V1.0**
+1. **NC-001 — Narrative Content Framework V1.0** *(Next Specification)*
+2. **RW-001 — Regional World Specifications V1.0**
+3. **TC-001 — Town Social Structure Specification V1.0**
+4. **CR-001 — Major NPC / Character Roster V1.0**
+5. **EV-001 — World Events & Festival Direction V1.0**
+6. **AU-001 — Audio & Music Direction Bible V1.0**
 
 ---
 
@@ -765,3 +765,4 @@ Following foundational creative definitions, remaining Level 2 gameplay specific
 | **V1.2** | 2026-09-16 | APPROVED | Gemini / Project Governance | Integrated Biome & Environment Bible V1.0 (`BE-001`) into Level 1 Foundation registry, updated reading matrices, build order, and creative hierarchy tree; advanced creative roadmap to `CW-001` (Creature & Wildlife Bible V1.0). | Integrated BE-001 foundation baseline. |
 | **V1.3** | 2026-09-16 | APPROVED | Gemini / Project Governance | Reconciled BE-001 to V1.1 Specification Pass (added 16 Canonical Environmental Laws, 6-tier Environmental Hierarchy, Gameplay Affordance Matrix, and 4-tier Mystery Density Model); acknowledged founder approval of PC-001 (Player Control, Movement & Interaction). | BE-001 V1.1 Specification Pass & PC-001 approval reconciliation. |
 | **V1.4** | 2026-09-16 | APPROVED | Gemini / Project Governance | Integrated Creature & Wildlife Bible V1.0 (`CW-001`) into Level 1 Foundation registry, reading matrices, build order, and creative hierarchy tree; codified Invariant 20; advanced creative roadmap to `ML-001` (Mystery & Lore Architecture V1.0). | Integrated CW-001 foundation baseline. |
+| **V1.5** | 2026-09-16 | APPROVED | Gemini / Project Governance | Integrated Mystery & Lore Architecture Specification V1.0 (`ML-001`) into Level 1 Foundation registry, reading matrices, build order, and creative hierarchy tree; codified Invariant 21; acknowledged founder approval of WM-001 (World & Map Architecture); advanced creative roadmap to `NC-001` (Narrative Content Framework V1.0). | Integrated ML-001 foundation baseline & WM-001 approval reconciliation. |
