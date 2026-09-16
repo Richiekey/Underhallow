@@ -43,6 +43,8 @@ const AdvanceDayDebugCommandClass = preload("res://src/core/commands/advance_day
 const GameScene = preload("res://scenes/game/game.tscn")
 const InspectableSignClass = preload("res://src/world/inspectable_sign.gd")
 const FarmPlotClass = preload("res://scenes/gameplay/farming/farm_plot.gd")
+const HuntingStateClass = preload("res://src/gameplay/hunting/hunting_state.gd")
+const BuildingStateClass = preload("res://src/gameplay/building/building_state.gd")
 
 var total_tests: int = 0
 var passed_tests: int = 0
@@ -63,6 +65,7 @@ func _init() -> void:
 	_run_phase4_gameplay_tests()
 	_run_interaction_prompt_persistence_tests()
 	_run_architecture_audit_a001_tests()
+	_run_hunting_and_building_state_tests()
 	
 	print("==================================================")
 	print("Test Results: %d passed, %d failed of %d total tests." % [passed_tests, failed_tests, total_tests])
@@ -1236,4 +1239,73 @@ func _run_architecture_audit_a001_tests() -> void:
 	farm_runtime.queue_free()
 	rollover_runtime.queue_free()
 	custom_runtime.queue_free()
+
+# -----------------------------------------------------------------------------
+# 11. Hunting & Building State Domain Verification Suite
+# -----------------------------------------------------------------------------
+func _run_hunting_and_building_state_tests() -> void:
+	print("\n--- Testing HuntingState & BuildingState Domain Infrastructure ---")
+	
+	# Test 1: Initialization
+	var state: GameState = GameStateClass.new()
+	_assert_true(state.hunting_state != null, "Domain 1: GameState initializes non-null hunting_state")
+	_assert_true(state.building_state != null, "Domain 1: GameState initializes non-null building_state")
+	
+	var direct_hunting: HuntingState = HuntingStateClass.new()
+	var direct_building: BuildingState = BuildingStateClass.new()
+	_assert_true(direct_hunting != null, "Domain 1: Direct HuntingState instantiation succeeds")
+	_assert_true(direct_building != null, "Domain 1: Direct BuildingState instantiation succeeds")
+	
+	# Test 2: Reset
+	state.reset()
+	_assert_equal(state.hunting_state.to_dictionary(), {}, "Domain 2: HuntingState resets to default empty dictionary")
+	_assert_equal(state.building_state.to_dictionary(), {}, "Domain 2: BuildingState resets to default empty dictionary")
+	
+	# Test 3: Serialization
+	var dict: Dictionary = state.to_dictionary()
+	_assert_true(dict.has("hunting"), "Domain 3: GameState payload includes 'hunting' key")
+	_assert_true(dict["hunting"] is Dictionary, "Domain 3: 'hunting' payload is a Dictionary")
+	_assert_true(dict.has("building"), "Domain 3: GameState payload includes 'building' key")
+	_assert_true(dict["building"] is Dictionary, "Domain 3: 'building' payload is a Dictionary")
+	_assert_equal(dict["hunting"], {}, "Domain 3: Initial 'hunting' payload is empty dictionary")
+	_assert_equal(dict["building"], {}, "Domain 3: Initial 'building' payload is empty dictionary")
+	
+	# Test 4: Deserialization
+	var restored: GameState = GameStateClass.new()
+	restored.from_dictionary(dict)
+	_assert_true(restored.hunting_state != null, "Domain 4: Deserialized state has non-null hunting_state")
+	_assert_true(restored.building_state != null, "Domain 4: Deserialized state has non-null building_state")
+	_assert_equal(restored.hunting_state.to_dictionary(), {}, "Domain 4: Deserialized hunting_state remains empty dictionary")
+	_assert_equal(restored.building_state.to_dictionary(), {}, "Domain 4: Deserialized building_state remains empty dictionary")
+	
+	# Test 5: Missing keys / Backward compatibility with Legacy Payload
+	var legacy_payload: Dictionary = {
+		"game_time_elapsed": 60.0,
+		"test_counter": 5,
+		"player": {},
+		"time": {},
+		"inventory": {},
+		"farming": {},
+		"progression": {},
+		"world": {}
+	}
+	_assert_true(not legacy_payload.has("hunting"), "Domain 5: Legacy payload explicitly lacks 'hunting'")
+	_assert_true(not legacy_payload.has("building"), "Domain 5: Legacy payload explicitly lacks 'building'")
+	
+	var legacy_state: GameState = GameStateClass.new()
+	legacy_state.from_dictionary(legacy_payload)
+	_assert_true(legacy_state.hunting_state != null, "Domain 5: Missing 'hunting' key defaults to non-null HuntingState")
+	_assert_true(legacy_state.building_state != null, "Domain 5: Missing 'building' key defaults to non-null BuildingState")
+	_assert_equal(legacy_state.hunting_state.to_dictionary(), {}, "Domain 5: Default HuntingState is empty dictionary")
+	_assert_equal(legacy_state.building_state.to_dictionary(), {}, "Domain 5: Default BuildingState is empty dictionary")
+	
+	# Test 6: Round-Trip Preservation
+	var round_trip_state: GameState = GameStateClass.new()
+	var round_trip_dict: Dictionary = round_trip_state.to_dictionary()
+	var round_trip_restored: GameState = GameStateClass.new()
+	round_trip_restored.from_dictionary(round_trip_dict)
+	_assert_true(round_trip_restored.hunting_state != null, "Domain 6: Round-trip preserves non-null hunting_state")
+	_assert_true(round_trip_restored.building_state != null, "Domain 6: Round-trip preserves non-null building_state")
+	_assert_equal(round_trip_restored.to_dictionary()["hunting"], {}, "Domain 6: Round-trip hunting payload matches")
+	_assert_equal(round_trip_restored.to_dictionary()["building"], {}, "Domain 6: Round-trip building payload matches")
 

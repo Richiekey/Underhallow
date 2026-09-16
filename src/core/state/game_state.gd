@@ -13,6 +13,8 @@ var inventory_state: InventoryState
 var farming_state: FarmingState
 var progression_state: ProgressionState
 var world_state: WorldState
+var hunting_state: HuntingState
+var building_state: BuildingState
 
 func _init() -> void:
 	player_state = PlayerState.new()
@@ -21,6 +23,8 @@ func _init() -> void:
 	farming_state = FarmingState.new()
 	progression_state = ProgressionState.new()
 	world_state = WorldState.new()
+	hunting_state = HuntingState.new()
+	building_state = BuildingState.new()
 	reset()
 
 func reset() -> void:
@@ -38,6 +42,10 @@ func reset() -> void:
 		progression_state.reset()
 	if world_state != null:
 		world_state.reset()
+	if hunting_state != null:
+		hunting_state.reset()
+	if building_state != null:
+		building_state.reset()
 
 func to_dictionary() -> Dictionary:
 	return {
@@ -48,7 +56,9 @@ func to_dictionary() -> Dictionary:
 		"inventory": inventory_state.to_dictionary() if inventory_state != null else {},
 		"farming": farming_state.to_dictionary() if farming_state != null else {},
 		"progression": progression_state.to_dictionary() if progression_state != null else {},
-		"world": world_state.to_dictionary() if world_state != null else {}
+		"world": world_state.to_dictionary() if world_state != null else {},
+		"hunting": hunting_state.to_dictionary() if hunting_state != null else {},
+		"building": building_state.to_dictionary() if building_state != null else {}
 	}
 
 func from_dictionary(dict: Dictionary) -> void:
@@ -86,3 +96,13 @@ func from_dictionary(dict: Dictionary) -> void:
 		world_state = WorldState.new()
 	if dict.has("world") and dict["world"] is Dictionary:
 		world_state.from_dictionary(dict["world"])
+	
+	if hunting_state == null:
+		hunting_state = HuntingState.new()
+	if dict.has("hunting") and dict["hunting"] is Dictionary:
+		hunting_state.from_dictionary(dict["hunting"])
+	
+	if building_state == null:
+		building_state = BuildingState.new()
+	if dict.has("building") and dict["building"] is Dictionary:
+		building_state.from_dictionary(dict["building"])
