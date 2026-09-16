@@ -1,10 +1,10 @@
 # UNDERHALLOW
 
-# Biome & Environment Bible V1.0
+# Biome & Environment Bible V1.1 — Specification Pass
 
 **Document ID:** BE-001
-**Status:** DRAFT
-**Version:** 1.0
+**Status:** DRAFT — SPECIFICATION PASS
+**Version:** 1.1
 **Project:** Underhallow
 **Authority Level:** Level 1 — Foundation Specification
 **Parent Specifications:**
@@ -35,1551 +35,1565 @@
 
 ---
 
-# 1. Purpose
+## 0. Specification Pass Purpose
 
-The Biome & Environment Bible establishes the environmental identity, ecological philosophy, geographic logic, visual differentiation, atmospheric principles, and environmental mystery language of Underhallow.
+This pass reconciles and strengthens the existing `BE-001 — Biome & Environment Bible V1.0`.
 
-It defines **what environments are supposed to feel like and why they exist**.
+It does **not** replace the approved environmental creative direction.
 
-It does not fully specify the implementation of weather, time simulation, wildlife AI, fishing, foraging, resource gathering, exploration systems, or audio systems. Those systems are governed by their respective downstream specifications.
+It converts the existing environmental philosophy into a stronger governing specification capable of guiding downstream implementation and creative documents.
 
-BE-001 exists to ensure that those systems ultimately produce a coherent world.
-
-The central principle is:
+The following principles remain canonical:
 
 > **Underhallow's environments should feel like places, not levels.**
 
-A biome is therefore not merely a visual theme.
-
-A strong Underhallow environment combines:
-
-**Geography → Ecology → Visual Identity → Gameplay Identity → Atmosphere → History → Mystery**
-
-Not every environment needs every layer equally.
-
-Some places may be primarily peaceful.
-
-Others may emphasize exploration.
-
-Others may carry historical weight.
-
-Others may contain unusual environmental phenomena.
-
-But the world should always feel internally coherent.
-
----
-
-# 2. Environmental Creative North Star
-
-Underhallow's environments must support the project's central creative contrast:
+and:
 
 > **Cozy surface. Mystical middle. Deep mystery underneath.**
 
-The ordinary environment should be convincing enough that strange elements feel meaningful.
+The environment system must remain:
 
-The player should be able to walk through a meadow and simply enjoy it.
+**Geographically coherent → Ecologically believable → Visually distinct → Mechanically meaningful → Atmospherically memorable → Historically layered → Occasionally mysterious.**
 
-They should be able to farm beside a river without wondering whether every rock hides a secret.
-
-They should be able to enter a forest because it is beautiful.
-
-Then, occasionally, something should make them stop.
-
-A structure that should not be there.
-
-A plant growing somewhere impossible.
-
-An animal behaving strangely.
-
-A path leading somewhere unexpected.
-
-A landscape that does not quite obey the rules the player has learned.
-
-The environmental mystery should emerge from a believable world rather than replacing it.
+This pass establishes the additional structure required to maintain that philosophy as the world expands.
 
 ---
 
-# 3. Environmental Identity Principles
+# 1. Environmental Authority
 
-## 3.1 Environments Must Have Personality
+BE-001 governs:
 
-Major environments should possess a recognizable emotional identity.
+* environmental identity;
+* biome classification;
+* environmental hierarchy;
+* geographic relationships between environments;
+* ecological identity;
+* visual environmental differentiation;
+* environmental gameplay affordances at the design level;
+* environmental atmosphere;
+* environmental history;
+* environmental mystery language;
+* environmental transitions;
+* environmental landmark principles;
+* environmental density;
+* environmental progression;
+* regional environmental composition.
 
-The player should eventually be able to associate a place with a feeling.
+BE-001 does **not** own the implementation details of:
+
+* wildlife AI;
+* fishing mechanics;
+* weather simulation;
+* time simulation;
+* resource spawning algorithms;
+* foraging mechanics;
+* mining/forestry systems;
+* exploration progression;
+* narrative quest implementation;
+* audio implementation;
+* building placement;
+* regional social structures.
+
+Those systems must specialize the environmental rules established here rather than independently redefining them.
+
+---
+
+# 2. Environmental Hierarchy
+
+Underhallow uses a layered environmental hierarchy.
+
+## 2.1 Hierarchy
+
+The canonical structure is:
+
+**Environmental Family → Biome → Sub-Biome → Ecotone → Micro-Environment → Landmark**
+
+### Environmental Family
+
+A broad environmental category sharing a major geographic/ecological identity.
 
 Examples:
 
-* Meadows — openness, warmth, freedom.
-* Woodland — shelter, life, familiarity.
-* Coast — openness, movement, distance.
-* Wetlands — lushness, isolation, reflection.
-* Highlands — perspective, exposure, scale.
-* Ancient Forest — beauty, age, mystery.
-* Caves — discovery, depth, uncertainty.
-* Ruins — history, absence, questions.
+* Woodland
+* Wetland
+* Coast
+* Highlands
+* Underground
 
-These identities should emerge naturally from the environment rather than through exaggerated thematic design.
+### Biome
 
----
+A recognizable environmental identity within that family.
 
-## 3.2 Environments Must Be Geographically Coherent
+Example:
 
-Underhallow is intended to feel like a naturally occurring world rather than a collection of disconnected game zones.
+**Coast → Beach**
 
-Environmental transitions should therefore follow believable geography.
+### Sub-Biome
+
+A meaningful ecological or geographic variation within a biome.
+
+Example:
+
+**Coast → Beach → Sheltered Beach**
+
+Sub-biomes should only exist when they create meaningful environmental differentiation.
+
+### Ecotone
+
+A transition between environmental identities.
 
 Examples:
 
-* Wetlands tend to appear around water.
-* Forests respond to terrain, moisture, and elevation.
-* Farmland tends to occur near settlements and useful water sources.
-* Rivers shape settlement and transportation.
-* Highlands provide broader views and different vegetation.
-* Coastlines change according to terrain and exposure.
-* Caves emerge from appropriate geological formations.
+* woodland edge;
+* river meadow;
+* coastal marsh;
+* highland woodland;
+* wet woodland;
+* forest/farmland boundary.
 
-The game does not require real-world simulation.
+Ecotones are first-class world-building elements rather than empty borders.
 
-It requires **intuitive physical credibility**.
+### Micro-Environment
 
-The player should rarely ask:
+A small environmental pocket with a distinct local identity.
 
-> "Why is this biome here?"
+Examples:
+
+* flower clearing;
+* hidden pond;
+* abandoned orchard;
+* moss-covered ruin;
+* secluded cove;
+* spring-fed pool.
+
+### Landmark
+
+A visually or narratively significant environmental feature used for navigation, identity, history, or discovery.
 
 ---
 
-# 4. Biome Structure
+# 3. Canonical Environmental Families
 
-Underhallow should contain a broad environmental vocabulary rather than a rigid collection of isolated biomes.
-
-The major environmental families include:
+The following environmental families are canonical.
 
 1. Farmland
 2. Meadows
 3. Woodland
 4. Ancient Forest
-5. Hills and Highlands
-6. Rivers and Valleys
-7. Lakes and Ponds
-8. Coast and Beaches
-9. Rocky Coves and Cliffs
-10. Wetlands and Marsh
-11. Caves and Underground Spaces
+5. Hills & Highlands
+6. Rivers & Valleys
+7. Lakes & Ponds
+8. Coast & Beaches
+9. Rocky Coves & Cliffs
+10. Wetlands & Marsh
+11. Caves & Underground
 12. Ruin Environments
 13. Specialized Micro-Environments
 
-These environments may overlap.
+These are **environmental vocabularies**, not mandatory map zones.
 
-A river may pass through woodland.
+A region may contain multiple families.
 
-A wetland may exist beside farmland.
+A single family may appear differently across several regions.
 
-A ruined settlement may sit inside a forest.
-
-A coastal cliff may contain caves.
-
-A highland may contain ancient structures.
-
-Underhallow should therefore be understood as a continuous ecosystem rather than a sequence of biome boxes.
+No region should feel like it exists solely to justify the presence of another biome.
 
 ---
 
-# 5. Biome Transitions
+# 4. Canonical Biome Identity Matrix
 
-## 5.1 Transition Philosophy
+Every major environment must possess a distinct identity across multiple dimensions.
 
-Transitions should be a mixture of:
+| Environment                    | Primary Feeling        | Typical Ecology                              | Core Activities                            | Traversal Character     | Historical Potential | Mystery Potential |
+| ------------------------------ | ---------------------- | -------------------------------------------- | ------------------------------------------ | ----------------------- | -------------------- | ----------------- |
+| Farmland                       | Warmth, belonging      | Crops, domestic animals, field wildlife      | Farming, gathering, trading                | Open, accessible        | High                 | Low–Medium        |
+| Meadows                        | Freedom, openness      | Grass, flowers, insects, small wildlife      | Exploration, gathering, movement           | Open, easy              | Low–Medium           | Low–Medium        |
+| Woodland                       | Shelter, familiarity   | Trees, understory, forest wildlife           | Gathering, hunting, exploration            | Moderately dense        | Medium               | Medium            |
+| Ancient Forest                 | Beauty, age, curiosity | Ancient trees, rich flora, unusual wildlife  | Exploration, gathering, hunting, discovery | Dense, layered          | High                 | High              |
+| Hills/Highlands                | Perspective, exposure  | Highland flora, birds, grazing wildlife      | Exploration, hunting, gathering            | Elevation-dependent     | Medium–High          | Medium–High       |
+| Rivers/Valleys                 | Connection, movement   | River ecology, wet vegetation                | Fishing, farming, travel, exploration      | Linear/branching        | High                 | Medium            |
+| Lakes/Ponds                    | Quiet, reflection      | Aquatic life, wetland vegetation             | Fishing, gathering, exploration            | Open around water       | Medium               | Medium            |
+| Coast/Beaches                  | Distance, openness     | Marine/coastal ecology                       | Fishing, travel, gathering, exploration    | Open + shoreline        | High                 | Medium–High       |
+| Rocky Coves/Cliffs             | Isolation, discovery   | Coastal rock ecology                         | Exploration, fishing, traversal            | Constrained/vertical    | High                 | High              |
+| Wetlands/Marsh                 | Lushness, isolation    | Reeds, amphibians, insects, wetland wildlife | Fishing, gathering, exploration            | Slow/irregular          | Medium–High          | High              |
+| Caves/Underground              | Depth, uncertainty     | Cave ecology, minerals, subterranean life    | Mining, exploration, gathering, discovery  | Constrained/depth-based | Very High            | Very High         |
+| Ruin Environments              | Absence, history       | Environment reclaiming civilization          | Exploration, lore, discovery               | Variable                | Very High            | Very High         |
+| Specialized Micro-Environments | Local identity         | Context-dependent                            | Context-dependent                          | Context-dependent       | Variable             | Variable          |
 
-* gradual ecological changes;
-* strong geographic boundaries;
-* human land-use transitions;
-* historical boundaries;
-* unusual environmental boundaries.
+This matrix is a **design constraint**, not a rigid implementation table.
 
-Most transitions should feel natural.
-
-However, geography can create dramatic changes.
-
-Examples include:
-
-* forest ending at a cliff;
-* farmland meeting a river;
-* meadow becoming wetland;
-* beach becoming rocky coastline;
-* woodland becoming Ancient Forest;
-* surface terrain giving way to cave entrances.
+A location may break expectations when there is a deliberate reason.
 
 ---
 
-## 5.2 Transitional Zones
+# 5. Environmental Identity Requirements
 
-Some of Underhallow's most interesting environments should exist between major environmental identities.
+A major environment should differ from another through a meaningful combination of:
+
+1. Visual identity
+2. Flora
+3. Wildlife
+4. Resources
+5. Traversal
+6. Atmosphere
+7. Environmental interactions
+8. Human presence
+9. Historical context
+10. Mystery potential
+
+No biome should be differentiated only by color palette.
+
+No biome should be differentiated only by resource drops.
+
+No biome should exist solely because the game requires another environment type.
+
+---
+
+# 6. Gameplay Affordance Matrix
+
+Environmental identity must translate into gameplay opportunities.
+
+| Environment        |    Farming |     Hunting |    Fishing |  Gathering |   Building | Exploration | Social/Human Presence |
+| ------------------ | ---------: | ----------: | ---------: | ---------: | ---------: | ----------: | --------------------: |
+| Farmland           |       High |  Low–Medium | Low–Medium |     Medium |       High |      Medium |                  High |
+| Meadows            |     Medium |      Medium |        Low |       High |     Medium |        High |                Medium |
+| Woodland           | Low–Medium |        High |     Medium |       High | Low–Medium |        High |            Low–Medium |
+| Ancient Forest     |        Low |        High | Low–Medium |       High |        Low |   Very High |                   Low |
+| Highlands          |        Low |        High | Low–Medium |     Medium |        Low |   Very High |                   Low |
+| Rivers/Valleys     |     Medium |      Medium |       High |       High |     Medium |        High |           Medium–High |
+| Lakes/Ponds        | Low–Medium |      Medium |       High |     Medium | Low–Medium | Medium–High |            Low–Medium |
+| Coast              | Low–Medium |      Medium |  Very High |     Medium |     Medium |        High | High in settled areas |
+| Coves/Cliffs       |        Low |      Medium |       High |     Medium |        Low |   Very High |                   Low |
+| Wetlands           | Low–Medium | Medium–High |       High |  Very High |        Low |        High |                   Low |
+| Underground        |   None/Low |      Medium | Contextual |       High |        Low |   Very High |              Very Low |
+| Ruins              |   None/Low |  Contextual | Contextual | Contextual |        Low |   Very High |              Variable |
+| Micro-Environments | Contextual |  Contextual | Contextual | Contextual | Contextual |        High |            Contextual |
+
+These values indicate **design emphasis**, not mandatory availability.
+
+For example, fishing may technically be possible in several environments while remaining most strongly associated with rivers, lakes, and coastlines.
+
+---
+
+# 7. Biome Identity Profiles
+
+Every major biome added to Underhallow must be capable of answering the following questions:
+
+### Identity
+
+* What does this place feel like?
+* What makes it immediately recognizable?
+
+### Geography
+
+* Why does this environment exist here?
+* What terrain produces it?
+
+### Ecology
+
+* What naturally grows here?
+* What lives here?
+* What ecological relationships are visible?
+
+### Human Relationship
+
+* How have people interacted with this environment?
+* Is it cultivated, settled, avoided, exploited, protected, or forgotten?
+
+### Gameplay
+
+* What activities naturally belong here?
+* What traversal characteristics distinguish it?
+
+### History
+
+* What traces of the past can exist here?
+
+### Mystery
+
+* What level of strange or unexplained content is appropriate?
+
+### Navigation
+
+* What landmarks or environmental structures help players understand where they are?
+
+### Atmosphere
+
+* What should the player feel without requiring explicit narrative?
+
+If a proposed biome cannot answer these questions, it should probably remain a sub-biome, micro-environment, or visual variation rather than becoming a new major biome.
+
+---
+
+# 8. Environmental Differentiation Rule
+
+Two environments are not sufficiently different merely because they use different art assets.
+
+Two environments should have different combinations of:
+
+**Look + Feel + Ecology + Activity + Traversal + Context.**
+
+For example:
+
+A woodland and Ancient Forest may both contain trees.
+
+They remain distinct because the Ancient Forest has:
+
+* substantially older vegetation;
+* different canopy structure;
+* deeper ecological density;
+* stronger environmental history;
+* rarer flora;
+* different wildlife patterns;
+* stronger mystery potential;
+* increasingly unusual spatial characteristics.
+
+This prevents biome proliferation without meaningful differentiation.
+
+---
+
+# 9. Ecological Relationship Rules
+
+Underhallow uses **believable abstraction**, not hardcore simulation.
+
+Environmental systems should create the impression of ecological relationships without simulating every biological process.
 
 Examples:
 
-* forest edge;
-* river meadow;
-* coastal marsh;
-* highland woodland;
-* wet woodland;
-* rocky shoreline;
-* old farmland reclaimed by nature;
-* ruins swallowed by vegetation.
+* wetlands support amphibians and insects;
+* forests support woodland wildlife;
+* coastlines support marine/coastal wildlife;
+* highlands support elevation-appropriate flora and fauna;
+* rivers support aquatic ecosystems;
+* human settlements alter nearby ecology;
+* farmland attracts certain wildlife while discouraging others;
+* weather changes environmental activity;
+* time changes environmental activity.
 
-These areas should prevent the world from feeling artificially segmented.
+The player should learn these relationships through observation rather than tutorials whenever practical.
 
 ---
 
-# 6. Environmental Layers
+# 10. Transition & Ecotone Rules
 
-Each major environment should be designed across multiple layers.
+Transitions must obey physical and ecological logic.
+
+## 10.1 Default
+
+The default transition is gradual.
+
+Examples:
+
+**Farmland → Meadow → Woodland**
+
+**Beach → Coastal Vegetation → Wetland**
+
+**Lowland Woodland → Highland Woodland → Highland Meadow**
+
+## 10.2 Strong Boundaries
+
+Strong environmental boundaries are appropriate when geography naturally creates them.
+
+Examples:
+
+* cliff;
+* river;
+* coastline;
+* cave entrance;
+* deep ravine;
+* ancient forest threshold.
+
+## 10.3 Unusual Boundaries
+
+A strange environmental boundary may deliberately violate ordinary geography.
+
+These should be:
+
+* rare;
+* memorable;
+* narratively/environmentally meaningful;
+* visually readable.
+
+An impossible boundary should feel like an event in the world, not poor level design.
+
+---
+
+# 11. Regional Composition Rules
+
+A major region should contain an environmental composition rather than one isolated biome.
+
+A typical region may contain:
+
+* a primary environment;
+* one or more supporting environments;
+* transition zones;
+* micro-environments;
+* landmarks;
+* human influence where appropriate;
+* resource patterns;
+* wildlife patterns;
+* historical traces.
+
+Regional identity emerges from the **relationship between environments**.
+
+For example, a farming region may contain:
+
+**Farmland + Meadows + River + Woodland Edge + Old Farm Ruins**
+
+rather than simply being labeled "Farm Biome."
+
+---
+
+# 12. Environmental Density
+
+Underhallow uses **moderate environmental density**.
+
+The world should generally feel alive without becoming visually noisy.
+
+Density should vary intentionally.
+
+### High-density environments
+
+* Ancient Forest
+* Wetlands
+* dense Woodland
+* some Ruins
+
+### Medium-density environments
+
+* farmland
+* river valleys
+* coastal settlements
+* woodland edges
+
+### Lower-density environments
+
+* meadows
+* highland ridges
+* beaches
+* exposed cliffs
+
+Lower density is not empty design.
+
+Open space can provide:
+
+* readability;
+* scale;
+* navigation;
+* scenic views;
+* breathing room;
+* emotional contrast.
+
+---
+
+# 13. Environmental Layering
+
+Every major environment should be considered through seven layers:
 
 ### Layer 1 — Geography
 
-What physical landscape exists?
+The physical shape of the place.
 
 ### Layer 2 — Ecology
 
-What naturally lives and grows there?
+Plants, wildlife, water, and environmental relationships.
 
 ### Layer 3 — Visual Identity
 
-What immediately tells the player where they are?
+Color, materials, vegetation structure, silhouettes, terrain, lighting.
 
 ### Layer 4 — Gameplay Identity
 
-What activities naturally make sense there?
+Activities and traversal naturally supported by the environment.
 
 ### Layer 5 — Atmosphere
 
-What does the player emotionally feel?
+Emotional and sensory character.
 
 ### Layer 6 — History
 
-What happened here before the player arrived?
+Evidence of previous human or natural events.
 
 ### Layer 7 — Mystery
 
-Is there something unusual that rewards deeper attention?
+Unusual details, anomalies, contradictions, or deeper questions.
 
-Not every biome must contain a major mystery.
-
-The ordinary must remain ordinary enough for the unusual to have meaning.
+The layers should not all have equal weight.
 
 ---
 
-# 7. Core Environmental Families
+# 14. Mystery Density Model
 
-## 7.1 Farmland
+Environmental mystery must be controlled.
 
-Farmland represents the most human-shaped relationship with the natural world.
+The canonical environmental mystery scale is:
 
-It should communicate:
+## Level 0 — Ordinary
 
-* productivity;
-* warmth;
-* community;
-* seasonal change;
-* routine;
-* belonging.
-
-Farmland should vary naturally.
-
-Some fields may be carefully maintained.
-
-Others may be older.
-
-Some may border woodland.
-
-Some may be close to waterways.
-
-Some may contain traces of older agricultural practices.
-
-Farmland should feel like part of a living community rather than a collection of crop plots.
-
----
-
-# 8. Meadows
-
-Meadows provide open space and visual breathing room.
-
-They should communicate:
-
-* freedom;
-* sunlight;
-* peacefulness;
-* openness;
-* natural beauty.
-
-Meadows are important because not every part of Underhallow should be dense.
-
-Open space provides:
-
-* visual contrast;
-* landmarks;
-* navigation clarity;
-* peaceful traversal;
-* opportunities to observe the wider landscape.
-
-Flowers, grasses, insects, small wildlife, paths, fences, scattered trees, and natural formations should create variation without overwhelming the space.
-
----
-
-# 9. Woodland
-
-Woodland represents the transition between civilization and deeper wilderness.
-
-It should feel:
-
-* alive;
-* sheltered;
-* familiar;
-* exploratory;
-* moderately dense.
-
-Woodlands may contain:
-
-* paths;
-* streams;
-* clearings;
-* fallen trees;
-* wildlife;
-* gathering resources;
-* small structures;
-* forgotten objects;
-* old paths;
-* occasional ruins.
-
-Woodland should feel comfortable enough that the player can spend time there without immediately expecting danger or mystery.
-
----
-
-# 10. Ancient Forest
-
-The Ancient Forest is one of Underhallow's most important environmental identities.
-
-Its defining principle is:
-
-> **Beautiful first. Strange second.**
-
-The player should initially be attracted to the forest because of its beauty.
-
-It may contain:
-
-* enormous old trees;
-* layered vegetation;
-* rich natural detail;
-* unusual light filtering through the canopy;
-* ancient pathways;
-* wildlife;
-* old structures;
-* rare flora;
-* unusual environmental formations.
-
-Deeper areas should progressively become less ordinary.
-
-The progression should resemble:
-
-**Familiar → Old → Unusual → Strange → Impossible**
-
-The forest should never simply become a horror biome.
-
-Its mystery should often be beautiful.
-
----
-
-# 11. Hills and Highlands
-
-Highlands provide vertical perspective without turning Underhallow into a mountain-climbing game.
-
-They should contain:
-
-* rolling terrain;
-* elevated meadows;
-* woodland;
-* exposed ridges;
-* streams;
-* wildlife;
-* ruins;
-* scenic viewpoints;
-* rare resources.
-
-Elevation should strongly influence:
-
-* visibility;
-* navigation;
-* routes;
-* landmarks;
-* environmental composition;
-* discovery.
-
-Reaching a high point should sometimes allow the player to look across large portions of Underhallow and understand the relationship between its regions.
-
----
-
-# 12. Rivers and Valleys
-
-Rivers are structural elements of the island rather than decorative water features.
-
-They can influence:
-
-* settlement;
-* agriculture;
-* transportation;
-* fishing;
-* bridges;
-* paths;
-* wildlife;
-* regional identity;
-* historical development.
-
-Rivers may form boundaries, but should also connect places.
-
-Valleys should naturally emerge around rivers and terrain.
-
-The player should learn to understand the island partly through its waterways.
-
----
-
-# 13. Lakes and Ponds
-
-Lakes and ponds should provide quieter water environments than the coast.
-
-They can support:
-
-* fishing;
-* wildlife;
-* vegetation;
-* gathering;
-* scenic spaces;
-* isolated structures;
-* small mysteries.
-
-Some should be ordinary.
-
-Others may have unusual characteristics.
-
-Water should not automatically imply mystery.
-
----
-
-# 14. Coast and Beaches
-
-The coastline is a defining part of Underhallow's identity.
-
-It should contain multiple coastal identities rather than one universal beach aesthetic.
-
-Possible coastal environments include:
-
-* peaceful beaches;
-* working harbor;
-* rocky cliffs;
-* sheltered coves;
-* marsh coast;
-* fishing coast;
-* isolated shoreline;
-* strange coastal formations.
-
-The coast should communicate both:
-
-**home** and **distance**.
-
-It is where the player can feel connected to the wider world while simultaneously being reminded that Underhallow is isolated.
-
----
-
-# 15. Rocky Coves and Cliffs
-
-Rocky coastal areas should provide:
-
-* strong landmarks;
-* unusual traversal routes;
-* fishing opportunities;
-* caves;
-* hidden beaches;
-* old structures;
-* isolated spaces;
-* environmental storytelling.
-
-Some locations should be inaccessible initially without making them feel artificially locked.
-
-The player should often see places before they can reach them.
-
----
-
-# 16. Wetlands and Marsh
-
-Wetlands should feel:
-
-> **Beautiful, alive, reflective, and slightly strange.**
-
-They should support:
-
-* wildlife;
-* gathering;
-* exploration;
-* resources;
-* fishing;
-* environmental storytelling;
-* occasional mystery.
-
-Wetlands should contain rich vegetation and water interactions.
-
-They should not default to horror aesthetics.
-
-Fog, reflections, reeds, shallow water, insects, birds, frogs, unusual plants, and abandoned structures can create an atmosphere that is peaceful during one visit and unsettling during another.
-
----
-
-# 17. Caves and Underground Environments
-
-The underground should possess its own environmental progression.
-
-The initial experience should be grounded.
-
-Early caves may contain:
-
-* ordinary geological formations;
-* resources;
-* underground water;
-* natural wildlife;
-* narrow passages;
-* old mining or gathering traces.
-
-Deeper spaces can introduce:
-
-* ancient excavations;
-* forgotten structures;
-* underground ruins;
-* unusual geological formations;
-* spaces that appear too large;
-* impossible connections;
-* fragments of history.
-
-The progression should be:
-
-**Natural → Ancient → Unusual → Impossible**
-
-The underground should become one of the major environmental pathways through which the deeper mystery of Underhallow can emerge.
-
----
-
-# 18. Ruin Environments
-
-Ruins should be distributed across the island rather than isolated into one "ruins biome."
-
-They may appear:
-
-* inside forests;
-* near rivers;
-* beneath modern settlements;
-* along the coast;
-* in wetlands;
-* in highlands;
-* underground;
-* near farmland.
-
-Ruins should vary greatly in importance.
-
-Some may simply be remnants of ordinary history.
-
-Some may contain clues.
-
-Some may still function in unexpected ways.
-
-Some may be beautiful.
-
-Some may feel strangely familiar.
-
-Modern communities may occasionally have been built directly over ancient foundations.
-
----
-
-# 19. Flora Philosophy
-
-Flora is one of the primary tools for environmental identity.
-
-Plant life should communicate:
-
-* climate;
-* geography;
-* moisture;
-* elevation;
-* region;
-* season;
-* environmental history.
-
-The island should have common flora shared across regions.
-
-Regional flora should then create stronger identities.
-
-Rare unusual flora may communicate mystery.
-
-However:
-
-> **Not every unusual plant is magical.**
-
-Some unusual-looking plants should simply be rare or ecologically specialized.
-
-This keeps mystical flora meaningful.
-
----
-
-# 20. Ecological Relationships
-
-Underhallow should use **strong but abstracted ecological relationships**.
-
-The game does not need a complete ecological simulation.
-
-Instead, relationships should feel intuitive.
+Nothing unusual is required.
 
 Examples:
 
-* certain animals prefer certain environments;
-* plants appear where their conditions make sense;
-* wetlands support different wildlife from highlands;
-* coastal creatures differ from inland wildlife;
-* forest density affects what lives there;
-* weather changes animal activity;
-* time of day changes environmental activity.
+* normal meadow;
+* ordinary farm field;
+* familiar woodland path.
 
-The player should understand these relationships naturally through observation.
+## Level 1 — Notable
 
----
+Something is interesting but entirely explainable.
 
-# 21. Environmental Change
+Examples:
 
-The environment should visibly change over time without requiring a deep simulation of every physical process.
+* unusually old tree;
+* abandoned structure;
+* rare plant;
+* unusual rock formation.
 
-Changes may include:
+## Level 2 — Strange
 
-* crops growing;
-* vegetation changing;
-* weather effects;
-* seasonal presentation;
-* wildlife movement;
-* player construction;
-* cleared land;
-* developed areas;
-* abandoned or restored spaces;
-* water appearance;
-* lighting.
+Something does not fully fit expectations.
 
-Some environmental changes should be temporary.
+Examples:
 
-Others should become persistent.
+* animal behavior that seems wrong;
+* plant growing in an unlikely location;
+* structure whose history does not make sense;
+* path appearing to connect places strangely.
 
-The environment should possess a sense of memory.
+## Level 3 — Impossible
 
----
+The environment appears to violate established physical expectations.
 
-# 22. Player Impact on Nature
+Examples:
 
-The player can meaningfully interact with natural environments.
+* impossible geography;
+* altered space;
+* impossible depth;
+* temporal/environmental echoes;
+* places that should not physically connect.
 
-They may:
-
-* gather;
-* clear;
-* cultivate;
-* build;
-* create paths;
-* develop land;
-* restore areas;
-* alter selected spaces.
-
-However, the player should not possess unlimited terraforming power.
-
-Underhallow is a world that the player lives **within**, not a blank canvas they completely control.
-
-Natural geography remains meaningful.
-
-The player's impact should therefore feel:
-
-**significant but bounded.**
+Level 3 environments must remain extremely rare.
 
 ---
 
-# 23. Environmental Recovery
+# 15. Mystery Distribution
 
-The Main Island should use a mixture of regeneration and permanence.
+Mystery should be:
 
-Some resources and environmental elements regenerate.
+**Broadly distributed but unevenly concentrated.**
 
-Some changes remain.
+Ordinary environments can contain small anomalies.
 
-Some areas respond according to ecological rules.
+Certain places should carry substantially greater mystery density.
 
-This creates a world where player activity has consequences without making the island permanently fragile or requiring the player to maintain a simulation.
+Higher mystery density may correlate with:
+
+* Ancient Forest depth;
+* underground depth;
+* ancient structures;
+* abandoned settlements;
+* unusual geography;
+* isolated areas;
+* specific historical locations;
+* particular environmental conditions.
+
+Mystery should **not** simply increase with distance from Town.
+
+A nearby strange place may be more important than a distant ordinary one.
 
 ---
 
-# 24. Weather
+# 16. Environmental Strangeness Progression
 
-Weather should affect the environmental experience through:
+Environmental strangeness should emerge through multiple factors:
+
+* geography;
+* depth;
+* remoteness;
+* history;
+* proximity to ancient structures;
+* environmental conditions;
+* specific locations;
+* interaction with other systems.
+
+The canonical progression is:
+
+**Ordinary → Unusual → Strange → Impossible**
+
+This progression may occur:
+
+* across a single location;
+* across a connected environment;
+* across multiple regions;
+* across the player's relationship with the world.
+
+It must never become a simple difficulty ladder.
+
+Strangeness is about **meaning and discovery**, not enemy level.
+
+---
+
+# 17. Ancient Forest Progression
+
+The Ancient Forest receives special environmental treatment.
+
+The intended emotional progression is:
+
+**Beautiful → Old → Curious → Unusual → Strange → Impossible**
+
+The forest should become more distinctive through combinations of:
+
+* older/larger trees;
+* increasing canopy density;
+* unusual light;
+* richer vegetation;
+* increasingly unusual wildlife;
+* ancient structures;
+* strange flora;
+* environmental anomalies.
+
+The player should remain attracted to deeper areas rather than feeling that the forest is merely becoming more hostile.
+
+The intended long-term feeling is:
+
+> **“I've been here before, but I still don't understand this place.”**
+
+---
+
+# 18. Underground Progression
+
+The underground follows a separate but related progression:
+
+**Natural Cave → Deeper Cave → Ancient Excavation → Forgotten Structure → Strange Space → Impossible Space**
+
+Early underground spaces should establish believable geology.
+
+Later spaces may reveal that the island's ancient history was more sophisticated than modern inhabitants understand.
+
+Impossible underground spaces should remain rare and significant.
+
+The underground must not become a generic dungeon layer.
+
+---
+
+# 19. Landmark Hierarchy
+
+Environmental landmarks are essential to navigation and world identity.
+
+The canonical hierarchy is:
+
+### Tier 1 — Primary Landmarks
+
+Visible from significant distances.
+
+Examples:
+
+* major tower;
+* distinctive natural formation;
+* large bridge;
+* major cliff;
+* enormous tree;
+* major harbor structure.
+
+### Tier 2 — Regional Landmarks
+
+Help identify a particular region.
+
+Examples:
+
+* old mill;
+* prominent hill;
+* distinctive ruin;
+* waterfall;
+* unusual tree cluster.
+
+### Tier 3 — Local Landmarks
+
+Useful for short-range navigation.
+
+Examples:
+
+* abandoned cabin;
+* pond;
+* small bridge;
+* boulder formation;
+* shrine-like structure.
+
+### Tier 4 — Environmental Markers
+
+Small details that help players orient themselves.
+
+Examples:
+
+* fence;
+* path intersection;
+* tree cluster;
+* stream;
+* distinctive rock.
+
+### Tier 5 — Secret Landmarks
+
+Discovered through exploration.
+
+Examples:
+
+* hidden ruin;
+* secret cave;
+* strange tree;
+* impossible formation;
+* concealed structure.
+
+---
+
+# 20. Landmark Design Rule
+
+Major landmarks should be recognizable without requiring the player to memorize a map.
+
+Where geography permits, major landmarks should be visible from a distance.
+
+Landmarks should also have:
+
+* distinct silhouettes;
+* consistent environmental placement;
+* meaningful relationship to surrounding terrain;
+* navigational value;
+* potential historical or narrative value.
+
+A landmark does not need to be important to the story to be important to navigation.
+
+---
+
+# 21. Environmental Storytelling
+
+Environmental storytelling should communicate:
+
+* previous settlement;
+* abandoned activity;
+* agriculture;
+* trade;
+* environmental change;
+* historical events;
+* cultural traditions;
+* unexplained phenomena.
+
+Environmental storytelling should frequently remain subtle.
+
+Examples:
+
+* old field boundaries in woodland;
+* a road disappearing beneath vegetation;
+* foundations beneath modern buildings;
+* a tree growing through old masonry;
+* fishing structures no longer in use;
+* old agricultural patterns;
+* objects left where people once lived.
+
+Not every environmental detail should connect to the central mystery.
+
+Some places simply have history.
+
+---
+
+# 22. Nature and Civilization
+
+Underhallow should present civilization and nature as overlapping rather than opposing systems.
+
+The island contains:
+
+* cultivated land;
+* managed woodland;
+* fishing areas;
+* roads;
+* bridges;
+* settlements;
+* abandoned spaces;
+* wilderness;
+* reclaimed ruins.
+
+Nature can reclaim human spaces.
+
+Humans can shape nature.
+
+Neither should completely dominate the island.
+
+This relationship is part of the world's identity.
+
+---
+
+# 23. Water as Environmental Structure
+
+Water environments must possess distinct identities.
+
+Water may function as:
+
+* ecological habitat;
+* navigation structure;
+* farming support;
+* fishing environment;
+* settlement foundation;
+* visual landmark;
+* traversal obstacle;
+* traversal route;
+* historical boundary;
+* mystery location.
+
+Different water environments should produce meaningful differences in:
+
+* fish;
+* vegetation;
+* wildlife;
+* traversal;
+* resources;
+* appearance;
+* atmosphere;
+* storytelling potential.
+
+Water must not be treated as a single generic environmental category.
+
+---
+
+# 24. Weather and Time Relationship
+
+Weather and time are environmental amplifiers.
+
+They may change:
 
 * lighting;
-* ambience;
-* water;
+* sound;
+* wildlife activity;
+* NPC activity;
+* water appearance;
+* vegetation presentation;
+* exploration atmosphere;
+* farming presentation.
+
+BE-001 establishes the **creative relationship**.
+
+`TS-001` and `WE-001` own the actual rules and implementation.
+
+Environmental design must remain readable under different lighting and weather conditions.
+
+---
+
+# 25. Seasonal Principles
+
+Seasons are governed by the relevant time/simulation specifications.
+
+BE-001 establishes that seasonal presentation may affect:
+
 * vegetation;
-* NPC behavior;
-* wildlife behavior;
+* color;
+* weather;
+* wildlife;
 * farming presentation;
-* exploration atmosphere.
+* water;
+* environmental atmosphere.
 
-Weather should not create unnecessary visual clutter.
-
-The visual hierarchy must remain readable under all ordinary conditions.
-
-Detailed weather mechanics belong to `WE-001`.
+Seasonal changes should reinforce environmental identity rather than repainting the world uniformly.
 
 ---
 
-# 25. Time of Day
+# 26. Personal Island Environmental Rules
 
-Time of day should produce distinct environmental moods.
+The Personal Island is environmentally distinct from the Main Island.
 
-### Morning
+Its environment should initially feel:
 
-Fresh, soft, calm, naturally bright.
+* safe;
+* familiar;
+* peaceful;
+* personal;
+* manageable;
+* naturally beautiful.
 
-### Midday
+It should contain enough wilderness to make development meaningful.
 
-Clear, readable, active, warm.
+Player development should create a visible dialogue between:
 
-### Afternoon
+**Nature ↔ Home ↔ Agriculture ↔ Building ↔ Personal Expression**
 
-Longer shadows and richer environmental depth.
+The Personal Island may eventually connect to the larger mystery.
 
-### Sunset
+However:
 
-Warm oranges, golden light, deeper contrast.
+> **The Personal Island must remain a home before it becomes a mystery location.**
 
-### Evening
-
-Transition toward quietness and artificial light.
-
-### Night
-
-Deep blues and purples, warm windows, lanterns, moonlight, reflections, silhouettes, and firelight.
-
-Night should be beautiful rather than merely dark.
-
-Detailed simulation belongs to `TS-001`.
+Strangeness should be occasional and meaningful.
 
 ---
 
-# 26. Fog
+# 27. Biome and Player Role Relationship
 
-Fog is primarily an atmospheric phenomenon.
+Environmental design must support multiple player identities.
 
-Most fog should be ordinary.
+A player may approach the world primarily as:
 
-It may:
+* farmer;
+* hunter;
+* fisher;
+* builder;
+* explorer;
+* collector;
+* decorator;
+* trader;
+* mixed-role player.
 
-* soften distant landmarks;
-* alter visibility;
-* create atmosphere;
-* change how familiar locations feel.
+No biome should require one player identity to be valid.
 
-Occasionally, fog may become strange.
+Instead, different environments should provide different reasons to visit.
 
-The important distinction is that the player should not immediately know whether they are experiencing:
+For example:
 
-**weather** or **something else.**
+The Ancient Forest may attract:
 
----
+* hunters through wildlife;
+* gatherers through flora;
+* explorers through hidden paths;
+* historians through ruins;
+* curious players through mystery.
 
-# 27. Environmental Mystery
-
-Environmental mystery should be distributed throughout Underhallow.
-
-It should not be confined to one "mystery biome."
-
-The player may encounter strange things in:
-
-* farmland;
-* forests;
-* wetlands;
-* caves;
-* coastlines;
-* ruins;
-* waterways;
-* settlements;
-* ordinary paths.
-
-However, certain places should contain much higher concentrations of unusual phenomena.
-
-This creates layers of discovery rather than a single mystery destination.
+This supports Underhallow's open-ended identity.
 
 ---
 
-# 28. The "Wrong Thing" Principle
+# 28. Environmental Reward Philosophy
 
-One of Underhallow's strongest environmental tools is the presence of something that is subtly wrong inside an otherwise ordinary environment.
+Environmental rewards should include more than resources.
 
-Examples include:
+Possible rewards include:
 
-* a structure nobody remembers building;
-* an object from the wrong period;
-* a tree growing in an impossible location;
-* an animal displaying unusual behavior;
-* a path that seems to lead somewhere it should not;
-* a body of water behaving strangely;
-* architecture appearing where geography makes little sense;
-* evidence of an event that contradicts accepted history.
-
-The player should frequently be able to think:
-
-> **"That shouldn't be there."**
-
-The environment should not always explain itself.
-
----
-
-# 29. Environmental Mystery Progression
-
-Environmental mystery should follow the broader Underhallow mystery curve:
-
-### Stage 1 — Ordinary
-
-The world appears normal.
-
-### Stage 2 — Inconsistent
-
-Small details do not quite fit.
-
-### Stage 3 — Unusual
-
-The player begins finding patterns.
-
-### Stage 4 — Strange
-
-The environment contradicts established assumptions.
-
-### Stage 5 — Impossible
-
-Certain places appear to violate ordinary geography, time, space, or historical understanding.
-
-The player should not encounter the final stage constantly.
-
-Impossible spaces must remain rare enough to retain impact.
-
----
-
-# 30. Beauty and Strangeness
-
-Strangeness does not always mean ugliness.
-
-Some of Underhallow's most mysterious locations should also be among its most beautiful.
-
-A strange place might contain:
-
-* unusual lighting;
-* impossible flowers;
-* beautiful water;
-* unusual skies;
-* distorted but peaceful landscapes;
-* ancient structures integrated with nature.
-
-The player may be drawn toward mystery because it is beautiful rather than because it appears dangerous.
-
-This reinforces the game's central philosophy:
-
-> **Curiosity is an invitation, not an obligation.**
-
----
-
-# 31. Environmental Landmarks
-
-Landmarks are a major component of Underhallow's navigation language.
-
-Landmarks should include:
-
-### Natural
-
-* distinctive trees;
-* cliffs;
-* hills;
-* rivers;
-* lakes;
-* unusual formations;
-* coastline shapes.
-
-### Human
-
-* towers;
-* bridges;
-* mills;
-* buildings;
-* docks;
-* farms;
-* monuments.
-
-### Ancient
-
-* ruins;
-* old structures;
-* buried architecture;
-* ancient markers.
-
-### Strange
-
-* impossible formations;
-* unusual environmental phenomena;
-* mysterious structures.
-
-The strongest landmarks may combine multiple categories.
-
----
-
-# 32. Landmark Visibility
-
-Major landmarks should be visible from distance whenever geography permits.
-
-A player should gradually construct a mental map of Underhallow through visual references.
-
-This reduces dependence on artificial navigation systems and strengthens the sense that the player actually knows the island.
-
-A distant tower, forest canopy, ridge, bridge, cliff, or unusual structure can become part of the player's spatial memory.
-
----
-
-# 33. Environmental Navigation
-
-The environment should support natural navigation through:
-
+* materials;
+* rare flora/fauna;
+* fishing opportunities;
+* scenic discoveries;
+* shortcuts;
 * landmarks;
-* rivers;
-* roads;
-* paths;
-* elevation;
-* coastline;
-* structures;
-* recognizable vegetation;
-* geographic formations.
+* lore;
+* NPC knowledge;
+* hidden locations;
+* objects;
+* personal memories;
+* environmental revelations;
+* experiential discoveries.
 
-The goal is not to eliminate maps or navigation UI.
+Some places should reward the player simply by being beautiful.
 
-The goal is to make the world itself useful for navigation.
-
-A player should eventually be able to say:
-
-> "I'll go past the old bridge, through the woods, then follow the river."
-
-rather than relying entirely on a marker.
+Not every discovery needs a monetary or progression reward.
 
 ---
 
-# 34. Environmental Audio Identity
+# 29. Biome Anti-Repetition Rules
 
-Each major environment should possess a distinct environmental sound identity.
+A new environmental area should be rejected or revised if it primarily creates:
 
-BE-001 establishes the creative requirement.
+* another version of an existing biome;
+* another resource spreadsheet;
+* another color palette;
+* another enemy/resource farm;
+* artificial environmental boundaries;
+* decorative emptiness;
+* unnecessary biome count.
 
-`AU-001` will establish implementation and complete audio direction.
+Before creating a new major biome, designers must establish:
+
+1. Why does it exist geographically?
+2. What makes its ecology distinct?
+3. What does it feel like?
+4. What activities belong there?
+5. How does traversal differ?
+6. What historical relationship does it have to the island?
+7. What makes it visually recognizable?
+8. Why can't an existing biome/sub-biome fulfill the role?
+
+If the answers are weak, the location should probably remain a variation of an existing environment.
+
+---
+
+# 30. Environmental Composition Rule
+
+Underhallow should favor **combinations of familiar environments** over constant introduction of new ones.
+
+For example:
+
+> Farmland beside a river, transitioning into meadow, then woodland, with an old ruin hidden near the forest edge.
+
+is preferable to:
+
+> Farm biome → River biome → Meadow biome → Forest biome → Ruin biome.
+
+The former feels like a place.
+
+The latter feels like a level sequence.
+
+---
+
+# 31. Environmental Readability
+
+Environmental detail must never destroy gameplay readability.
+
+The player should be able to distinguish:
+
+* walkable terrain;
+* obstacles;
+* water;
+* elevation;
+* paths;
+* interactables;
+* resources;
+* buildings;
+* NPCs;
+* wildlife;
+* entrances;
+* landmarks;
+* hidden routes where appropriate.
+
+Visual richness is subordinate to clarity when the two conflict.
+
+This follows the Art Direction principle:
+
+> **Readability and beauty have equal priority.**
+
+---
+
+# 32. Environmental Beauty Rule
+
+Underhallow should frequently reward the player for simply looking.
+
+Beauty may come from:
+
+* lighting;
+* water;
+* terrain;
+* vegetation;
+* weather;
+* architecture;
+* wildlife;
+* distance views;
+* seasonal presentation;
+* environmental composition.
+
+A scenic location does not need a quest marker.
+
+A player may stop because the world is worth looking at.
+
+This is a valid environmental reward.
+
+---
+
+# 33. Environmental Mystery Rule
+
+Mystery must emerge from a world that already works without it.
+
+Therefore:
+
+> **The strange should be layered onto the believable, not used to replace believability.**
+
+The player should be able to enjoy Underhallow without investigating its mystery.
+
+But attentive players should repeatedly encounter details that suggest:
+
+> Something is not quite right.
+
+Some mysteries may eventually connect.
+
+Others may remain local.
+
+Some may never be explained.
+
+---
+
+# 34. Environmental “Wrong Thing” Principle
+
+Ordinary environments should occasionally contain a detail that feels subtly wrong.
+
+Examples:
+
+* an object in an unlikely location;
+* a path that does not appear on local maps;
+* an old structure whose architecture does not match its surroundings;
+* an animal behaving unusually;
+* vegetation growing under impossible conditions;
+* an object associated with an event that supposedly happened elsewhere;
+* a familiar landmark that seems slightly different.
+
+These details should be:
+
+* uncommon;
+* discoverable;
+* subtle;
+* memorable;
+* internally consistent where possible.
+
+The goal is curiosity, not constant fear.
+
+---
+
+# 35. Environmental Mystery Restraint
+
+Mystery loses meaning if everything is mysterious.
+
+Therefore:
+
+* most meadows should simply be meadows;
+* most farms should simply be farms;
+* most forests should simply be forests;
+* most caves should initially behave like caves;
+* most wildlife should behave naturally.
+
+The world must establish a strong baseline of normality.
+
+That baseline is what gives anomalies weight.
+
+---
+
+# 36. Environmental Memory
+
+The world should feel as though it existed before the player arrived.
+
+Environmental evidence may survive through:
+
+* abandoned roads;
+* old fields;
+* ruins;
+* altered waterways;
+* ancient trees;
+* old structures;
+* rebuilt settlements;
+* inherited objects;
+* forgotten paths;
+* environmental scars;
+* traditions reflected in the landscape.
+
+The player is entering an existing world rather than activating it.
+
+---
+
+# 37. Environmental Change and Player History
+
+Player actions should gradually become part of the landscape.
+
+Examples:
+
+* a developed farm becomes recognizable;
+* paths emerge through repeated use where supported;
+* buildings alter local composition;
+* cleared areas become cultivated;
+* restored areas regain ecological identity;
+* decorations create a personal visual language;
+* old spaces may become associated with player memories.
+
+This supports the Personal Island principle:
+
+> **Personal Island is where the player turns progress into place.**
+
+---
+
+# 38. Environmental Relationship to Narrative
+
+Environmental design should support narrative without becoming a narrative delivery system.
+
+The world can reveal history through:
+
+* architecture;
+* ruins;
+* landscape;
+* vegetation;
+* old roads;
+* objects;
+* environmental anomalies;
+* settlement patterns.
+
+`NB-001`, `ML-001`, and `NC-001` own narrative structure and delivery.
+
+BE-001 establishes the environmental vocabulary those systems use.
+
+---
+
+# 39. Environmental Relationship to Wildlife
+
+`CW-001` owns creature definitions, behavior, AI, progression, and wildlife-specific systems.
+
+BE-001 establishes:
+
+* habitat identity;
+* ecological plausibility;
+* environmental distribution principles;
+* visual relationship between wildlife and habitat;
+* unusual wildlife escalation;
+* environmental reasons for wildlife presence.
+
+Wildlife should make environments feel alive rather than functioning solely as encounter content.
+
+---
+
+# 40. Environmental Relationship to Resources
+
+`FR-001` and `RG-001` own resource rules.
+
+BE-001 establishes that resource distribution should reinforce environmental identity.
+
+Resources should therefore feel like something that belongs where the player finds them.
+
+The player should gradually develop intuitive expectations:
+
+> “If I need this, I probably know where to look.”
+
+Rare resources may break this expectation when justified.
+
+---
+
+# 41. Environmental Relationship to Exploration
+
+`EX-001` owns exploration mechanics and discovery progression.
+
+BE-001 establishes the environmental foundation for exploration:
+
+* layered geography;
+* landmarks;
+* transitions;
+* hidden spaces;
+* scenic rewards;
+* environmental storytelling;
+* unusual locations;
+* increasingly strange spaces.
+
+Exploration should be driven primarily by curiosity rather than checklist completion.
+
+---
+
+# 42. Environmental Relationship to Audio
+
+`AU-001` owns implementation and music direction.
+
+BE-001 establishes environmental sound identity.
 
 Examples:
 
 ### Meadow
 
-Wind, insects, birds, distant activity.
+* wind;
+* insects;
+* birds;
+* grasses.
 
 ### Woodland
 
-Layered leaves, branches, birds, wildlife, distant water.
-
-### Ancient Forest
-
-Deep canopy ambience, subtle environmental resonance, wildlife, occasional unusual sounds.
+* canopy;
+* branches;
+* birds;
+* wildlife;
+* leaves.
 
 ### Wetlands
 
-Water, insects, frogs, birds, reeds, distant movement.
+* frogs;
+* insects;
+* reeds;
+* water.
 
 ### Coast
 
-Waves, wind, seabirds, harbor activity.
-
-### Highlands
-
-Wind, distant wildlife, exposed environmental sounds.
+* waves;
+* wind;
+* seabirds;
+* harbor activity.
 
 ### Caves
 
-Dripping water, echoes, subterranean movement, muffled environmental sound.
+* echoes;
+* dripping water;
+* rock movement;
+* distant subterranean sounds.
 
-The audio should reinforce geography and atmosphere rather than constantly announce gameplay information.
+### Ancient Forest
 
----
+Familiar forest sounds with subtle anomalies.
 
-# 35. Seasons
-
-BE-001 establishes seasonal environmental principles without fully defining the seasonal simulation.
-
-Seasons may influence:
-
-* vegetation;
-* color;
-* farming presentation;
-* wildlife;
-* weather;
-* water;
-* environmental atmosphere.
-
-A complete seasonal implementation belongs to the appropriate time, weather, farming, wildlife, and environmental system specifications.
-
-The design should remain extensible rather than prematurely locking four complete seasonal states.
+Environmental audio should reinforce place recognition.
 
 ---
 
-# 36. Regional Environmental Identity
+# 43. Environmental Identity Test
 
-Major regions should be distinguishable through combinations of:
+Before an environment is considered complete, it must pass the following test.
 
-* terrain;
-* vegetation;
-* wildlife;
-* resources;
-* architecture;
-* landmarks;
-* water;
-* lighting;
-* atmosphere;
-* history.
+### Visual Test
 
-No region should be differentiated by color alone.
+Can the player identify the environment from its composition?
 
-Likewise, regions should not become completely disconnected visual worlds.
+### Emotional Test
 
-They should feel like parts of the same island.
+Does the environment produce a recognizable feeling?
 
----
+### Ecological Test
 
-# 37. Environmental Density
+Does its flora and wildlife make sense?
 
-Underhallow should use **moderate environmental density**.
+### Geographic Test
 
-The world should contain:
+Does its location make physical sense?
 
-* trees;
-* bushes;
-* flowers;
-* rocks;
-* fences;
-* signs;
-* barrels;
-* benches;
-* lamps;
-* tools;
-* farm equipment;
-* paths;
-* wildlife;
-* water features;
-* architectural details.
+### Gameplay Test
 
-However, empty space is intentional.
+Does it provide meaningful reasons to exist?
 
-Empty space can communicate:
+### Navigation Test
 
-* peace;
-* scale;
-* openness;
-* navigation;
-* composition;
-* landmarks;
-* future expansion.
+Can the player orient themselves within it?
 
-Density should vary according to environment and purpose.
+### Historical Test
+
+Does it feel like a place with a past?
+
+### Mystery Test
+
+If mystery exists here, does it feel appropriate rather than arbitrary?
+
+### Repetition Test
+
+Does the environment feel sufficiently distinct from nearby environments?
+
+If several answers are no, the environment requires revision.
 
 ---
 
-# 38. Visual Readability
+# 44. Canonical Environmental Laws
 
-Beauty and readability have equal priority.
+The following laws are binding creative constraints.
 
-Important environmental elements must remain distinguishable:
+### Law 1
 
-* walkable terrain;
-* obstacles;
-* interactables;
-* buildings;
-* NPCs;
-* wildlife;
-* resources;
-* paths;
-* water;
-* elevation;
-* landmarks;
-* hidden entrances.
+**A biome must feel like a place, not a level.**
 
-Environmental detail must never obscure the player's ability to understand the space.
+### Law 2
 
----
+**Geography comes before biome labeling.**
 
-# 39. Environmental Storytelling
+### Law 3
 
-The environment should communicate history without requiring explicit exposition.
+**Ecology must support visual identity.**
 
-Examples include:
+### Law 4
 
-* abandoned foundations;
-* old roads;
-* unusual crop patterns;
-* buried structures;
-* reused architecture;
-* altered landscapes;
-* forgotten tools;
-* ancient symbols;
-* vegetation reclaiming human spaces;
-* structures built over older structures.
+**Gameplay identity must emerge from the environment rather than being arbitrarily assigned.**
 
-The player should sometimes learn something about Underhallow simply by noticing how a place was built.
+### Law 5
 
----
+**Transitions should make physical sense.**
 
-# 40. Relationship Between Nature and Civilization
+### Law 6
 
-Underhallow should not divide the world into:
+**Ordinary environments must remain genuinely ordinary.**
 
-**civilization = safe**
+### Law 7
 
-and
+**Mystery must be rare enough to retain meaning.**
 
-**nature = dangerous.**
+### Law 8
 
-Both should contain beauty, danger, history, and mystery.
+**Beautiful environments are allowed to exist without mechanical justification.**
 
-Civilized areas can contain secrets.
+### Law 9
 
-Wilderness can contain peaceful spaces.
+**Not every environmental detail needs lore.**
 
-Ancient forests can be beautiful.
+### Law 10
 
-Town buildings can conceal uncomfortable histories.
+**Not every mystery needs an explanation.**
 
-This reinforces the world's moral and narrative complexity.
+### Law 11
 
----
+**The player can influence nature but cannot completely rewrite geography.**
 
-# 41. The Personal Island Environment
+### Law 12
 
-The Personal Island is governed by `PI-001` and should not be redefined here.
+**Environmental density must serve readability.**
 
-However, environmentally it should function as a strong contrast to the Main Island.
+### Law 13
 
-The Personal Island should feel:
+**Landmarks must support navigation as well as aesthetics.**
 
-* familiar;
-* safe;
-* peaceful;
-* personal;
-* increasingly developed;
-* naturally connected to its surroundings.
+### Law 14
 
-It should retain meaningful wilderness.
+**Biome variety must not become biome bloat.**
 
-Its environmental identity should evolve as the player develops it.
+### Law 15
 
-The island may eventually reveal connections to the wider mystery, but strange phenomena should remain occasional rather than constant.
+**No biome exists solely because the game needs another biome.**
+
+### Law 16
+
+**Strangeness should make the believable world more interesting, not make the believable world irrelevant.**
 
 ---
 
-# 42. Environmental Mystery and the Personal Island
+# 45. Canonical Environmental Identity
 
-The player's home is not exempt from Underhallow's deeper history.
+Underhallow's environment should consistently communicate:
 
-The Personal Island may contain:
+> **A warm, beautiful, lived-in world where nature and civilization coexist — with something much older and stranger beneath the surface.**
 
-* traces of its previous inhabitants;
-* inherited structures;
-* forgotten objects;
-* environmental clues;
-* unusual discoveries;
-* connections to the grandparent;
-* eventually, connections to the island's larger mystery.
+The player should be able to spend hours simply:
 
-However:
+* farming;
+* walking;
+* fishing;
+* hunting;
+* gathering;
+* building;
+* visiting town;
+* watching wildlife;
+* exploring;
+* decorating home;
+* discovering scenic places.
 
-> **Home should remain home.**
+The deeper environmental mystery exists underneath that life.
 
-Mystery should enrich the player's relationship with the Personal Island rather than turn it into a permanent supernatural zone.
-
----
-
-# 43. The Environmental Strangeness Model
-
-Environmental strangeness should be influenced by multiple factors:
-
-* geography;
-* remoteness;
-* depth;
-* historical significance;
-* proximity to ancient structures;
-* specific locations;
-* unusual environmental conditions;
-* narrative context.
-
-There should be no universal formula such as:
-
-> "The farther from town you go, the stranger everything becomes."
-
-Instead, strangeness should emerge from the island's history and geography.
+It should not consume every environment.
 
 ---
 
-# 44. Ordinary vs Strange
+# 46. Long-Term Environmental Experience
 
-The majority of Underhallow should remain grounded.
-
-This is essential.
-
-If everything is strange:
-
-**nothing is strange.**
-
-The ordinary world creates the reference point against which the mysterious world can be recognized.
-
-Therefore:
-
-* most wildlife should be believable;
-* most plants should be ordinary;
-* most weather should be ordinary;
-* most ruins should have understandable explanations;
-* most caves should behave like caves;
-* most NPC routines should feel normal;
-* most landscapes should obey geography.
-
-Then the exceptions matter.
-
----
-
-# 45. Environmental Progression
-
-As the player becomes more familiar with Underhallow, environmental progression should not simply mean unlocking increasingly spectacular biomes.
-
-Instead, the player's understanding should deepen.
-
-### Early Game
-
-The player sees:
-
-> **A beautiful island.**
-
-### Developing Game
-
-The player sees:
-
-> **A beautiful island with strange history.**
-
-### Mid/Late Game
-
-The player sees:
-
-> **A beautiful island whose history does not fully make sense.**
-
-### Deep Discovery
-
-The player realizes:
-
-> **The island's geography, history, people, and strange places are connected.**
-
-### Endgame Understanding
-
-The player understands much more than when they arrived, while still recognizing that the island contains mysteries that cannot be completely reduced to an explanation.
-
----
-
-# 46. Environmental Philosophy
-
-The player should never be required to treat the environment as a checklist.
-
-A biome is successful when the player remembers:
-
-> "I love that place."
-
-not merely:
-
-> "That is where resource X spawns."
-
-Resources, wildlife, traversal, exploration, and story should give environments functional reasons to exist.
-
-But emotional memory should remain equally important.
-
----
-
-# 47. Environmental Anti-Patterns
-
-A biome must never become:
-
-* generic;
-* interchangeable;
-* repetitive;
-* visually noisy;
-* empty without purpose;
-* overdecorated;
-* mechanically arbitrary;
-* disconnected from geography;
-* disconnected from ecology;
-* merely a resource container;
-* merely a quest backdrop;
-* a collection of visual assets without identity.
-
-Most importantly:
-
-> **A biome should never exist solely because the game needs another biome.**
-
-Every major environmental identity must have a reason to exist within Underhallow's geography, ecology, gameplay, atmosphere, history, or mystery.
-
----
-
-# 48. Environmental Identity Test
-
-Before approving a major biome or environment, designers should be able to answer:
-
-1. What does this place look like?
-2. What does this place feel like?
-3. What naturally lives here?
-4. What naturally grows here?
-5. Why does this environment exist geographically?
-6. What activities make sense here?
-7. What landmarks define it?
-8. What makes it different from neighboring environments?
-9. What history does it contain?
-10. Does it contain any mystery?
-11. If so, does the mystery emerge naturally?
-12. Would the player remember this place without a quest marker?
-
-If these questions cannot be answered, the environment is not sufficiently defined.
-
----
-
-# 49. The 100-Hour Environmental Goal
-
-After approximately 100 hours, the player should know the island intimately.
+At approximately 20 hours, the player should understand the major environmental vocabulary of Underhallow.
 
 They should recognize:
 
-* major regions;
-* common routes;
-* landmarks;
-* environmental transitions;
-* familiar wildlife;
-* important waterways;
-* major settlements;
-* known secrets.
+* farmland;
+* meadow;
+* woodland;
+* coast;
+* wetlands;
+* highlands;
+* major waterways;
+* major town environments.
 
-But they should still occasionally encounter something that surprises them.
+At approximately 100 hours, the player should understand the island deeply.
 
-The desired feeling is:
+But they should still encounter:
 
-> **"I've been here before, but I still don't completely understand this place."**
+* unexpected places;
+* hidden environmental stories;
+* unfamiliar micro-environments;
+* unexplained anomalies;
+* beautiful locations they had never noticed;
+* mysteries that resist complete explanation.
 
-The world should become familiar without becoming exhausted.
-
----
-
-# 50. Ancient Forest Long-Term Identity
-
-At high playtime, the Ancient Forest should evoke:
-
-> **"I've been here before, but I still don't understand this place."**
-
-It should remain recognizable and navigable while retaining deeper layers of environmental history and mystery.
-
-The player should feel familiarity and uncertainty simultaneously.
+The world should reward familiarity without becoming completely exhausted by it.
 
 ---
 
-# 51. Underhallow Environmental Identity
+# 47. The 100-Hour Environmental Feeling
 
-The definitive environmental identity statement is:
+The intended long-term environmental feeling is:
 
-> **"The world feels warm, beautiful, lived-in, and peaceful — but there's always something just beneath the surface that doesn't quite make sense."**
+> **“I've been here before, but I still don't fully understand this place.”**
 
-This should guide future biome, region, landmark, environment, wildlife, and environmental storytelling decisions.
+The player should feel simultaneously:
 
----
+* familiarity;
+* ownership;
+* comfort;
+* curiosity;
+* wonder;
+* uncertainty.
 
-# 52. Environmental Design Laws
-
-The following laws govern future environmental design.
-
-### Law 1 — Place Before Level
-
-Design environments as places rather than gameplay containers.
-
-### Law 2 — Geography Must Make Sense
-
-Major environmental relationships should feel physically believable.
-
-### Law 3 — Beauty and Readability Are Equal
-
-Neither visual spectacle nor gameplay clarity should completely dominate.
-
-### Law 4 — Ordinary Creates the Strange
-
-Do not saturate the world with anomalies.
-
-### Law 5 — Mystery Must Emerge Naturally
-
-The environment should not constantly announce its secrets.
-
-### Law 6 — Strange Can Be Beautiful
-
-Mystery does not require horror aesthetics.
-
-### Law 7 — The Player Should Learn the Land
-
-Landmarks and geography should create genuine spatial memory.
-
-### Law 8 — Nature Has Identity
-
-Flora, fauna, water, terrain, weather, and light should contribute to regional identity.
-
-### Law 9 — Human History Leaves Traces
-
-Civilization should visibly shape and be shaped by the environment.
-
-### Law 10 — Not Everything Must Be Explained
-
-Some environmental mysteries may remain unresolved.
-
-### Law 11 — Do Not Over-Simulate
-
-Believability is more important than simulation complexity.
-
-### Law 12 — Do Not Turn Nature Into a Spreadsheet
-
-Resources support environments; they do not define their entire identity.
-
-### Law 13 — The Island Remains a World
-
-Player influence should matter without allowing complete environmental domination.
-
-### Law 14 — Familiarity Should Not Equal Exhaustion
-
-Even a well-known location can contain another layer.
-
-### Law 15 — Never Let Mystery Destroy the Home
-
-Underhallow's deeper mystery must coexist with the player's peaceful life.
+This is one of the defining environmental experiences of Underhallow.
 
 ---
 
-# 53. Canonical Environmental Philosophy
+# 48. Downstream Specification Contract
 
-> **Underhallow's environments should feel like places you could spend years getting to know rather than levels you are expected to complete.**
-
-The player should gradually learn the island's geography, ecology, landmarks, pathways, wildlife, history, and hidden layers.
-
-The world should become familiar because the player has lived in it.
-
-But familiarity should never completely erase curiosity.
-
----
-
-# 54. Canonical Environmental Identity
-
-> **Underhallow is a beautiful, coherent natural world where geography, ecology, history, human life, and mystery are layered together. Its environments are peaceful enough to live in, rich enough to explore, and strange enough to make the player wonder what lies beneath the world they thought they understood.**
-
----
-
-# 55. Relationship to Downstream Specifications
-
-BE-001 establishes environmental creative authority.
-
-It does **not** replace downstream specifications.
+The following specifications must treat BE-001 as environmental authority:
 
 ### `CW-001`
 
-Defines creatures and wildlife in greater detail.
-
-BE-001 establishes where and why wildlife belongs in environments.
+Must use BE-001 for habitat and environmental identity.
 
 ### `ML-001`
 
-Defines mystery and lore architecture.
-
-BE-001 establishes how environmental spaces can carry mystery.
+Must use BE-001's mystery-density and strangeness model.
 
 ### `NC-001`
 
-Defines narrative content structures.
-
-BE-001 provides environmental contexts for narrative content.
+Must use environmental history and environmental storytelling principles.
 
 ### `RW-001`
 
-Defines specific regional implementations.
-
-BE-001 establishes the environmental principles those regions must follow.
+Must compose regions using BE-001's environmental hierarchy.
 
 ### `EX-001`
 
-Defines exploration and secrets.
-
-BE-001 establishes the environmental spaces in which exploration occurs.
+Must use environmental landmarks, micro-environments, transitions, and discovery principles.
 
 ### `FR-001`
 
-Defines foraging and wild resources.
-
-BE-001 establishes environmental/ecological identity; FR-001 defines the actual system.
+Must use environmental ecology and flora identity.
 
 ### `RG-001`
 
-Defines gathering, forestry, and mining systems.
-
-BE-001 establishes environmental context.
+Must distribute resources according to environmental identity.
 
 ### `FI-001`
 
-Defines fishing.
-
-BE-001 establishes water identities and ecological context.
+Must distinguish aquatic environments according to BE-001.
 
 ### `TS-001`
 
-Defines time and simulation.
-
-BE-001 establishes desired environmental expression of time.
+Must preserve environmental readability across time-of-day and seasonal changes.
 
 ### `WE-001`
 
-Defines weather systems.
-
-BE-001 establishes desired environmental expression of weather.
+Must treat weather as an environmental amplifier.
 
 ### `AU-001`
 
-Defines audio and music direction.
-
-BE-001 establishes environmental sound identities at the creative level.
+Must establish distinct environmental sound identities.
 
 ---
 
-# 56. Final Design Statement
+# 49. Authority Boundaries
 
-Underhallow's world should initially make the player want to live there.
+When conflicts occur:
 
-Then it should make them want to explore it.
+* `AD-001` governs visual/art direction.
+* `WB-001` governs world canon.
+* `NB-001` governs narrative canon.
+* `BE-001` governs environmental identity and ecological/world-environment relationships.
+* `PI-001` governs Personal Island-specific design.
+* `MI-001` governs Main Island spatial/world composition.
+* downstream system specifications govern implementation details within their domain.
 
-Then it should make them curious about it.
+No downstream specification should redefine the canonical environmental philosophy without an explicit reconciliation pass.
 
-Then it should make them question it.
+---
 
-And eventually:
+# 50. Final Environmental Statement
 
-> **The player should realize that the beautiful world they have spent so much time building a life inside has always contained something much deeper.**
+Underhallow's environments are not a collection of biomes.
 
-The environment should never stop being a home.
+They are a continuous world shaped by geography, ecology, history, people, weather, time, memory, and mystery.
 
-It should simply become a home the player understands less completely than they once thought.
+A meadow should be worth visiting because it is beautiful.
 
-**Cozy on the surface.
-Alive underneath.
-Mysterious at depth.
-Occasionally impossible.**
+A forest should be worth entering because it feels alive.
 
-That is the environmental identity of Underhallow.
+A river should matter because it connects the world.
+
+A coastline should remind the player that somewhere beyond the island is a larger world.
+
+A ruin should make the player wonder who was here.
+
+A cave should make the player wonder how deep the island goes.
+
+An Ancient Forest should make the player feel that they have entered somewhere old enough to remember things nobody else does.
+
+And, occasionally, the environment should make the player stop and think:
+
+> **“That shouldn't be possible.”**
+
+Then the world should allow them to keep walking.
+
+That balance is the environmental identity of Underhallow.
+
+> **Underhallow should feel like a place you could spend years getting to know rather than a map you are expected to complete.**
