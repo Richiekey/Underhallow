@@ -62,6 +62,7 @@ func _init() -> void:
 	_run_world_foundation_tests()
 	_run_phase4_gameplay_tests()
 	_run_interaction_prompt_persistence_tests()
+	_run_architecture_audit_a001_tests()
 	
 	print("==================================================")
 	print("Test Results: %d passed, %d failed of %d total tests." % [passed_tests, failed_tests, total_tests])
@@ -1060,4 +1061,169 @@ func _run_interaction_prompt_persistence_tests() -> void:
 	test_bush.free()
 	test_plot.free()
 	game.queue_free()
+
+# -----------------------------------------------------------------------------
+# 10. Architecture Audit A-001 Verification Suite
+# -----------------------------------------------------------------------------
+func _run_architecture_audit_a001_tests() -> void:
+	print("\n--- Testing Architecture Audit A-001: Sole Clock Authority ---")
+	
+	# Suite A: Initial Synchronization
+	var runtime: GameRuntime = GameRuntimeClass.new()
+	runtime.initialize_runtime()
+	_assert_approx(runtime.game_time.elapsed_seconds, 0.0, "A001-A: GameTime starts at 0.0")
+	_assert_approx(runtime.game_state.game_time_elapsed, 0.0, "A001-A: GameState game_time_elapsed synchronized at 0.0")
+	_assert_approx(runtime.game_state.time_state.elapsed_seconds, 0.0, "A001-A: TimeState elapsed_seconds synchronized at 0.0")
+	_assert_equal(runtime.game_state.time_state.current_day, 1, "A001-A: TimeState current_day starts at 1")
+	_assert_approx(runtime.game_state.time_state.get_day_progress(), 0.0, "A001-A: TimeState day progress starts at 0.0")
+	
+	# Suite B: Normal Simulation Stepping & Monotonic Derivation
+	runtime.start_runtime()
+	runtime.step_simulation(10.0)
+	_assert_approx(runtime.game_time.elapsed_seconds, 10.0, "A001-B: GameTime advances to 10.0s")
+	_assert_approx(runtime.game_state.game_time_elapsed, 10.0, "A001-B: GameState time matches GameTime (10.0s)")
+	_assert_approx(runtime.game_state.time_state.elapsed_seconds, 10.0, "A001-B: TimeState elapsed_seconds matches GameTime (10.0s)")
+	_assert_equal(runtime.game_state.time_state.current_day, 1, "A001-B: Current day remains 1 within first day")
+	_assert_approx(runtime.game_state.time_state.get_day_progress(), 10.0 / runtime.game_state.time_state.day_duration, "A001-B: Day progress derived correctly")
+	
+	# Multiple simulation steps through update_simulation
+	var steps: int = runtime.update_simulation(1.0)
+	_assert_true(steps > 0, "A001-B: update_simulation executed fixed steps")
+	_assert_approx(runtime.game_state.game_time_elapsed, runtime.game_time.elapsed_seconds, "A001-B: GameState remains in lockstep with GameTime")
+	_assert_approx(runtime.game_state.time_state.elapsed_seconds, runtime.game_time.elapsed_seconds, "A001-B: TimeState remains in lockstep with GameTime")
+	
+	# Suite C: Sleep Advances Canonical Clock
+	var before_time: float = runtime.game_time.elapsed_seconds
+	var before_day: int = runtime.game_state.time_state.current_day
+	var day_duration: float = runtime.game_state.time_state.day_duration
+	
+	var sleep_cmd: AdvanceDayDebugCommand = AdvanceDayDebugCommandClass.new()
+	var sleep_res: CommandResult = runtime.execute_command(sleep_cmd)
+	_assert_true(sleep_res.success, "A001-C: SleepCommand execution succeeds")
+	
+	var after_time: float = runtime.game_time.elapsed_seconds
+	_assert_approx(after_time - before_time, day_duration, "A001-C: GameTime advanced by exactly configured day_duration")
+	_assert_approx(runtime.game_state.game_time_elapsed, after_time, "A001-C: GameState time synchronized to new GameTime")
+	_assert_approx(runtime.game_state.time_state.elapsed_seconds, after_time, "A001-C: TimeState elapsed_seconds synchronized to new GameTime")
+	_assert_equal(runtime.game_state.time_state.current_day, before_day + 1, "A001-C: Calendar current_day advanced to %d" % (before_day + 1))
+	
+	# Suite D: Post-Sleep Simulation Stepping
+	runtime.step_simulation(5.0)
+	_assert_approx(runtime.game_time.elapsed_seconds, after_time + 5.0, "A001-D: Post-sleep simulation increases monotonically")
+	_assert_approx(runtime.game_state.game_time_elapsed, runtime.game_time.elapsed_seconds, "A001-D: GameState remains synchronized after post-sleep step")
+	_assert_approx(runtime.game_state.time_state.elapsed_seconds, runtime.game_time.elapsed_seconds, "A001-D: TimeState remains synchronized after post-sleep step")
+	_assert_equal(runtime.game_state.time_state.current_day, before_day + 1, "A001-D: Calendar does not regress after sleep")
+	
+	# Suite E: Persistence Load Authority Chain (SaveData.game_time_elapsed -> GameTime -> TimeState)
+	var pb: PersistenceBoundary = PersistenceBoundaryClass.new()
+	var save: SaveData = pb.serialize_state(runtime.game_state, runtime.game_time)
+	_assert_approx(save.game_time_elapsed, runtime.game_time.elapsed_seconds, "A001-E: Serialized game_time_elapsed matches canonical GameTime")
+	
+	var restored_state: GameState = GameStateClass.new()
+	var restored_time: GameTime = GameTimeClass.new()
+	var deser_ok: bool = pb.deserialize_state(save, restored_state, restored_time)
+	_assert_true(deser_ok, "A001-E: Deserialization succeeds")
+	_assert_approx(restored_time.elapsed_seconds, save.game_time_elapsed, "A001-E: GameTime restored directly from SaveData.game_time_elapsed")
+	_assert_approx(restored_state.game_time_elapsed, restored_time.elapsed_seconds, "A001-E: GameState.game_time_elapsed driven by restored GameTime")
+	_assert_approx(restored_state.time_state.elapsed_seconds, restored_time.elapsed_seconds, "A001-E: TimeState.elapsed_seconds driven by restored GameTime")
+	_assert_equal(restored_state.time_state.current_day, runtime.game_state.time_state.current_day, "A001-E: Restored calendar current_day matches saved state")
+	
+	# Stale Data Resistance: Manipulate payload calendar data and ensure canonical GameTime wins
+	var corrupted_payload: Dictionary = save.payload.duplicate(true)
+	corrupted_payload["time"] = {
+		"elapsed_seconds": 0.0,
+		"current_day": 99,
+		"day_duration": day_duration
+	}
+	corrupted_payload["game_time_elapsed"] = 0.0
+	var corrupted_save: SaveData = SaveDataClass.new(save.schema_version, save.timestamp, save.game_time_elapsed, corrupted_payload)
+	
+	var hardened_state: GameState = GameStateClass.new()
+	var hardened_time: GameTime = GameTimeClass.new()
+	var hardened_deser: bool = pb.deserialize_state(corrupted_save, hardened_state, hardened_time)
+	_assert_true(hardened_deser, "A001-E: Deserialization of corrupted payload succeeds")
+	_assert_approx(hardened_time.elapsed_seconds, save.game_time_elapsed, "A001-E: Canonical GameTime preserved despite corrupted payload")
+	_assert_approx(hardened_state.game_time_elapsed, save.game_time_elapsed, "A001-E: GameState time derived from GameTime, ignoring corrupted 0.0")
+	_assert_approx(hardened_state.time_state.elapsed_seconds, save.game_time_elapsed, "A001-E: TimeState elapsed_seconds derived from GameTime, ignoring corrupted 0.0")
+	_assert_equal(hardened_state.time_state.current_day, runtime.game_state.time_state.current_day, "A001-E: TimeState current_day derived from GameTime, ignoring stale 99")
+	
+	# Suite F: Farming Loop Preservation Across Sleep
+	var farm_runtime: GameRuntime = GameRuntimeClass.new()
+	farm_runtime.initialize_runtime()
+	farm_runtime.start_runtime()
+	
+	var plot_coord: Vector2i = Vector2i(0, 0)
+	var plot_pos: Vector2 = Vector2(-130, 20)
+	var player_pos: Vector2 = Vector2(-130, 25)
+	
+	farm_runtime.execute_command(TillSoilCommandClass.new(plot_coord, player_pos, plot_pos, true))
+	farm_runtime.execute_command(PlantCropCommandClass.new(plot_coord, &"carrot", player_pos, plot_pos, true))
+	farm_runtime.execute_command(WaterCropCommandClass.new(plot_coord, player_pos, plot_pos, true))
+	
+	var farm_before_time: float = farm_runtime.game_time.elapsed_seconds
+	farm_runtime.execute_command(AdvanceDayDebugCommandClass.new())
+	
+	_assert_approx(farm_runtime.game_time.elapsed_seconds - farm_before_time, farm_runtime.game_state.time_state.day_duration, "A001-F: Clock advanced across farming sleep")
+	var plot_after_sleep: SoilPlotState = farm_runtime.game_state.farming_state.get_plot(plot_coord)
+	_assert_equal(plot_after_sleep.crop.days_grown, 1, "A001-F: Watered crop grew 1 day across sleep")
+	_assert_equal(plot_after_sleep.crop.growth_stage, 1, "A001-F: Crop growth stage updated to 1")
+	_assert_true(not plot_after_sleep.is_watered, "A001-F: Soil watering reset to false")
+	
+	# Edge Cases:
+	# 1. Direct SleepCommand execution without GameTime fails
+	var uncontexted_sleep: SleepCommand = SleepCommandClass.new()
+	var direct_fail: CommandResult = uncontexted_sleep.execute_verified(farm_runtime.game_state)
+	_assert_true(not direct_fail.success, "A001-Edge: Direct SleepCommand without GameTime context fails")
+	
+	# 2. Consecutive Sleep Commands
+	var consec_before: float = farm_runtime.game_time.elapsed_seconds
+	var consec_day_before: int = farm_runtime.game_state.time_state.current_day
+	farm_runtime.execute_command(AdvanceDayDebugCommandClass.new())
+	farm_runtime.execute_command(AdvanceDayDebugCommandClass.new())
+	_assert_approx(farm_runtime.game_time.elapsed_seconds - consec_before, day_duration * 2.0, "A001-Edge: Consecutive sleeps advance clock by exactly 2 days")
+	_assert_equal(farm_runtime.game_state.time_state.current_day, consec_day_before + 2, "A001-Edge: Consecutive sleeps advance current_day by 2")
+	
+	# 3. Continuous Simulation Day Boundary Rollover (emitting day_changed)
+	var rollover_runtime: GameRuntime = GameRuntimeClass.new()
+	rollover_runtime.initialize_runtime()
+	rollover_runtime.start_runtime()
+	var signal_days: Array[int] = []
+	rollover_runtime.game_state.time_state.day_changed.connect(func(d: int): signal_days.append(d))
+	
+	# Step to right before day boundary: 239.0s
+	rollover_runtime.step_simulation(239.0)
+	_assert_equal(rollover_runtime.game_state.time_state.current_day, 1, "A001-Edge: Current day remains 1 at 239.0s")
+	_assert_equal(signal_days.size(), 0, "A001-Edge: day_changed not emitted before boundary")
+	
+	# Step across boundary: 2.0s -> 241.0s total
+	rollover_runtime.step_simulation(2.0)
+	_assert_equal(rollover_runtime.game_state.time_state.current_day, 2, "A001-Edge: Current day rolls over to 2 at 241.0s via continuous simulation")
+	_assert_equal(signal_days.size(), 1, "A001-Edge: Exactly one day_changed signal emitted on rollover")
+	_assert_equal(signal_days[0], 2, "A001-Edge: day_changed signal emitted with day 2")
+	
+	# 4. Neutralized TimeState mutations: advance_time and advance_day do NOT mutate elapsed_seconds
+	var neutralized_ts: TimeState = TimeStateClass.new(50.0, 1, 240.0)
+	neutralized_ts.advance_time(100.0)
+	_assert_approx(neutralized_ts.elapsed_seconds, 50.0, "A001-Edge: Neutralized advance_time does not mutate elapsed_seconds")
+	neutralized_ts.advance_day()
+	_assert_approx(neutralized_ts.elapsed_seconds, 50.0, "A001-Edge: Neutralized advance_day does not mutate elapsed_seconds")
+	
+	# 5. Non-default day_duration configuration (e.g. 300.0s)
+	var custom_runtime: GameRuntime = GameRuntimeClass.new()
+	custom_runtime.initialize_runtime()
+	custom_runtime.game_state.time_state.day_duration = 300.0
+	custom_runtime.start_runtime()
+	custom_runtime.execute_command(AdvanceDayDebugCommandClass.new())
+	_assert_approx(custom_runtime.game_time.elapsed_seconds, 300.0, "A001-Edge: Configured day_duration 300.0 used for sleep duration without hardcoding")
+	_assert_equal(custom_runtime.game_state.time_state.current_day, 2, "A001-Edge: Current day is 2 after 300.0s sleep")
+	
+	# 6. Presentation DayNightCycle reflects canonical GameTime after sleep
+	var presentation_color: Color = DayNightCycleClass.evaluate_ambient_color(custom_runtime.game_time.elapsed_seconds, custom_runtime.game_state.time_state.day_duration)
+	_assert_equal(presentation_color, DayNightCycleClass.COLOR_DAWN, "A001-Edge: DayNightCycle correctly reads canonical GameTime at day start")
+	
+	# Clean up
+	runtime.queue_free()
+	farm_runtime.queue_free()
+	rollover_runtime.queue_free()
+	custom_runtime.queue_free()
 

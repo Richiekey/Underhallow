@@ -13,6 +13,9 @@ func serialize_state(state: GameState, time: GameTime) -> SaveData:
 	var metadata_timestamp: int = int(Time.get_unix_time_from_system())
 	# Authoritative simulation time is preserved directly from GameTime
 	var sim_time: float = time.elapsed_seconds
+	state.game_time_elapsed = sim_time
+	if state.time_state != null:
+		state.time_state.sync_from_game_time(time)
 	var payload: Dictionary = state.to_dictionary()
 	
 	var save: SaveData = SaveData.new(
@@ -36,7 +39,11 @@ func deserialize_state(save_data: SaveData, target_state: GameState, target_time
 	
 	# Authoritative simulation time is restored directly from game_time_elapsed.
 	# The metadata timestamp is intentionally ignored for simulation time calculation.
+	# Authority chain: SaveData.game_time_elapsed -> GameTime -> TimeState
 	target_time.reset(save_data.game_time_elapsed)
 	target_state.from_dictionary(save_data.payload)
+	target_state.game_time_elapsed = target_time.elapsed_seconds
+	if target_state.time_state != null:
+		target_state.time_state.sync_from_game_time(target_time)
 	save_deserialized.emit(save_data)
 	return true

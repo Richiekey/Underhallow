@@ -62,6 +62,11 @@ func initialize_runtime() -> void:
 	game_state.reset()
 	game_time.reset()
 	time_accumulator = 0.0
+	
+	# Initial synchronization per A-001
+	game_state.game_time_elapsed = game_time.elapsed_seconds
+	if game_state.time_state != null:
+		game_state.time_state.sync_from_game_time(game_time)
 
 ## Transitions runtime from INITIALIZE to RUNNING.
 func start_runtime() -> void:
@@ -90,7 +95,7 @@ func step_simulation(step_delta: float) -> void:
 	game_time.advance(step_delta)
 	game_state.game_time_elapsed = game_time.elapsed_seconds
 	if game_state.time_state != null:
-		game_state.time_state.elapsed_seconds = game_time.elapsed_seconds
+		game_state.time_state.sync_from_game_time(game_time)
 	simulation_stepped.emit(step_delta)
 
 ## Receives variable render/frame delta from engine loop, accumulates it, and executes
@@ -153,8 +158,12 @@ func execute_command(command: Command) -> CommandResult:
 		return validation
 	
 	# Step 2: Authoritative Mutation (strictly after validation succeeded)
-	var execution: CommandResult = command._execute_mutation(game_state)
+	var execution: CommandResult = command._execute_with_time(game_state, game_time)
 	if execution.success:
+		# Guarantee canonical clock synchronization across domain state
+		game_state.game_time_elapsed = game_time.elapsed_seconds
+		if game_state.time_state != null:
+			game_state.time_state.sync_from_game_time(game_time)
 		command_executed.emit(command, execution)
 	else:
 		command_failed.emit(command, execution)

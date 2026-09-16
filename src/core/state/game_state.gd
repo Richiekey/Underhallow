@@ -64,8 +64,8 @@ func from_dictionary(dict: Dictionary) -> void:
 		time_state = TimeState.new()
 	if dict.has("time") and dict["time"] is Dictionary:
 		time_state.from_dictionary(dict["time"])
-	else:
-		time_state.elapsed_seconds = game_time_elapsed
+	# Canonical synchronization: ensure time_state calendar derives strictly from game_time_elapsed
+	time_state.sync_from_elapsed_seconds(game_time_elapsed)
 	
 	if inventory_state == null:
 		inventory_state = InventoryState.new()

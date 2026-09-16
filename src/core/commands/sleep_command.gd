@@ -22,10 +22,18 @@ func validate(state: GameState) -> CommandResult:
 	
 	return CommandResult.ok()
 
-func _execute_mutation(state: GameState) -> CommandResult:
-	# 1. Advance calendar day
-	state.time_state.advance_day()
-	state.game_time_elapsed = state.time_state.elapsed_seconds
+func _execute_mutation(_state: GameState) -> CommandResult:
+	return CommandResult.fail("SleepCommand requires authoritative GameTime context. Execute via GameRuntime or provide GameTime.")
+
+func _execute_with_time(state: GameState, time: GameTime) -> CommandResult:
+	if time == null:
+		return _execute_mutation(state)
+	
+	# 1. Advance authoritative simulation clock by configured day duration
+	var sleep_duration: float = state.time_state.day_duration if state.time_state != null else TimeState.DEFAULT_DAY_DURATION
+	time.advance(sleep_duration)
+	state.game_time_elapsed = time.elapsed_seconds
+	state.time_state.sync_from_game_time(time)
 	
 	# 2. Resolve crop growth across all farm plots
 	var all_plots: Dictionary = state.farming_state.get_all_plots()
