@@ -157,7 +157,7 @@ These define concrete world territories and individual major game systems.
 * **Inventory, Items, Tools & Crafting Specification V1.0** (`II-001`) — Planned
 * **Exploration & Secrets Specification V1.0** (`EX-001`) — Planned
 * **Transportation & Travel Specification V1.0** (`TR-001`) — Planned
-* **Time, Day/Night & Simulation Specification V1.0** (`TS-001`) — Planned
+* **Time, Day/Night & Simulation Specification V1.0** (`TS-001`) — Planned *(Foundational simulation-clock authority established in ETA-001 §54; A-001 implemented)*
 * **Weather & Environmental Systems Specification V1.0** (`WE-001`) — Planned
 * **NPCs, Dialogue & Quests Specification V1.0** (`NQ-001`) — Planned
 * **Multiplayer & Social Systems Specification V1.0** (`MS-001`) — Cross-Cutting Social Systems
@@ -502,7 +502,7 @@ The following table documents the active specification registry for the Underhal
 | **II-001** | Inventory, Items, Tools & Crafting | 2 | PLANNED | Not yet drafted |
 | **EX-001** | Exploration & Secrets | 2 | PLANNED | Not yet drafted |
 | **TR-001** | Transportation & Travel | 2 | PLANNED | Not yet drafted |
-| **TS-001** | Time, Day/Night & Simulation | 2 | PLANNED | Not yet drafted |
+| **TS-001** | Time, Day/Night & Simulation | 2 | PLANNED | Not yet drafted *(Foundational clock authority established in ETA-001 §54; A-001 implemented)* |
 | **WE-001** | Weather & Environmental Systems | 2 | PLANNED | Not yet drafted |
 | **NQ-001** | NPCs, Dialogue & Quests | 2 | PLANNED | Not yet drafted |
 | **MS-001** | Multiplayer & Social Systems | 2 | DRAFT | [docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md) |
@@ -741,7 +741,7 @@ Following `ML-001`, creative and world authoring proceeds in the following seque
 Following foundational creative definitions, remaining Level 2 gameplay specifications will be drafted per dependency readiness:
 
 * **II-001 — Inventory, Items, Tools & Crafting Specification V1.0**
-* **TS-001 — Time, Day/Night & Simulation Specification V1.0**
+* **TS-001 — Time, Day/Night & Simulation Specification V1.0** *(Planned — Note: ETA-001 §54 establishes the foundational simulation-clock authority; A-001 is implemented. TS-001 remains planned for broader time/day/night/world-simulation rules and must conform to the ETA-001 single-clock contract with GameTime.elapsed_seconds as sole authority).*
 * **EX-001 — Exploration & Secrets Specification V1.0**
 * **RG-001 — Resource Gathering, Forestry & Mining Specification V1.0**
 * **FR-001 — Foraging & Wild Resources Specification V1.0**
@@ -766,3 +766,4 @@ Following foundational creative definitions, remaining Level 2 gameplay specific
 | **V1.3** | 2026-09-16 | APPROVED | Gemini / Project Governance | Reconciled BE-001 to V1.1 Specification Pass (added 16 Canonical Environmental Laws, 6-tier Environmental Hierarchy, Gameplay Affordance Matrix, and 4-tier Mystery Density Model); acknowledged founder approval of PC-001 (Player Control, Movement & Interaction). | BE-001 V1.1 Specification Pass & PC-001 approval reconciliation. |
 | **V1.4** | 2026-09-16 | APPROVED | Gemini / Project Governance | Integrated Creature & Wildlife Bible V1.0 (`CW-001`) into Level 1 Foundation registry, reading matrices, build order, and creative hierarchy tree; codified Invariant 20; advanced creative roadmap to `ML-001` (Mystery & Lore Architecture V1.0). | Integrated CW-001 foundation baseline. |
 | **V1.5** | 2026-09-16 | APPROVED | Gemini / Project Governance | Integrated Mystery & Lore Architecture Specification V1.0 (`ML-001`) into Level 1 Foundation registry, reading matrices, build order, and creative hierarchy tree; codified Invariant 21; acknowledged founder approval of WM-001 (World & Map Architecture); advanced creative roadmap to `NC-001` (Narrative Content Framework V1.0). | Integrated ML-001 foundation baseline & WM-001 approval reconciliation. |
+| **V1.6** | 2026-09-16 | APPROVED | Gemini / Project Governance | A-001 Documentation Reconciliation. Reconciled ETA-001 §54 and MSI-001 to document the implemented single authoritative simulation-clock model (GameTime.elapsed_seconds as sole authority; GameState.game_time_elapsed mirror; derived TimeState; SaveData persistence chain). Kept TS-001 PLANNED under ETA-001 single-clock contract. | Reconciled documentation against implemented A-001 authority model. |

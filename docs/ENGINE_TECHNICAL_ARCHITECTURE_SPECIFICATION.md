@@ -1439,36 +1439,91 @@ Its persistent regeneration state can be stored without requiring the actual tre
 
 # 54. Time Architecture
 
-The game should distinguish:
+Underhallow enforces a **single authoritative simulation-clock model** (codified in Architecture Audit A-001). All game systems, world processes, and derived calendar states flow strictly from one canonical source of truth.
 
-### Real-world time
+### 54.1 Authoritative Simulation Contract
 
-Used for:
+The runtime time architecture operates under a strict, unidirectional data flow:
 
-* Offline progression
-* Timers
-* Daily systems
-* Long-term progression
+```text
+GameTime.elapsed_seconds (Sole Authoritative Simulation Clock)
+        │
+        ▼
+GameState.game_time_elapsed (Synchronized State / Persistence Mirror)
+        │
+        ▼
+TimeState (Derived Calendar State)
+        │
+        ├── current_day
+        ├── day progress
+        └── calendar-derived state
+                │
+                ▼
+Simulation Consumers (Farming, Day/Night, Schedules, Wildlife, Environment)
+```
 
-### Simulation time
+### 54.2 Core Time Distinctions
 
-Used for:
+The architecture cleanly separates three distinct operational concepts of time without introducing competing clocks:
 
-* Movement
-* Combat
-* AI
-* Active world interactions
+1. **Deterministic Simulation Time (`GameTime.elapsed_seconds`):**
+   * **Sole Authority:** `GameTime.elapsed_seconds` is the single authoritative simulation clock for all runtime gameplay and world simulation.
+   * **Scope:** Governs active movement, combat, AI, interaction loops, crop growth, day/night cycles, NPC schedules, and environmental systems.
+   * **Determinism:** Advances via deterministic simulation ticks (`advance_time(delta)`), never raw unscaled frame delta accumulation.
 
-### Gameplay/world time
+2. **Synchronized State Mirror (`GameState.game_time_elapsed`):**
+   * `GameState.game_time_elapsed` is a synchronized state and persistence mirror, not an independent or secondary clock.
+   * It provides a clean, serializable representation of simulation time for state snapshots, netcode synchronization, and save persistence.
 
-Used for:
+3. **Derived Calendar & World State (`TimeState`):**
+   * `TimeState` is a projection of simulation time into game calendar concepts (`current_day`, day progress ratio, hour, minute, and ticks).
+   * It is derived strictly from `GameTime.elapsed_seconds` and the configured day duration.
+   * **Invariant:** `TimeState` must never independently advance simulation time. Any direct mutation of `TimeState` is neutralized; all time advancement flows down from `GameTime`.
 
-* Day/night
-* NPC schedules
-* Farming
-* Environmental systems
+4. **Real-World / Wall-Clock Time (Wall-Clock Timestamps):**
+   * Real-world UTC timestamps are metadata and input parameters used solely for calculating elapsed offline time during login/island load catch-up routines.
+   * Real-world time is never authoritative simulation state and cannot directly mutate active simulation time.
 
-This separation prevents unnecessary continuous simulation.
+### 54.3 Persistence Restoration Flow
+
+Persistence serializes and restores canonical simulation time strictly through `GameTime`:
+
+```text
+SaveData.game_time_elapsed
+        ↓
+    GameTime
+        ↓
+    TimeState
+```
+
+1. **Save:** `GameState.game_time_elapsed` (mirrored from `GameTime.elapsed_seconds`) is serialized into `SaveData.game_time_elapsed`.
+2. **Load:** The persistence boundary restores `GameTime.elapsed_seconds` directly from `SaveData.game_time_elapsed`.
+3. **Propagation:** `GameTime` updates `GameState` and derives `TimeState`, ensuring full mathematical parity and eliminating time divergence across save/load cycles.
+
+### 54.4 Deliberate Time Advancement & Sleep
+
+* Sleep (e.g., player sleeping in a cottage bed) and deliberate time advancement operations advance `GameTime.elapsed_seconds` directly via commands (e.g., `SleepCommand` executing with `GameTime` context).
+* `TimeState` updates as a downstream reaction to `GameTime` advancement.
+* `TimeState` is prohibited from skipping days or modifying calendar progress independently of `GameTime`.
+
+### 54.5 Offline Progression & Catch-Up Mechanics
+
+```text
+Wall-clock timestamp (Logout / Login Delta)
+        ↓
+Metadata / Offline Elapsed-Time Input
+        ↓
+Never Authoritative Simulation State
+        ↓
+Server / Local Catch-Up Calculation
+        ↓
+Advance GameTime (Authoritative)
+```
+
+When an island or player session is unloaded:
+* Active tick accumulation pauses.
+* Upon reconnect or island load, real-world timestamps provide the elapsed duration metadata.
+* The system evaluates offline progression (e.g., crop maturation, water absorption) by calculating the equivalent simulated time and advancing `GameTime` deterministically, maintaining authoritative simulation integrity without running 24/7 background processes.
 
 ---
 
