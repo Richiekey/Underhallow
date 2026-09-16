@@ -246,6 +246,7 @@ func _setup_world_building_display(world: WorldSpace) -> void:
 		preview_display = BuildingPreviewDisplay.new()
 		preview_display.name = "BuildingPreviewDisplay"
 		world.add_child(preview_display)
+	preview_display.origin_offset = building_display.origin_offset
 	if player_instance != null:
 		preview_display.bind_player(player_instance, runtime)
 

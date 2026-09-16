@@ -95,6 +95,8 @@ func set_equipped_item(item_id: StringName) -> void:
 		elif is_in_building_preview:
 			cancel_building_preview()
 
+const BuildingDisplayClass = preload("res://scenes/gameplay/building/building_display.gd")
+
 ## Selects and equips a buildable structure, activating non-authoritative preview.
 func select_building(building_id: StringName) -> bool:
 	set_equipped_item(building_id)
@@ -115,7 +117,7 @@ func start_building_preview(building_id: StringName, initial_coord: Vector2i = V
 	
 	if initial_coord == Vector2i.ZERO and facing_direction != Vector2.ZERO:
 		var target_pos: Vector2 = global_position + facing_direction.normalized() * 24.0
-		preview_coord = world_to_grid(target_pos)
+		preview_coord = BuildingDisplayClass.world_to_grid_coordinate(target_pos)
 	else:
 		preview_coord = initial_coord
 	
@@ -142,15 +144,8 @@ func update_preview_target_from_facing() -> void:
 	if not is_in_building_preview:
 		return
 	var target_pos: Vector2 = global_position + facing_direction.normalized() * 24.0
-	var coord: Vector2i = world_to_grid(target_pos)
+	var coord: Vector2i = BuildingDisplayClass.world_to_grid_coordinate(target_pos)
 	set_preview_coord(coord)
-
-static func world_to_grid(world_pos: Vector2) -> Vector2i:
-	var local: Vector2 = world_pos - Vector2(-130.0, -20.0)
-	return Vector2i(roundi(local.x / 16.0), roundi(local.y / 16.0))
-
-static func grid_to_world(coord: Vector2i) -> Vector2:
-	return Vector2(-130.0, -20.0) + Vector2(float(coord.x) * 16.0, float(coord.y) * 16.0)
 
 ## Queries whether the current preview placement would pass PlaceBuildingCommand validation.
 ## Strictly non-authoritative query for presentation feedback only.

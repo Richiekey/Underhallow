@@ -4,10 +4,12 @@ extends Node2D
 ## Presentation component for non-authoritative construction preview per PC-001 & BI-001.
 ## Strictly visual feedback for proposed building placement.
 ## Reads state from PlayerController and validates against GameState via PlaceBuildingCommand.validate().
+## Consumes canonical coordinate transform from BuildingDisplay.
 ## Never mutates BuildingState or InventoryState.
 
-const CELL_SIZE: float = 16.0
-@export var origin_offset: Vector2 = Vector2(-130.0, -20.0)
+const BuildingDisplayClass = preload("res://scenes/gameplay/building/building_display.gd")
+
+@export var origin_offset: Vector2 = BuildingDisplayClass.DEFAULT_ORIGIN_OFFSET
 
 var player: PlayerController = null
 var runtime: GameRuntime = null
@@ -92,12 +94,12 @@ func update_preview() -> void:
 	var orientation: int = player.preview_orientation
 	var footprint: Vector2i = def.footprint
 	
-	# Compute world position matching BuildingDisplay formula
-	position = origin_offset + Vector2(float(coord.x) * CELL_SIZE, float(coord.y) * CELL_SIZE)
+	# Compute world position consuming canonical BuildingDisplay transform
+	position = BuildingDisplayClass.grid_to_world_position(coord, origin_offset)
 	rotation = float(orientation) * (PI / 2.0)
 	
-	var width: float = float(footprint.x) * CELL_SIZE
-	var height: float = float(footprint.y) * CELL_SIZE
+	var width: float = float(footprint.x) * BuildingDisplayClass.CELL_SIZE
+	var height: float = float(footprint.y) * BuildingDisplayClass.CELL_SIZE
 	var draw_size: Vector2 = Vector2(maxf(14.0, width - 2.0), maxf(14.0, height - 2.0))
 	var draw_pos: Vector2 = Vector2(-7.0, -7.0)
 	

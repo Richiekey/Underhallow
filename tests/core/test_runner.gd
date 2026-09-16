@@ -1580,7 +1580,7 @@ func _run_construction_slice_tests() -> void:
 	player.set_preview_coord(Vector2i(18, 18))
 	_assert_equal(player.preview_coord, Vector2i(18, 18), "Test 3: Preview coordinate updated to (18, 18)")
 	preview_display.update_preview()
-	var expected_world_pos: Vector2 = PlayerController.grid_to_world(Vector2i(18, 18))
+	var expected_world_pos: Vector2 = BuildingDisplayClass.grid_to_world_position(Vector2i(18, 18))
 	_assert_equal(preview_display.position, expected_world_pos, "Test 3: Preview representation reflects updated grid coordinate")
 	_assert_true(not runtime.game_state.building_state.has_building_at(Vector2i(18, 18)), "Test 3: Target coordinate remains unoccupied in BuildingState")
 	_assert_true(not runtime.game_state.building_state.has_instance(&"preview_fence_01"), "Test 3: Movement does not create BuildingInstance")
@@ -1641,11 +1641,78 @@ func _run_construction_slice_tests() -> void:
 	var authoritative_display: BuildingDisplay = BuildingDisplayClass.new()
 	authoritative_display.initialize_from_state(runtime.game_state.building_state)
 	_assert_true(authoritative_display.get_rendered_count() >= 3, "Test 8: BuildingDisplay reflects all placed buildings from BuildingState")
-	authoritative_display.queue_free()
 	
+	# --- Coordinate Agreement Regression Test (Correction D) ---
+	# Scenario: preview world position and authoritative placed node world position must agree exactly
+	runtime.game_state.inventory_state.add_item(&"resource_wood", 3)
+	player.select_building(&"rustic_fence")
+	player.set_preview_coord(Vector2i(22, 22))
+	preview_display.update_preview()
+	var preview_resolved_pos: Vector2 = preview_display.position
+	
+	var agree_confirm_res: CommandResult = player.confirm_placement(&"fence_agreement_test")
+	_assert_true(agree_confirm_res.success, "Coord Agreement: Placement command succeeds")
+	
+	# Reinitialize display to capture new placed building
+	authoritative_display.initialize_from_state(runtime.game_state.building_state)
+	var placed_node: Node2D = authoritative_display.get_building_node(&"fence_agreement_test")
+	_assert_true(placed_node != null, "Coord Agreement: Placed building node exists in BuildingDisplay")
+	var placed_resolved_pos: Vector2 = placed_node.position
+	
+	_assert_equal(preview_resolved_pos, placed_resolved_pos, "Coord Agreement: Preview and placed building world positions agree exactly for (22, 22)")
+	_assert_equal(placed_resolved_pos, BuildingDisplayClass.grid_to_world_position(Vector2i(22, 22)), "Coord Agreement: Both match canonical BuildingDisplayClass.grid_to_world_position")
+	
+	authoritative_display.queue_free()
 	preview_display.queue_free()
 	hotbar.queue_free()
 	player.queue_free()
+	
+	# --- Lightweight Input-Path Coverage (Correction E) ---
+	var input_player: PlayerController = PlayerControllerClass.new()
+	input_player.runtime = runtime
+	
+	# 1. hotbar_4 action equips rustic_fence and enters preview
+	var ev_h4: InputEventAction = InputEventAction.new()
+	ev_h4.action = "hotbar_4"
+	ev_h4.pressed = true
+	input_player._unhandled_input(ev_h4)
+	_assert_equal(input_player.equipped_item_id, &"rustic_fence", "Input 1: hotbar_4 action equips rustic_fence")
+	_assert_true(input_player.is_in_building_preview, "Input 1: hotbar_4 action enters preview mode")
+	
+	# 2. rotate_building action rotates preview
+	var ev_rot: InputEventAction = InputEventAction.new()
+	ev_rot.action = "rotate_building"
+	ev_rot.pressed = true
+	input_player._unhandled_input(ev_rot)
+	_assert_equal(input_player.preview_orientation, 1, "Input 2: rotate_building action rotates orientation to 1")
+	
+	# 3. hotbar_5 action equips stone_path
+	var ev_h5: InputEventAction = InputEventAction.new()
+	ev_h5.action = "hotbar_5"
+	ev_h5.pressed = true
+	input_player._unhandled_input(ev_h5)
+	_assert_equal(input_player.equipped_item_id, &"stone_path", "Input 3: hotbar_5 action equips stone_path")
+	_assert_equal(input_player.preview_building_id, &"stone_path", "Input 3: preview building updated to stone_path")
+	
+	# 4. cancel action cancels preview
+	var ev_cancel: InputEventAction = InputEventAction.new()
+	ev_cancel.action = "cancel"
+	ev_cancel.pressed = true
+	input_player._unhandled_input(ev_cancel)
+	_assert_true(not input_player.is_in_building_preview, "Input 4: cancel action exits preview mode")
+	
+	# 5. interact action confirms placement when in preview
+	runtime.game_state.inventory_state.add_item(&"resource_wood", 3)
+	input_player._unhandled_input(ev_h4) # re-enter fence preview
+	input_player.set_preview_coord(Vector2i(28, 28))
+	var ev_interact: InputEventAction = InputEventAction.new()
+	ev_interact.action = "interact"
+	ev_interact.pressed = true
+	input_player._unhandled_input(ev_interact)
+	_assert_true(not input_player.is_in_building_preview, "Input 5: interact action confirms placement and exits preview")
+	_assert_true(runtime.game_state.building_state.has_building_at(Vector2i(28, 28)), "Input 5: Coordinate (28, 28) occupied after interact action")
+	
+	input_player.queue_free()
 
 	# --- Targeted Surgical Verification: Footprint-Aware Placement ---
 	# 1. 1x1 building occupies its expected cell

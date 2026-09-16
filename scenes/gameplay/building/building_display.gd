@@ -6,10 +6,20 @@ extends Node2D
 ## Zero authoritative state is stored here.
 
 const CELL_SIZE: float = 16.0
+const DEFAULT_ORIGIN_OFFSET: Vector2 = Vector2(-130.0, -20.0)
 
-@export var origin_offset: Vector2 = Vector2(-130.0, -20.0)
+@export var origin_offset: Vector2 = DEFAULT_ORIGIN_OFFSET
 
 var _rendered_instances: Dictionary = {} # instance_id -> Node2D
+
+## Canonical world-to-grid and grid-to-world transform for construction presentation.
+## Single source of truth for building coordinate resolution.
+static func grid_to_world_position(coord: Vector2i, origin: Vector2 = DEFAULT_ORIGIN_OFFSET) -> Vector2:
+	return origin + Vector2(float(coord.x) * CELL_SIZE, float(coord.y) * CELL_SIZE)
+
+static func world_to_grid_coordinate(world_pos: Vector2, origin: Vector2 = DEFAULT_ORIGIN_OFFSET) -> Vector2i:
+	var local: Vector2 = world_pos - origin
+	return Vector2i(roundi(local.x / CELL_SIZE), roundi(local.y / CELL_SIZE))
 
 func initialize_from_state(building_state: BuildingState) -> void:
 	clear_display()
@@ -44,7 +54,7 @@ func _render_building_instance(instance: BuildingInstance) -> void:
 	
 	var node: Node2D = Node2D.new()
 	node.name = "Building_%s" % str(instance.instance_id)
-	node.position = origin_offset + Vector2(float(instance.grid_coord.x) * CELL_SIZE, float(instance.grid_coord.y) * CELL_SIZE)
+	node.position = grid_to_world_position(instance.grid_coord, origin_offset)
 	node.rotation = float(instance.orientation) * (PI / 2.0)
 	
 	var width: float = float(instance.footprint.x) * CELL_SIZE
@@ -64,6 +74,9 @@ func _render_building_instance(instance: BuildingInstance) -> void:
 	node.add_child(rect)
 	add_child(node)
 	_rendered_instances[instance.instance_id] = node
+
+func get_building_node(instance_id: StringName) -> Node2D:
+	return _rendered_instances.get(instance_id, null)
 
 func get_rendered_count() -> int:
 	return _rendered_instances.size()
