@@ -4,7 +4,7 @@
 
 **Document ID:** PC-001  
 **Version:** 1.0  
-**Document Status:** DRAFT (Reconciliation Candidate V1.0)  
+**Document Status:** APPROVED  
 **Authority Level:** Level 1 — Foundation Specification  
 **Parent Specifications:**  
 * [North Star V1.0 (NS-001)](NORTH_STAR.md)
@@ -43,7 +43,7 @@ It establishes the foundation for:
 * Non-lethal defeat control flow
 * Multiplayer player-to-player interaction interface
 
-This document defines **player-facing behavior, control contracts, and system rules**, not engine-specific implementation code.
+This document defines the **player-facing control contract, control feel, and interaction rules**, not engine-specific technical implementation code.
 
 ---
 
@@ -72,7 +72,7 @@ To maintain clean architectural separation across the Underhallow specification 
 ### What PC-001 Owns:
 * Player locomotion, velocity, acceleration, and diagonal normalization.
 * Logical input action abstractions and default keybindings.
-* The contextual resolution rules between primary actions (Left Mouse Button) and interaction (`E`).
+* The contextual resolution rules between primary actions (`action_primary` / Left Mouse Button) and interaction (`interact` / `E`).
 * Canonical interaction targeting hierarchy and target resolution algorithms.
 * 8-directional facing resolution, orientation retention, and contextual auto-facing.
 * Action commitment, interruption rules, and movement locking.
@@ -95,9 +95,9 @@ To maintain clean architectural separation across the Underhallow specification 
 * Island geography, layout, or regional borders (owned by [MI-001](MAIN_ISLAND_DESIGN_SPECIFICATION.md) and [PI-001](PERSONAL_ISLAND_DESIGN_SPECIFICATION.md)).
 * Traversal vehicle mechanics, ferry scheduling, or transit networks (owned by [TR-001](MASTER_SPECIFICATION_INDEX.md)).
 * Weather states, atmospheric effects, or rain simulation (owned by [WE-001](MASTER_SPECIFICATION_INDEX.md)).
-* Day/night cycles, simulation time, or game clocks (owned by [TS-001](TIME_CALENDAR_SYSTEM_SPECIFICATION.md)).
+* Day/night cycles, simulation time, or game clocks (owned by [TS-001](MASTER_SPECIFICATION_INDEX.md)).
 * Economy, pricing, currency, or merchant trading rules (owned by [EC-001](MASTER_SPECIFICATION_INDEX.md)).
-* Server network authority, replication protocols, or client-side prediction algorithms (owned by [ETA-001](ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)).
+* Technical networking, server authority, replication protocols, or prediction algorithms (owned by [ETA-001](ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)).
 * Party structures, guilds, permissions, or social systems (owned by [MS-001](MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md)).
 
 ---
@@ -106,29 +106,28 @@ To maintain clean architectural separation across the Underhallow specification 
 
 Underhallow is **single-player-first, multiplayer-native**.
 
-PC-001 defines the player-facing feel and intent; [ETA-001](ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md) defines technical network authority.
+**PC-001 defines the player-facing control contract. ETA-001 defines the technical implementation of prediction, authority, command execution, state mutation, replication, and networking.**
 
-The control pipeline operates strictly as:
+From the player's perspective, control operates through an intuitive responsive pipeline:
 
 ```text
 Physical Input (Keyboard / Mouse)
         ↓
 Logical Input Action
         ↓
-Local Player Intent & Controller Prediction
+Local Player Intent & Immediate Presentation Feedback
         ↓
-Command Execution Request (Command Pipeline)
+Authoritative Action Validation
         ↓
-Authoritative Validation (Server / Host Runtime)
-        ↓
-State Mutation (GameState / PlayerState)
-        ↓
-Network Replication & Event Emission
+Authoritative State Mutation & Event Replication
         ↓
 Presentation & Animation Confirmation
 ```
 
-In single-player mode, validation executes immediately within the local runtime. In multiplayer mode, the client predicts local movement for responsiveness, while authoritative validation guarantees placement, inventory consumption, and interaction legality without client-side spoofing.
+### Experience Requirements:
+* **Player-Facing Responsiveness:** Local locomotion and interface actions must feel immediate, crisp, and predictable without perceptible input lag.
+* **Authoritative Legality:** Economically and structurally meaningful actions (item consumption, crop harvesting, building placement, combat damage) are strictly validated by the authoritative game runtime to prevent client spoofing.
+* **Predictable Control:** Network reconciliation must never produce disorienting snaps, jitter, or unexpected loss of control during standard multiplayer sessions.
 
 ---
 
@@ -189,14 +188,17 @@ To ensure predictable control semantics and avoid input collisions, Underhallow 
 ### B. Primary Action (`action_primary` — `Left Mouse Button` / `F`)
 `action_primary` operates as the **Equipped Hand Activation Action**. Its outcome is determined contextually by the current player state and hotbar selection:
 1. **Direct Entity Click:** If the mouse cursor directly clicks on an in-range interactable entity in the world (e.g., clicking directly on Rowan or a storage chest), the system dispatches `interact` on that specific target.
-2. **Tool Equipped (Hoe, Watering Can, Axe, Pickaxe):** Dispatches `use_tool` toward the targeted tile or resource node in the player's facing direction or cursor position.
-3. **Weapon Equipped (Sword, Bow, Spear):** Dispatches `attack` along the player's facing vector or toward the cursor.
-4. **Building Placement Active:** Confirms placement of the active ghost structure preview.
+2. **Tool Equipped (Hoe, Watering Can, Axe, Pickaxe):** Dispatches `use_tool` toward the targeted tile or resource node in the player's facing direction or cursor position. Actual tool rules belong to governing systems ([FB-001](FARMING_SYSTEM_SPECIFICATION.md), [RG-001](MASTER_SPECIFICATION_INDEX.md)).
+3. **Weapon Equipped (Sword, Bow, Spear):** Dispatches `attack` along the player's facing vector or toward the cursor. Actual combat rules belong to [HU-001](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md).
+4. **Building Placement Active:** Confirms placement of the active ghost structure preview. Actual placement validation rules belong to [BI-001](BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md).
 5. **Empty Hand / Inactive Item:** Performs no destructive action.
+
+PC-001 provides the activation and targeting interface; the underlying gameplay systems own their respective simulation and validation rules.
 
 ### C. Inventory vs. Target Cycling (`Tab` vs. `I`)
 * `Tab` and `I` are strictly bound to `toggle_inventory`.
-* `Tab` does **not** cycle targets. Target selection is resolved automatically by the Canonical Interaction Targeting Hierarchy based on proximity and the player's facing cone. If target cycling is added in the future as an accessibility option, it will receive a distinct, dedicated action (`cycle_target`), keeping `Tab` conflict-free.
+* `Tab` does **not** cycle targets.
+* There is **no target cycling action in V1.0**. Target selection is resolved automatically and deterministically by the Canonical Interaction Targeting Hierarchy based on proximity and the player's facing cone.
 
 ---
 
@@ -225,6 +227,14 @@ Underhallow uses continuous, responsive 2D movement with crisp acceleration and 
   * Temporary status conditions or environmental factors
 * **Readability Invariant:** Speed modifications must remain subtle and readable. Navigation must never feel frustratingly bogged down.
 
+### Speed Modifier Architectural Ownership:
+Movement modifiers may be supplied by governing systems, but PC-001 does not define the simulation rules, progression rules, or balance tables that generate those modifiers. PC-001 owns:
+* Receiving a movement-speed modifier
+* Applying the resulting modifier to player locomotion
+* Maintaining responsiveness and readability
+
+PC-001 does NOT own terrain definitions, weather effects, status-effect definitions, road/pathway progression, environmental simulation, or balance values owned by other systems. Furthermore, movement modifiers must never become a disguised stamina or energy system; player activity is never gated behind depleting resource gauges.
+
 ---
 
 # 10. Sprinting & Stamina Invariant
@@ -251,8 +261,8 @@ To guarantee responsive gameplay without sacrificing animation weight, actions u
 | **Basic Interaction** | Contextual | Contextual | Short inspects allow immediate step-away |
 | **Tool Usage** | Restricted | System-defined | Movement locked during swing/till/water animation |
 | **Crop Harvesting** | Restricted | No | Locks movement for short harvest animation |
-| **Combat Attack** | Contextual | Early recovery | Movement locked during active frames; early recovery upon completion |
-| **Fishing** | Locked | System-defined | Movement locked while fishing line is active; lifecycle governed by FI-001 |
+| **Combat Attack** | Contextual | Early recovery | Movement locked during active frames; early recovery upon completion (governed by HU-001) |
+| **Fishing** | Locked | System-defined | Movement locked while fishing line is active; lifecycle governed by [FI-001](MASTER_SPECIFICATION_INDEX.md) |
 | **Building Placement** | Free before placement | Yes (Cancel preview) | Movement allowed during preview; brief lock on confirm |
 | **Dialogue** | Locked | No | Movement locked while conversation window is active |
 | **World Transition** | Locked | No | Complete control lock during scene load / fade |
@@ -264,7 +274,15 @@ To guarantee responsive gameplay without sacrificing animation weight, actions u
 
 Player facing direction is an authoritative component of `PlayerState`.
 
-* **8-Directional Facing:** Facing resolves to 8 cardinal and intercardinal directions (`NORTH`, `NORTHEAST`, `EAST`, `SOUTHEAST`, `SOUTH`, `SOUTHEAST`, `WEST`, `NORTHWEST`).
+* **8-Directional Facing:** Facing resolves to 8 cardinal and intercardinal directions:
+  * `NORTH`
+  * `NORTHEAST`
+  * `EAST`
+  * `SOUTHEAST`
+  * `SOUTH`
+  * `SOUTHWEST`
+  * `WEST`
+  * `NORTHWEST`
 * **Stationary Retention:** When the player stops moving, their facing direction is strictly preserved. Stationary players do not snap back to a default facing direction.
 * **Gameplay Relevance:** Facing direction dictates:
   * Tool targeting tile selection
@@ -322,7 +340,7 @@ Step 6: Display Targeted Feedback & Bind Universal Key (E)
 ```
 
 ### Proximity & Focus Resolution
-When multiple valid objects are close together, the system deterministically highlights the highest-tier, closest object in the player's forward arc. Players can shift focus naturally by stepping slightly or turning toward the desired object.
+When multiple valid objects are close together, the system deterministically highlights the highest-tier, closest object in the player's forward arc. Players adjust focus naturally by stepping slightly or turning toward the desired object. There is no manual target cycling key in V1.0.
 
 ---
 
@@ -409,11 +427,15 @@ PC-001 defines the player interface for construction placement:
 Underhallow utilizes a ground-footprint collision architecture:
 
 * **Footprint Ground Collision:** The character's collision volume is constrained to the ground contact area at the feet, rather than a full-body upright bounding box. This prevents the character from being blocked by overhead geometry (tree canopies, roofs, eaves, hanging lanterns) and allows natural visual depth overlap.
-* **Environmental Obstacles:** Solid terrain, cliffs, trees, large boulders, building walls, and closed gates block movement cleanly without sticky sliding artifacts.
+* **Clean Obstacle Resolution:** Solid terrain, cliffs, trees, large boulders, building walls, and closed gates block movement cleanly without sticky friction or snagging artifacts.
+* **Distinct Interaction Range:** Interaction trigger range is separate from physical collision. The player does not need to bump directly into an object's physical collision boundary to interact with it.
+* **Visual Integrity:** Scenery presentation must never create confusing invisible walls; navigable spaces must feel physically credible and readable.
 * **NPC Soft Collision:** NPCs use soft collision volumes. An NPC will gently yield to the player; the player can never be permanently trapped or griefed in corners by NPCs.
 * **Multiplayer Player Collision:** Other players use soft avoidance collision. Players cannot physically block doors, docks, or narrow paths to grief other players.
 * **Impassable Water:** Deep water is a strict physical barrier. Players cannot walk into deep water; crossing waterways requires bridges or boats.
 * **Elevation & Cliffs:** Cliffs represent impassable elevation boundaries. Movement remains strictly constrained to navigable authored paths; there is no freeform falling or fall damage.
+
+Technical implementation of collision shapes and layers is owned by [ETA-001](ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md).
 
 ---
 
@@ -435,17 +457,20 @@ World Boundary Clamping
 STRICTLY NO CAMERA ROTATION IN V1.0
 ```
 
-* **No Camera Rotation:** Camera rotation is **strictly disabled in V1.0** (per [SR-001](SPECIFICATION_RECONCILIATION.md), [AD-001](ART_DIRECTION_BIBLE.md), and [ETA-001](ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)). The camera orientation remains locked to a single fixed isometric angle. This protects 16-bit pixel-art hand-drawn sprite density, avoids costly 4-sided asset redundancy, and ensures spatial readability.
+* **No Camera Rotation:** Camera rotation is **strictly disabled in V1.0** (per [SR-001](SPECIFICATION_RECONCILIATION.md), [AD-001](ART_DIRECTION_BIBLE.md), and [ETA-001](ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)). The camera orientation remains locked to a single fixed isometric angle. There is no free rotation, arbitrary orbit, or player-controlled camera yaw/pitch. This protects 16-bit pixel-art hand-drawn sprite density, avoids costly 4-sided asset redundancy, and ensures spatial readability.
 * **Smooth Tracking:** The camera tracks the player smoothly using asymptotic smoothing and deadzone filtering, avoiding jarring frame-to-frame snaps.
 * **Directional Look-Ahead:** During sustained locomotion, the camera gently biases slightly forward in the direction of travel to expand forward visibility, easing back to center when stationary.
 * **Controlled Zoom:** Players can adjust zoom within safe clamped limits (e.g., $1.0\times$ to $2.0\times$ / $3.0\times$). Zoom increments maintain integer pixel scaling to eliminate pixel shimmering and texture distortion.
 * **Boundary Clamping:** The camera stops at authored region boundaries, preventing the rendering of empty outside-the-world space.
+* **Presentation Scope:** The camera exists to support comfortable navigation and spatial readability. It does not reveal excessive world information beyond the intended presentation, and does not use artificial camera shake or disruptive cinematic swings.
 
 ---
 
 # 24. Player State Machine & Mutual Exclusivity
 
-The player controller maintains an explicit state model to ensure **incompatible actions never execute simultaneously**:
+The player controller maintains an explicit state model to ensure **incompatible actions never execute simultaneously**.
+
+These states represent **player-facing control and interaction states**, not a duplicate of the global game-state architecture or domain state machines. Where another system owns an action's underlying simulation lifecycle (e.g., combat animations in [HU-001](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md), crop harvesting in [FB-001](FARMING_SYSTEM_SPECIFICATION.md), building placement in [BI-001](BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md), fishing minigame in [FI-001](MASTER_SPECIFICATION_INDEX.md)), PC-001 defines only the **player-facing control contract**: whether movement is permitted, whether input is accepted, whether the action is interruptible, and what player-facing control state applies.
 
 ### Core State Categories:
 1. **`FREE` / `IDLE`:** Player is stationary, eligible to move, interact, equip, or activate tools.
@@ -512,8 +537,9 @@ Player Enters Portal Trigger / Boards Dock Ferry / Interacts with Door
                   Player Controls Fully Restored
 ```
 
+* **Control Lock:** During island travel, interior transitions, loading/fade screens, and respawn, player control is locked to prevent invalid movement or interaction.
 * **Doors:** Doors use contextual interaction (`[E] Enter Cottage`) rather than accidental proximity walk-ins.
-* **Travel:** Boarding boats at docks initiates a deliberate travel sequence; players do not teleport abruptly without diegetic context. Traversal mechanics belong to [TR-001](MASTER_SPECIFICATION_INDEX.md).
+* **Travel:** Boarding boats at docks initiates a deliberate travel sequence; players do not teleport abruptly without diegetic context. World topology and travel rules belong to [WM-001](WORLD_MAP_ARCHITECTURE_SPECIFICATION.md) and [TR-001](MASTER_SPECIFICATION_INDEX.md).
 
 ---
 
@@ -535,8 +561,9 @@ Health Reaches Zero in Dangerous Wilderness / Dungeon
        Health Restored to Safe Minimum & Player Controls Restored
 ```
 
-* **Permanent Progression Intact:** Player skill levels, tool ownership, personal island structures, and equipped items are never permanently lost.
-* **Control Handover:** PC-001 ensures control disabling and restoration occur seamlessly without animation glitches or input lockups.
+* **Defeat Control Contract:** Defeat temporarily disables player control, prevents interaction during the defeat sequence, transitions the character to the canonical Personal Island cottage respawn location, and restores control only when respawn is fully complete.
+* **Permanent Progression Intact:** Player skill levels, tool ownership, personal island structures, and equipped items are never permanently lost. There is no permadeath, no health-system redesign, and no stamina penalty.
+* **Ownership Boundary:** Defeat resource-loss rules and inventory handling are governed by [HU-001](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md) and [PR-001](PLAYER_PROGRESSION_SPECIFICATION.md). PC-001 defines only the player-facing control handover.
 
 ---
 
@@ -545,8 +572,9 @@ Health Reaches Zero in Dangerous Wilderness / Dungeon
 In multiplayer environments (governed by [MS-001](MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md)):
 
 * **Soft Avoidance Collision:** Players cannot form human walls or physically trap other players in cottages, shops, or narrow paths. Players gently slide past one another.
-* **Proximity Interaction:** Approaching another player displays a dedicated social prompt (`[E] Inspect / Trade / Party`).
+* **Proximity Interaction:** Approaching another player displays a dedicated social prompt (`[E] Inspect / Social`).
 * **Non-Interference with Environment:** When another player stands near a crop or resource node, environmental interaction maintains clear targeting distinction to prevent misclicks.
+* **Ownership Boundary:** PC-001 defines the player-facing control interface. Social permissions, party mechanics, guild structures, trading rules, chat systems, and network authority remain strictly owned by [MS-001](MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md) and [ETA-001](ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md).
 
 ---
 
@@ -584,10 +612,8 @@ This specification serves as the foundational control layer for:
 
 # 32. Open Questions
 
-### Blocking Questions (Pending Founder Review):
-1. **Primary Action Input Multiplexing:** Does unifying `use_tool`, `attack`, and `confirm_placement` under a single `action_primary` (Left Mouse Button / `F`) that branches on the equipped hotbar slot align with the founder's vision, or should tools and weapons maintain independent primary keybindings?
-2. **Ground Item Collection Mechanism:** Should dropped/placed items strictly require manual interaction (`[E] Pick up [Item]`) as currently drafted, or should an optional proximity-based collection model be formally designed when [II-001](MASTER_SPECIFICATION_INDEX.md) is drafted?
-3. **Target Cycling Requirement:** Is the automatic Canonical Interaction Targeting Hierarchy (facing cone + proximity) sufficient for all V1 gameplay, or should a dedicated target cycling action (`cycle_target`) be formally reserved in the InputMap?
+### Blocking Questions:
+* *None.* All core foundation questions (camera orientation, no-stamina rule, input abstraction, continuous movement, contextual targeting hierarchy, action commitment, defeat flow, and primary action multiplexing) are resolved and aligned with Level 0 and Level 1 authorities.
 
 ### Deferred Questions (To be tuned during implementation/playtesting):
 1. **Locomotion Tuning Constants:** Final calibration of base velocity, acceleration curves, and friction damping on target hardware.
@@ -598,9 +624,8 @@ This specification serves as the foundational control layer for:
 
 # 33. Definition of Done
 
-PC-001 is considered ready for full Level 1 approval when:
+PC-001 is fully reconciled and approved to govern implementation:
 
-* Founder review confirms resolution of the open blocking questions in Section 32.
 * Keyboard direct movement (WASD/Arrows) is fully functional with normalized diagonal velocity.
 * Click-to-move is architecturally supported and cleanly overridable by keyboard.
 * Absence of stamina and sprint meters is strictly verified.
