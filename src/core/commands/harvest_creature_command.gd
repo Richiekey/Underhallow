@@ -37,6 +37,10 @@ func validate(state: GameState) -> CommandResult:
 	if creature.is_harvested:
 		return CommandResult.fail("Creature has already been harvested.")
 	
+	var def: CreatureDefinition = CreatureDatabase.get_definition(creature.definition_id)
+	if def == null:
+		return CommandResult.fail("Creature definition '%s' not found." % str(creature.definition_id))
+	
 	if check_distance and player_position.distance_to(creature_position) > 60.0:
 		return CommandResult.fail("Too far away to harvest creature.")
 	
@@ -44,13 +48,18 @@ func validate(state: GameState) -> CommandResult:
 
 func _execute_mutation(state: GameState) -> CommandResult:
 	var creature: CreatureState = state.hunting_state.get_creature(creature_instance_id)
-	creature.is_harvested = true
-	
 	var def: CreatureDefinition = CreatureDatabase.get_definition(creature.definition_id)
 	var harvest_item: StringName = def.harvest_item_id if def != null else &"resource_raw_hide"
 	var harvest_count: int = def.harvest_item_count if def != null else 1
 	
-	state.inventory_state.add_item(harvest_item, harvest_count)
+	# Atomically add reward to authoritative inventory.
+	# Follow inventory contract: if adding fails (e.g. invalid item, capacity limit),
+	# do NOT mark the creature harvested and do NOT lose reward.
+	var add_success: bool = state.inventory_state.add_item(harvest_item, harvest_count)
+	if not add_success:
+		return CommandResult.fail("Failed to add harvest rewards to inventory.")
+	
+	creature.is_harvested = true
 	state.hunting_state.creature_updated.emit(creature)
 	
 	var item_def: ItemDefinition = ItemDatabase.get_definition(harvest_item)

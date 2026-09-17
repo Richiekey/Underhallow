@@ -1330,60 +1330,79 @@ func _run_hunting_slice_tests() -> void:
 	var runtime: GameRuntime = GameRuntimeClass.new()
 	runtime.initialize_runtime()
 	
-	# 1. HuntingState initializes
+	# 1. HuntingState initializes cleanly
 	_assert_true(runtime.game_state.hunting_state != null, "Hunting 1: HuntingState initializes")
 	_assert_equal(runtime.game_state.hunting_state.get_all_creatures().size(), 0, "Hunting 1: HuntingState starts empty")
 	
-	# 2. Hare can be registered/discovered (Authoritative registration)
-	var hare: CreatureState = runtime.game_state.hunting_state.register_creature(&"hare_01", &"hare", Vector2(10.0, 20.0))
-	_assert_true(hare != null, "Hunting 2: Hare registered successfully")
-	_assert_equal(hare.instance_id, &"hare_01", "Hunting 2: Instance ID matches")
-	_assert_equal(hare.definition_id, &"hare", "Hunting 2: Definition ID matches")
-	_assert_equal(hare.current_health, 10, "Hunting 2: Initial health matches definition")
-	_assert_true(not hare.is_discovered, "Hunting 2: Creature initially undiscovered")
-	_assert_true(not hare.is_defeated, "Hunting 2: Creature initially alive (not defeated)")
-	_assert_true(not hare.is_harvested, "Hunting 2: Creature initially unharvested")
-	_assert_true(runtime.game_state.hunting_state.has_creature(&"hare_01"), "Hunting 2: HuntingState reports has_creature true")
+	# 2. Creature definition lookup (data-driven authoring)
+	var hare_def: CreatureDefinition = CreatureDatabaseClass.get_definition(&"hare")
+	_assert_true(hare_def != null, "Hunting 2: Forest Hare definition found in CreatureDatabase")
+	_assert_equal(hare_def.id, &"hare", "Hunting 2: Creature definition ID matches 'hare'")
+	_assert_equal(hare_def.display_name, "Forest Hare", "Hunting 2: Creature display name matches")
+	_assert_equal(hare_def.max_health, 10, "Hunting 2: Max health configured to 10")
+	_assert_equal(hare_def.harvest_item_id, &"resource_raw_hide", "Hunting 2: Harvest item ID matches resource_raw_hide")
+	_assert_equal(hare_def.harvest_item_count, 1, "Hunting 2: Harvest item quantity matches 1")
+	_assert_true(CreatureDatabaseClass.get_definition(&"non_existent_creature") == null, "Hunting 2: Unknown creature definition returns null")
 	
-	# 3. Valid engagement / discovery succeeds through command pipeline
+	# 3. Hare can be registered with position & initial state (Authoritative registration)
+	var hare_pos: Vector2 = Vector2(60.0, -120.0)
+	var hare: CreatureState = runtime.game_state.hunting_state.register_creature(&"hare_01", &"hare", hare_pos)
+	_assert_true(hare != null, "Hunting 3: Hare registered successfully")
+	_assert_equal(hare.instance_id, &"hare_01", "Hunting 3: Instance ID matches")
+	_assert_equal(hare.definition_id, &"hare", "Hunting 3: Definition ID matches")
+	_assert_equal(hare.current_health, 10, "Hunting 3: Initial health matches definition")
+	_assert_equal(hare.max_health, 10, "Hunting 3: Max health matches definition")
+	_assert_equal(hare.position, hare_pos, "Hunting 3: Configured position matches world coordinates")
+	_assert_true(not hare.is_discovered, "Hunting 3: Creature initially undiscovered")
+	_assert_true(not hare.is_defeated, "Hunting 3: Creature initially alive (not defeated)")
+	_assert_true(not hare.is_harvested, "Hunting 3: Creature initially unharvested")
+	_assert_true(runtime.game_state.hunting_state.has_creature(&"hare_01"), "Hunting 3: HuntingState reports has_creature true")
+	
+	# 4. Valid engagement / discovery succeeds through command pipeline
 	var disc_cmd: DiscoverCreatureCommand = DiscoverCreatureCommandClass.new(&"hare_01")
 	var disc_res: CommandResult = runtime.execute_command(disc_cmd)
-	_assert_true(disc_res.success, "Hunting 3: Valid discovery command succeeds")
-	_assert_true(hare.is_discovered, "Hunting 3: Hare is marked discovered")
+	_assert_true(disc_res.success, "Hunting 4: Valid discovery command succeeds")
+	_assert_true(hare.is_discovered, "Hunting 4: Hare is marked discovered in HuntingState")
 	
-	# 4. Invalid engagement fails without mutation
+	# 5. Invalid engagement fails without mutating state
 	var invalid_disc_cmd: DiscoverCreatureCommand = DiscoverCreatureCommandClass.new(&"non_existent_creature")
 	var inv_disc_res: CommandResult = runtime.execute_command(invalid_disc_cmd)
-	_assert_true(not inv_disc_res.success, "Hunting 4: Discovery of nonexistent creature fails")
-	_assert_true(not runtime.game_state.hunting_state.has_creature(&"non_existent_creature"), "Hunting 4: No creature created on invalid discovery")
+	_assert_true(not inv_disc_res.success, "Hunting 5: Discovery of nonexistent creature fails validation")
+	_assert_true(not runtime.game_state.hunting_state.has_creature(&"non_existent_creature"), "Hunting 5: No creature created on invalid discovery")
+	var invalid_disc_empty: DiscoverCreatureCommand = DiscoverCreatureCommandClass.new(&"")
+	_assert_true(not runtime.execute_command(invalid_disc_empty).success, "Hunting 5: Discovery with empty ID fails validation")
 	
-	# 5. Attack succeeds through the command pipeline
-	var atk_cmd1: AttackCreatureCommand = AttackCreatureCommandClass.new(&"hare_01", 4)
+	# 6. Attack distance validation (when check_distance is enabled)
+	var player_far: Vector2 = Vector2(200.0, 200.0) # distance to (60, -120) is ~350 > 60
+	var out_of_range_atk: AttackCreatureCommand = AttackCreatureCommandClass.new(&"hare_01", 4, player_far, hare_pos, true)
+	var out_of_range_res: CommandResult = runtime.execute_command(out_of_range_atk)
+	_assert_true(not out_of_range_res.success, "Hunting 6: Attack out of range fails validation")
+	_assert_equal(hare.current_health, 10, "Hunting 6: Creature health unmutated on failed out-of-range attack")
+	
+	# 7. Valid basic attack reduces authoritative health
+	var player_near: Vector2 = Vector2(65.0, -120.0) # distance 5 <= 60
+	var atk_cmd1: AttackCreatureCommand = AttackCreatureCommandClass.new(&"hare_01", 4, player_near, hare_pos, true)
 	var atk_res1: CommandResult = runtime.execute_command(atk_cmd1)
-	_assert_true(atk_res1.success, "Hunting 5: Attack command succeeds through pipeline")
+	_assert_true(atk_res1.success, "Hunting 7: Attack command succeeds through pipeline within range")
+	_assert_equal(hare.current_health, 6, "Hunting 7: Authoritative health updated to 6")
+	_assert_true(not hare.is_defeated, "Hunting 7: Creature remains alive at 6 HP")
 	
-	# 6. Attack changes authoritative hunting state
-	_assert_equal(hare.current_health, 6, "Hunting 6: Authoritative health updated to 6")
-	_assert_true(not hare.is_defeated, "Hunting 6: Creature remains alive at 6 HP")
-	
-	# 7. Creature health decreases deterministically
+	# 8. Subsequent basic attack deterministically reduces health
 	var atk_cmd2: AttackCreatureCommand = AttackCreatureCommandClass.new(&"hare_01", 3)
 	var atk_res2: CommandResult = runtime.execute_command(atk_cmd2)
-	_assert_true(atk_res2.success, "Hunting 7: Second attack succeeds")
-	_assert_equal(hare.current_health, 3, "Hunting 7: Health deterministically decreased to 3")
+	_assert_true(atk_res2.success, "Hunting 8: Second attack succeeds")
+	_assert_equal(hare.current_health, 3, "Hunting 8: Health deterministically decreased to 3")
 	
-	# 8. Defeat occurs at zero health (non-lethal to player, non-lethal creature defeat)
+	# 9. Defeat occurs at zero health (health clamped at 0, non-lethal creature defeat)
 	var atk_cmd3: AttackCreatureCommand = AttackCreatureCommandClass.new(&"hare_01", 5) # 5 >= 3 remaining
 	var atk_res3: CommandResult = runtime.execute_command(atk_cmd3)
-	_assert_true(atk_res3.success, "Hunting 8: Fatal blow command succeeds")
-	_assert_equal(hare.current_health, 0, "Hunting 8: Health clamped at 0 HP")
-	
-	# 9. Defeat is recorded in HuntingState
+	_assert_true(atk_res3.success, "Hunting 9: Fatal blow command succeeds")
+	_assert_equal(hare.current_health, 0, "Hunting 9: Health clamped at 0 HP")
 	_assert_true(hare.is_defeated, "Hunting 9: Defeat is recorded in HuntingState")
 	_assert_true(not hare.is_harvested, "Hunting 9: Defeat does NOT automatically harvest rewards")
 	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_raw_hide"), 0, "Hunting 9: Inventory raw hide remains 0 upon defeat")
 	
-	# 10. Defeated creature cannot be attacked as alive
+	# 10. Defeated creature cannot take further normal damage
 	var atk_cmd_post: AttackCreatureCommand = AttackCreatureCommandClass.new(&"hare_01", 2)
 	var atk_res_post: CommandResult = runtime.execute_command(atk_cmd_post)
 	_assert_true(not atk_res_post.success, "Hunting 10: Attacking defeated creature fails validation")
@@ -1397,36 +1416,111 @@ func _run_hunting_slice_tests() -> void:
 	_assert_true(not living_hare.is_harvested, "Hunting 11: Living creature is not marked harvested")
 	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_raw_hide"), 0, "Hunting 11: No rewards granted from living creature harvest")
 	
-	# 12. Defeated creature can be harvested
-	var harv_cmd1: HarvestCreatureCommand = HarvestCreatureCommandClass.new(&"hare_01")
+	# 12. Harvest distance validation (when check_distance is enabled)
+	var out_of_range_harv: HarvestCreatureCommand = HarvestCreatureCommandClass.new(&"hare_01", player_far, hare_pos, true)
+	var out_of_range_harv_res: CommandResult = runtime.execute_command(out_of_range_harv)
+	_assert_true(not out_of_range_harv_res.success, "Hunting 12: Harvest out of range fails validation")
+	_assert_true(not hare.is_harvested, "Hunting 12: Creature remains unharvested on failed out-of-range harvest")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_raw_hide"), 0, "Hunting 12: No inventory rewards granted on out-of-range harvest")
+	
+	# 13. Defeated creature can be harvested within range
+	var harv_cmd1: HarvestCreatureCommand = HarvestCreatureCommandClass.new(&"hare_01", player_near, hare_pos, true)
 	var harv_res1: CommandResult = runtime.execute_command(harv_cmd1)
-	_assert_true(harv_res1.success, "Hunting 12: Harvesting defeated creature succeeds")
+	_assert_true(harv_res1.success, "Hunting 13: Harvesting defeated creature succeeds within range")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_raw_hide"), 1, "Hunting 13: Harvest granted configured 1 Raw Hide to inventory")
+	_assert_true(hare.is_harvested, "Hunting 13: Creature marked as harvested in HuntingState")
 	
-	# 13. Harvest grants the configured inventory resource
-	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_raw_hide"), 1, "Hunting 13: Harvest granted 1 Raw Hide to inventory")
-	
-	# 14. Harvest marks the creature as harvested
-	_assert_true(hare.is_harvested, "Hunting 14: Creature marked as harvested in HuntingState")
-	
-	# 15. Repeated harvest fails
+	# 14. Repeated harvest rejected without duplicating rewards
 	var harv_cmd2: HarvestCreatureCommand = HarvestCreatureCommandClass.new(&"hare_01")
 	var harv_res2: CommandResult = runtime.execute_command(harv_cmd2)
-	_assert_true(not harv_res2.success, "Hunting 15: Repeated harvest command fails validation")
+	_assert_true(not harv_res2.success, "Hunting 14: Repeated harvest command fails validation")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_raw_hide"), 1, "Hunting 14: Raw Hide quantity strictly unchanged on repeated harvest")
 	
-	# 16. Repeated harvest does not duplicate inventory rewards
-	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_raw_hide"), 1, "Hunting 16: Raw Hide quantity unchanged on repeated harvest")
+	# 15. Attacking harvested creature is rejected
+	var atk_harv_cmd: AttackCreatureCommand = AttackCreatureCommandClass.new(&"hare_01", 1)
+	var atk_harv_res: CommandResult = runtime.execute_command(atk_harv_cmd)
+	_assert_true(not atk_harv_res.success, "Hunting 15: Attacking harvested creature fails validation")
 	
-	# 17. Invalid hunting commands do not corrupt state
+	# 16. Missing creature definition & inventory failure safety
+	var missing_def_hare: CreatureState = runtime.game_state.hunting_state.register_creature(&"corrupt_hare", &"unknown_definition")
+	missing_def_hare.is_defeated = true
+	var corrupt_harv_cmd: HarvestCreatureCommand = HarvestCreatureCommandClass.new(&"corrupt_hare")
+	var corrupt_harv_res: CommandResult = runtime.execute_command(corrupt_harv_cmd)
+	_assert_true(not corrupt_harv_res.success, "Hunting 16: Harvesting creature with missing definition fails validation")
+	_assert_true(not missing_def_hare.is_harvested, "Hunting 16: Creature with missing definition is not marked harvested")
+	
+	# Test inventory addition rejection safeguard (when inventory cannot add item):
+	var invalid_reward_def: CreatureDefinition = CreatureDefinitionClass.new()
+	invalid_reward_def.id = &"bad_reward_creature"
+	invalid_reward_def.harvest_item_id = &"" # empty ID causes add_item to return false
+	invalid_reward_def.harvest_item_count = 0
+	CreatureDatabaseClass.register_definition(invalid_reward_def)
+	var bad_reward_hare: CreatureState = runtime.game_state.hunting_state.register_creature(&"bad_reward_hare", &"bad_reward_creature")
+	bad_reward_hare.is_defeated = true
+	var bad_harv_cmd: HarvestCreatureCommand = HarvestCreatureCommandClass.new(&"bad_reward_hare")
+	var bad_harv_res: CommandResult = runtime.execute_command(bad_harv_cmd)
+	_assert_true(not bad_harv_res.success, "Hunting 16: Harvest fails when inventory cannot accept item")
+	_assert_true(not bad_reward_hare.is_harvested, "Hunting 16: Creature is NOT marked harvested on inventory addition failure")
+	
+	# 17. Invalid hunting commands with empty IDs fail cleanly without corrupting state
 	var invalid_atk_empty: AttackCreatureCommand = AttackCreatureCommandClass.new(&"")
 	_assert_true(not runtime.execute_command(invalid_atk_empty).success, "Hunting 17: Attack with empty ID fails")
 	var invalid_harv_empty: HarvestCreatureCommand = HarvestCreatureCommandClass.new(&"")
 	_assert_true(not runtime.execute_command(invalid_harv_empty).success, "Hunting 17: Harvest with empty ID fails")
 	
-	# 18. Hare presentation adapter reflects state changes
+	# 18. Authority: Presentation adapter delegates to HuntingState and does not own truth
 	var hare_interactable: HareInteractable = HareInteractableClass.new()
 	hare_interactable.creature_instance_id = &"hare_01"
+	hare_interactable.bind_runtime(runtime)
 	_assert_equal(hare_interactable.creature_instance_id, &"hare_01", "Hunting 18: HareInteractable instance ID matches")
+	var adapter_state: CreatureState = hare_interactable.get_creature_state()
+	_assert_true(adapter_state != null, "Hunting 18: HareInteractable delegates state lookup to HuntingState")
+	_assert_equal(adapter_state.instance_id, &"hare_01", "Hunting 18: Presentation retrieved authoritative instance")
+	_assert_true(adapter_state.is_harvested, "Hunting 18: Presentation reflects authoritative harvested status")
+	
+	# Test prompt update transitions
+	hare_interactable.update_prompt_for_player(null)
+	_assert_equal(hare_interactable.prompt_text, "Hare (Harvested)", "Hunting 18: Prompt reflects harvested state")
+	
+	# Test prompt for living undefeated creature
+	var living_interactable: HareInteractable = HareInteractableClass.new()
+	living_interactable.creature_instance_id = &"hare_02"
+	living_interactable.bind_runtime(runtime)
+	living_interactable.update_prompt_for_player(null)
+	_assert_equal(living_interactable.prompt_text, "Discover Hare", "Hunting 18: Undiscovered prompt is 'Discover Hare'")
+	
+	# Simulate discovery command on hare_02
+	runtime.execute_command(DiscoverCreatureCommandClass.new(&"hare_02"))
+	living_interactable.update_prompt_for_player(null)
+	_assert_equal(living_interactable.prompt_text, "Attack Hare (10 HP)", "Hunting 18: Discovered prompt is 'Attack Hare (10 HP)'")
+	
+	# Signal reactivity verification: attack hare_02 and verify signal updates presentation
+	runtime.execute_command(AttackCreatureCommandClass.new(&"hare_02", 4))
+	living_interactable.update_prompt_for_player(null)
+	_assert_equal(living_interactable.prompt_text, "Attack Hare (6 HP)", "Hunting 18: Damaged prompt reflects 6 HP remaining")
+	
 	hare_interactable.queue_free()
+	living_interactable.queue_free()
+	
+	# 19. Persistence: HuntingState round-trip preserves creature states
+	var serialized_hunting: Dictionary = runtime.game_state.hunting_state.to_dictionary()
+	_assert_true(serialized_hunting.has("hare_01"), "Hunting 19: Serialized hunting state contains hare_01")
+	_assert_true(serialized_hunting.has("hare_02"), "Hunting 19: Serialized hunting state contains hare_02")
+	
+	var restored_hunting: HuntingState = HuntingStateClass.new()
+	restored_hunting.from_dictionary(serialized_hunting)
+	var restored_hare_01: CreatureState = restored_hunting.get_creature(&"hare_01")
+	_assert_true(restored_hare_01 != null, "Hunting 19: Restored hunting state contains hare_01")
+	_assert_true(restored_hare_01.is_defeated, "Hunting 19: Restored hare_01 remains defeated")
+	_assert_true(restored_hare_01.is_harvested, "Hunting 19: Restored hare_01 remains harvested")
+	_assert_equal(restored_hare_01.current_health, 0, "Hunting 19: Restored hare_01 health is 0")
+	_assert_equal(restored_hare_01.position, hare_pos, "Hunting 19: Restored hare_01 position matches")
+	
+	var restored_hare_02: CreatureState = restored_hunting.get_creature(&"hare_02")
+	_assert_true(restored_hare_02 != null, "Hunting 19: Restored hunting state contains hare_02")
+	_assert_equal(restored_hare_02.current_health, 6, "Hunting 19: Restored hare_02 health is 6")
+	_assert_true(not restored_hare_02.is_defeated, "Hunting 19: Restored hare_02 is not defeated")
+
 
 func _run_construction_slice_tests() -> void:
 	print("\n--- Testing Phase 4 Construction Slice (BI-001) ---")

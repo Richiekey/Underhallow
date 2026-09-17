@@ -47,6 +47,7 @@ func validate(state: GameState) -> CommandResult:
 
 func _execute_mutation(state: GameState) -> CommandResult:
 	var creature: CreatureState = state.hunting_state.get_creature(creature_instance_id)
+	creature.is_discovered = true
 	creature.current_health = maxi(0, creature.current_health - damage)
 	
 	var defeated_now: bool = false

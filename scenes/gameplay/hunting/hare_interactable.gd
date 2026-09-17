@@ -19,12 +19,36 @@ func _ready() -> void:
 	_find_runtime()
 	update_visuals()
 
+func bind_runtime(p_runtime: GameRuntime) -> void:
+	if runtime != null and runtime.game_state != null and runtime.game_state.hunting_state != null:
+		if runtime.game_state.hunting_state.creature_updated.is_connected(_on_creature_updated):
+			runtime.game_state.hunting_state.creature_updated.disconnect(_on_creature_updated)
+	runtime = p_runtime
+	if runtime != null and runtime.game_state != null and runtime.game_state.hunting_state != null:
+		if not runtime.game_state.hunting_state.creature_updated.is_connected(_on_creature_updated):
+			runtime.game_state.hunting_state.creature_updated.connect(_on_creature_updated)
+	update_visuals()
+
 func _find_runtime() -> void:
-	if runtime == null:
+	if runtime == null and get_tree() != null:
 		var root: Node = get_tree().root
-		var game_node: Node = root.get_node_or_null("Game")
-		if game_node != null:
-			runtime = game_node.get_node_or_null("Systems/Runtime") as GameRuntime
+		if root != null:
+			var game_node: Node = root.get_node_or_null("Game")
+			if game_node != null:
+				runtime = game_node.get_node_or_null("Systems/Runtime") as GameRuntime
+	
+	if runtime != null and runtime.game_state != null and runtime.game_state.hunting_state != null:
+		if not runtime.game_state.hunting_state.creature_updated.is_connected(_on_creature_updated):
+			runtime.game_state.hunting_state.creature_updated.connect(_on_creature_updated)
+
+func _on_creature_updated(creature: CreatureState) -> void:
+	if creature != null and creature.instance_id == creature_instance_id:
+		update_visuals()
+
+func _exit_tree() -> void:
+	if runtime != null and runtime.game_state != null and runtime.game_state.hunting_state != null:
+		if runtime.game_state.hunting_state.creature_updated.is_connected(_on_creature_updated):
+			runtime.game_state.hunting_state.creature_updated.disconnect(_on_creature_updated)
 
 func get_creature_state() -> CreatureState:
 	_find_runtime()
