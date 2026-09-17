@@ -3,6 +3,9 @@ extends Command
 
 ## Authoritative command to discover/engage an existing creature.
 ## Command -> Validation -> Mutation -> Event per HU-001 & IA-001.
+## Note: Contextual discovery proximity/range is authoritatively enforced by the
+## player interaction layer (PlayerInteraction, PC-001 Section 14/15, range 28.0 px).
+## This command owns discovery state mutation, remaining free of competing range logic.
 
 var creature_instance_id: StringName
 

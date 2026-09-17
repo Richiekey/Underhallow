@@ -59,6 +59,7 @@ const BuildingDisplayClass = preload("res://scenes/gameplay/building/building_di
 const BuildingPreviewDisplayClass = preload("res://scenes/gameplay/building/building_preview_display.gd")
 const HotbarUIClass = preload("res://scenes/gameplay/ui/hotbar_ui.gd")
 const HareInteractableClass = preload("res://scenes/gameplay/hunting/hare_interactable.gd")
+const HareScene = preload("res://scenes/gameplay/hunting/hare.tscn")
 
 var total_tests: int = 0
 var passed_tests: int = 0
@@ -1520,6 +1521,122 @@ func _run_hunting_slice_tests() -> void:
 	_assert_true(restored_hare_02 != null, "Hunting 19: Restored hunting state contains hare_02")
 	_assert_equal(restored_hare_02.current_health, 6, "Hunting 19: Restored hare_02 health is 6")
 	_assert_true(not restored_hare_02.is_defeated, "Hunting 19: Restored hare_02 is not defeated")
+	
+	# 20. Targeted Surgical Verification: Full Player-Facing Hunting Loop
+	# Traces: Player input / interaction -> PlayerInteraction -> HareInteractable -> Command -> GameRuntime -> HuntingState -> Presentation
+	var live_runtime: GameRuntime = GameRuntimeClass.new()
+	live_runtime.initialize_runtime()
+	live_runtime.start_runtime()
+	
+	# Register world creature hare_island (representing the Personal Island instance at Vector2(60, -120))
+	var island_hare_pos: Vector2 = Vector2(60.0, -120.0)
+	var live_hare_state: CreatureState = live_runtime.game_state.hunting_state.register_creature(&"hare_island", &"hare", island_hare_pos)
+	_assert_true(live_hare_state != null, "PlayerLoop 20.1: Live world hare registered in HuntingState")
+	_assert_true(not live_hare_state.is_discovered, "PlayerLoop 20.1: Live hare starts undiscovered")
+	
+	# Instantiate actual Hare presentation scene from res://scenes/gameplay/hunting/hare.tscn
+	var live_hare_node: HareInteractable = HareScene.instantiate() as HareInteractable
+	live_hare_node.creature_instance_id = &"hare_island"
+	live_hare_node.position = island_hare_pos
+	live_hare_node.bind_runtime(live_runtime)
+	if live_hare_node.visual_body == null:
+		live_hare_node.visual_body = live_hare_node.get_node_or_null("VisualBody") as ColorRect
+	if live_hare_node.state_label == null:
+		live_hare_node.state_label = live_hare_node.get_node_or_null("StateLabel") as Label
+	root.add_child(live_hare_node)
+	
+	# Instantiate actual Player presentation scene from res://scenes/player/player.tscn
+	var live_player: PlayerController = PlayerScene.instantiate() as PlayerController
+	live_player.runtime = live_runtime
+	live_player.player_state = live_runtime.game_state.player_state
+	if live_player.interaction_detector == null:
+		live_player.interaction_detector = live_player.get_node_or_null("InteractionDetector") as PlayerInteraction
+	root.add_child(live_player)
+	
+	# Proximity check: Player is far away at (200, 200) -> out of range (PC-001 range 28.0 px)
+	live_player.global_position = Vector2(200.0, 200.0)
+	live_player.interaction_detector.global_position = Vector2(200.0, 200.0)
+	live_player.player_state.position = Vector2(200.0, 200.0)
+	
+	# Notify detector of nearby candidate; detector evaluates distance
+	live_player.interaction_detector._on_area_entered(live_hare_node)
+	_assert_true(live_player.interaction_detector.current_target == null, "PlayerLoop 20.2: Out-of-range hare is not focused by PlayerInteraction")
+	var can_interact_far: bool = live_player.interaction_detector.trigger_interaction(live_player)
+	_assert_true(not can_interact_far, "PlayerLoop 20.2: Normal player interaction rejected when out of range")
+	_assert_true(not live_hare_state.is_discovered, "PlayerLoop 20.2: Hare cannot be discovered from outside interaction range")
+	
+	# Approach: Move player adjacent to hare within interaction range (e.g. at (60, -100), dist 20.0 <= 28.0)
+	var near_pos: Vector2 = Vector2(60.0, -100.0)
+	live_player.global_position = near_pos
+	live_player.interaction_detector.global_position = near_pos
+	live_player.player_state.position = near_pos
+	live_player.facing_direction = Vector2.UP # Facing NORTH toward hare at (60, -120)
+	live_player.interaction_detector.update_facing(Vector2.UP)
+	_assert_equal(live_player.interaction_detector.current_target, live_hare_node, "PlayerLoop 20.3: Player focuses HareInteractable within range")
+	
+	# Step 1: Discover
+	live_hare_node.update_prompt_for_player(live_player)
+	_assert_equal(live_hare_node.prompt_text, "Discover Hare", "PlayerLoop 20.4: Interaction prompt indicates 'Discover Hare'")
+	var trigger_disc_ok: bool = live_player.interaction_detector.trigger_interaction(live_player)
+	_assert_true(trigger_disc_ok, "PlayerLoop 20.5: Triggering interaction executes discovery")
+	_assert_true(live_hare_state.is_discovered, "PlayerLoop 20.5: Authoritative state records hare as discovered")
+	
+	# Step 2: First Basic Attack
+	live_hare_node.update_prompt_for_player(live_player)
+	_assert_equal(live_hare_node.prompt_text, "Attack Hare (10 HP)", "PlayerLoop 20.6: Prompt updates to 'Attack Hare (10 HP)'")
+	var trigger_atk1_ok: bool = live_player.interaction_detector.trigger_interaction(live_player)
+	_assert_true(trigger_atk1_ok, "PlayerLoop 20.7: Triggering interaction executes first attack")
+	_assert_equal(live_hare_state.current_health, 5, "PlayerLoop 20.7: Authoritative health reduced to 5 HP")
+	_assert_true(not live_hare_state.is_defeated, "PlayerLoop 20.7: Hare remains alive at 5 HP")
+	
+	# Step 3: Second Basic Attack (Defeat)
+	live_hare_node.update_prompt_for_player(live_player)
+	_assert_equal(live_hare_node.prompt_text, "Attack Hare (5 HP)", "PlayerLoop 20.8: Prompt updates to 'Attack Hare (5 HP)'")
+	var trigger_atk2_ok: bool = live_player.interaction_detector.trigger_interaction(live_player)
+	_assert_true(trigger_atk2_ok, "PlayerLoop 20.9: Triggering interaction executes defeating attack")
+	_assert_equal(live_hare_state.current_health, 0, "PlayerLoop 20.9: Authoritative health clamped at 0 HP")
+	_assert_true(live_hare_state.is_defeated, "PlayerLoop 20.9: Hare is authoritatively marked defeated")
+	_assert_true(not live_hare_state.is_harvested, "PlayerLoop 20.9: Hare is not yet harvested upon defeat")
+	
+	# Attack on defeated creature is rejected by command pipeline
+	var post_defeat_atk: AttackCreatureCommand = AttackCreatureCommandClass.new(&"hare_island", 5, near_pos, island_hare_pos, true)
+	var post_defeat_res: CommandResult = live_runtime.execute_command(post_defeat_atk)
+	_assert_true(not post_defeat_res.success, "PlayerLoop 20.10: Attacking defeated hare fails validation")
+	_assert_equal(live_hare_state.current_health, 0, "PlayerLoop 20.10: Health remains 0")
+	
+	# Step 4: Harvest
+	live_hare_node.update_prompt_for_player(live_player)
+	_assert_equal(live_hare_node.prompt_text, "Harvest Hare", "PlayerLoop 20.11: Prompt updates to 'Harvest Hare'")
+	_assert_equal(live_runtime.game_state.inventory_state.get_quantity(&"resource_raw_hide"), 0, "PlayerLoop 20.11: Inventory starts with 0 raw hide")
+	var trigger_harv_ok: bool = live_player.interaction_detector.trigger_interaction(live_player)
+	_assert_true(trigger_harv_ok, "PlayerLoop 20.12: Triggering interaction executes harvest")
+	_assert_true(live_hare_state.is_harvested, "PlayerLoop 20.12: Authoritative state records hare as harvested")
+	_assert_equal(live_runtime.game_state.inventory_state.get_quantity(&"resource_raw_hide"), 1, "PlayerLoop 20.12: Exactly 1 Raw Hide granted to inventory")
+	
+	# Step 5: Post-Harvest State & Deduplication
+	live_hare_node.update_prompt_for_player(live_player)
+	_assert_equal(live_hare_node.prompt_text, "Hare (Harvested)", "PlayerLoop 20.13: Prompt reflects harvested state")
+	var trigger_post_harv_ok: bool = live_player.interaction_detector.trigger_interaction(live_player)
+	_assert_true(not trigger_post_harv_ok or live_runtime.game_state.inventory_state.get_quantity(&"resource_raw_hide") == 1, "PlayerLoop 20.14: Triggering interaction on harvested hare safely handled")
+	_assert_equal(live_runtime.game_state.inventory_state.get_quantity(&"resource_raw_hide"), 1, "PlayerLoop 20.14: Inventory raw hide strictly unchanged (no duplication)")
+	
+	# Direct harvest command on already-harvested creature rejected
+	var post_harv_cmd: HarvestCreatureCommand = HarvestCreatureCommandClass.new(&"hare_island", near_pos, island_hare_pos, true)
+	_assert_true(not live_runtime.execute_command(post_harv_cmd).success, "PlayerLoop 20.15: Direct harvest command on harvested hare fails validation")
+	
+	# Step 6: Attack does not mutate discovery (Responsibility separation test)
+	var separate_hare: CreatureState = live_runtime.game_state.hunting_state.register_creature(&"hare_separate", &"hare", island_hare_pos)
+	_assert_true(not separate_hare.is_discovered, "PlayerLoop 20.16: Separate hare starts undiscovered")
+	var direct_atk: AttackCreatureCommand = AttackCreatureCommandClass.new(&"hare_separate", 3)
+	live_runtime.execute_command(direct_atk)
+	_assert_equal(separate_hare.current_health, 7, "PlayerLoop 20.16: Direct attack reduces health to 7")
+	_assert_true(not separate_hare.is_discovered, "PlayerLoop 20.16: Attack does NOT mutate is_discovered (responsibility separation verified)")
+	
+	root.remove_child(live_hare_node)
+	root.remove_child(live_player)
+	live_hare_node.free()
+	live_player.free()
+
 
 
 func _run_construction_slice_tests() -> void:
