@@ -7,12 +7,12 @@
 **Version:** 1.0  
 **Status:** Baseline Implementation Roadmap (Layer 5)  
 **Parent Documents:**  
-- [Underhallow North Star V1.0 (NS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/NORTH_STAR.md)  
-- [Underhallow Foundation Specification V1.0 (FS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/FOUNDATION_SPECIFICATION.md)  
-- [Specification Reconciliation V1.0 (SR-001)](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md)  
-- [Engine & Technical Architecture Specification V1 (ETA-001)](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)  
-- [Multiplayer & Social Systems Specification V1.0 (MS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md)  
-- [Underhallow Agent Constitution V1.0 (AC-001)](file:///c:/Users/HP/Documents/Underhallow/docs/AGENT_CONSTITUTION.md)  
+- [Underhallow North Star V1.0 (NS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/NORTH_STAR.md)  
+- [Underhallow Foundation Specification V1.0 (FS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/FOUNDATION_SPECIFICATION.md)  
+- [Specification Reconciliation V1.0 (SR-001)](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/SPECIFICATION_RECONCILIATION.md)  
+- [Engine & Technical Architecture Specification V1 (ETA-001)](file:///c:/Users/HP/Documents/Underhallow/docs/02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)  
+- [Multiplayer & Social Systems Specification V1.0 (MS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/07-multiplayer/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md)  
+- [Underhallow Agent Constitution V1.0 (AC-001)](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/AGENT_CONSTITUTION.md)  
 
 ---
 
@@ -74,9 +74,9 @@ PHASE 5: HUMAN QA & VERTICAL SLICE SUCCESS TEST
 # 2. Phase 0: Toolchain & Repository Scaffolding (Immediate)
 
 ### Deliverables:
-1. `project.godot` configured for Windows PC target per [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md):
-   - Pixel-art display settings with integer scaling per [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md).
-   - Default input action bindings (`move_up`, `move_down`, `move_left`, `move_right`, `interact`, `use_tool`, `cancel`) per [PC-001](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md).
+1. `project.godot` configured for Windows PC target per [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md):
+   - Pixel-art display settings with integer scaling per [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md).
+   - Default input action bindings (`move_up`, `move_down`, `move_left`, `move_right`, `interact`, `use_tool`, `cancel`) per [PC-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md).
 2. GUT (Godot Unit Testing) addon installed in `addons/gut/` for automated unit/integration test suites.
 3. Directory tree conforming to **ETA-001 Section 17**:
    - `src/core/` (GameTime, state, signals)
@@ -100,10 +100,10 @@ The goal of Phase 1 is to answer the **6 Prototype Gate Questions**:
 6. **Art scale:** Does the character size feel harmonious relative to the environment and structures?
 
 ### Technical Components:
-- Coordinate conversions between world, tile, and screen coordinates per [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md).
+- Coordinate conversions between world, tile, and screen coordinates per [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md).
 - TileMapLayer management for terrain, paths, foliage, and structures.
-- Continuous isometric movement controller with collision detection per [PC-001](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md).
-- Camera2D with fixed isometric angle, smooth tracking, and clamped zoom tiers (camera rotation disabled per [SR-001](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md)).
+- Continuous isometric movement controller with collision detection per [PC-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md).
+- Camera2D with fixed isometric angle, smooth tracking, and clamped zoom tiers (camera rotation disabled per [SR-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/SPECIFICATION_RECONCILIATION.md)).
 - Mock Environment: Isometric grass terrain, cobblestone path, rustic cabin, oak trees, and animated player sprite.
 
 ---
@@ -111,13 +111,13 @@ The goal of Phase 1 is to answer the **6 Prototype Gate Questions**:
 # 4. Phase 2: Core Runtime & State Architecture
 
 ### Deliverables:
-- Authoritative serializable state models per [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md):
+- Authoritative serializable state models per [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md):
   - `PlayerState` (position, direction, health, inventory, progression — strictly no stamina meter).
   - `WorldState` (current_island_id, modified_tiles, placed_objects).
   - `TimeState` (day, hour, minute, tick_count).
-- Deterministic simulation clock dispatching minute/hour/day signals per [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md).
+- Deterministic simulation clock dispatching minute/hour/day signals per [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md).
 - Strongly typed global event bus for system decoupling.
-- Spatial interaction detector for contextual interactable entities in front of the player (E key) per [PC-001](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md).
+- Spatial interaction detector for contextual interactable entities in front of the player (E key) per [PC-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md).
 
 ---
 

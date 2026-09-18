@@ -13,17 +13,17 @@
 
 ### Parent Specifications
 
-* [North Star — NS-001](file:///c:/Users/HP/Documents/Underhallow/docs/NORTH_STAR.md)
-* [Foundation Specification — FS-001](file:///c:/Users/HP/Documents/Underhallow/docs/FOUNDATION_SPECIFICATION.md)
-* [Core Gameplay Systems Specification — CG-001](file:///c:/Users/HP/Documents/Underhallow/docs/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md)
-* [Engine & Technical Architecture Specification — ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)
-* [Implementation Architecture Specification — IA-001](file:///c:/Users/HP/Documents/Underhallow/docs/IMPLEMENTATION_ARCHITECTURE_SPECIFICATION.md)
-* [Player Control, Movement & Interaction Specification — PC-001](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md)
-* [World & Map Architecture Specification — WM-001](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md)
-* [Player Progression Specification — PR-001](file:///c:/Users/HP/Documents/Underhallow/docs/PLAYER_PROGRESSION_SPECIFICATION.md)
-* [Farming System Specification — FB-001](file:///c:/Users/HP/Documents/Underhallow/docs/FARMING_SYSTEM_SPECIFICATION.md)
-* [Hunting & Combat System Specification — HU-001](file:///c:/Users/HP/Documents/Underhallow/docs/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md)
-* [Multiplayer & Social Systems Specification — MS-001](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md)
+* [North Star — NS-001](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/NORTH_STAR.md)
+* [Foundation Specification — FS-001](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/FOUNDATION_SPECIFICATION.md)
+* [Core Gameplay Systems Specification — CG-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md)
+* [Engine & Technical Architecture Specification — ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)
+* [Implementation Architecture Specification — IA-001](file:///c:/Users/HP/Documents/Underhallow/docs/02-architecture/IMPLEMENTATION_ARCHITECTURE_SPECIFICATION.md)
+* [Player Control, Movement & Interaction Specification — PC-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md)
+* [World & Map Architecture Specification — WM-001](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md)
+* [Player Progression Specification — PR-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/PLAYER_PROGRESSION_SPECIFICATION.md)
+* [Farming System Specification — FB-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/FARMING_SYSTEM_SPECIFICATION.md)
+* [Hunting & Combat System Specification — HU-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md)
+* [Multiplayer & Social Systems Specification — MS-001](file:///c:/Users/HP/Documents/Underhallow/docs/07-multiplayer/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md)
 
 ### Related Future Specifications
 

@@ -7,10 +7,10 @@
 **Project:** Underhallow  
 **Purpose:** Define the fundamental gameplay systems, player activities, progression model, world structure, and gameplay relationships that form the playable foundation of Underhallow.  
 **Parent Documents:**  
-* [Underhallow North Star V1.0](file:///c:/Users/HP/Documents/Underhallow/docs/NORTH_STAR.md)  
-* [Underhallow Foundation Specification V1.0](file:///c:/Users/HP/Documents/Underhallow/docs/FOUNDATION_SPECIFICATION.md)  
-* [Engine & Technical Architecture Specification V1 (ETA-001)](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)  
-* [Underhallow Agent Constitution V1.0](file:///c:/Users/HP/Documents/Underhallow/docs/AGENT_CONSTITUTION.md)  
+* [Underhallow North Star V1.0](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/NORTH_STAR.md)  
+* [Underhallow Foundation Specification V1.0](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/FOUNDATION_SPECIFICATION.md)  
+* [Engine & Technical Architecture Specification V1 (ETA-001)](file:///c:/Users/HP/Documents/Underhallow/docs/02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)  
+* [Underhallow Agent Constitution V1.0](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/AGENT_CONSTITUTION.md)  
 
 ---
 
@@ -283,7 +283,7 @@ Possible uses include:
 
 # 9.1 Guild Islands
 
-In accordance with [SR-001](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md), [WM-001](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md), and [MS-001](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md), guilds can unlock and develop persistent **Guild Islands**.
+In accordance with [SR-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/SPECIFICATION_RECONCILIATION.md), [WM-001](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md), and [MS-001](file:///c:/Users/HP/Documents/Underhallow/docs/07-multiplayer/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md), guilds can unlock and develop persistent **Guild Islands**.
 
 Guild Islands provide:
 
@@ -1182,7 +1182,7 @@ The transition should feel diegetic rather than like a purely technical teleport
 
 # 50. Social & Cooperative Systems
 
-In accordance with [SR-001](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md), [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md), and [MS-001](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md), Underhallow is **single-player-first, multiplayer-native**.
+In accordance with [SR-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/SPECIFICATION_RECONCILIATION.md), [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md), and [MS-001](file:///c:/Users/HP/Documents/Underhallow/docs/07-multiplayer/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md), Underhallow is **single-player-first, multiplayer-native**.
 
 The single-player experience is complete, self-contained, and fully playable without any social interaction. For players who choose to engage socially, the architecture natively provides:
 
@@ -1338,7 +1338,7 @@ This keeps the architecture modular and allows future systems to be added safely
 
 # 54.1 Multiplayer Compatibility Principle
 
-In accordance with [SR-001](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md) and [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md), Underhallow is **single-player-first, multiplayer-native**.
+In accordance with [SR-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/SPECIFICATION_RECONCILIATION.md) and [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md), Underhallow is **single-player-first, multiplayer-native**.
 
 Every core gameplay system (farming, hunting, gathering, building, trading, exploration) functions completely and satisfyingly for a solo player. When playing cooperatively:
 

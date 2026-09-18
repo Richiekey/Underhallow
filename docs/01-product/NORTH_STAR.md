@@ -236,7 +236,7 @@ The island should therefore become an important form of player expression.
 ---
 
 ## 11.1 The Guild Island
-In accordance with [SR-001](file:///c:/Users/HP/Documents/Underhallow/docs/SPECIFICATION_RECONCILIATION.md), [WM-001](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md), and [MS-001](file:///c:/Users/HP/Documents/Underhallow/docs/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md), guilds can unlock and develop a persistent, communal **Guild Island**.  
+In accordance with [SR-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/SPECIFICATION_RECONCILIATION.md), [WM-001](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md), and [MS-001](file:///c:/Users/HP/Documents/Underhallow/docs/07-multiplayer/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md), guilds can unlock and develop a persistent, communal **Guild Island**.  
 
 The Guild Island functions as a shared cooperative haven:
 - Guild Hall housing the communal bank, war room, and trophy displays

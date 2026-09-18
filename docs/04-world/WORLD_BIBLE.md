@@ -7,7 +7,7 @@
 **Version:** 1.0  
 **Project:** Underhallow  
 **Authority:** Level 0 — Project Authority / Canonical World-Building Foundation  
-**Parent Documents:** [docs/NORTH_STAR.md](file:///c:/Users/HP/Documents/Underhallow/docs/NORTH_STAR.md), [docs/CREATIVE_DIRECTION.md](file:///c:/Users/HP/Documents/Underhallow/docs/CREATIVE_DIRECTION.md), [docs/ART_DIRECTION_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/ART_DIRECTION_BIBLE.md)  
+**Parent Documents:** [docs/01-product/NORTH_STAR.md](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/NORTH_STAR.md), [docs/06-art/CREATIVE_DIRECTION.md](file:///c:/Users/HP/Documents/Underhallow/docs/06-art/CREATIVE_DIRECTION.md), [docs/06-art/ART_DIRECTION_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/06-art/ART_DIRECTION_BIBLE.md)  
 **Applies To:** All world-building, narrative design, environmental storytelling, geography, quest writing, NPC development, and lore across Underhallow  
 **Repository:** `Richiekey/Underhallow`  
 

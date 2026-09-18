@@ -7,7 +7,7 @@
 **Version:** 1.0  
 **Project:** Underhallow  
 **Authority Level:** Level 0 — Project Authority / Canonical Creative Foundation  
-**Parent Document:** [docs/NORTH_STAR.md](file:///c:/Users/HP/Documents/Underhallow/docs/NORTH_STAR.md)  
+**Parent Document:** [docs/01-product/NORTH_STAR.md](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/NORTH_STAR.md)  
 **Applies To:** All Underhallow creative design, art direction, world building, narrative, audio, and gameplay systems  
 
 ---

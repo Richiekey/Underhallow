@@ -12,14 +12,14 @@
 
 ### Parent Specifications
 
-* [North Star — NS-001](file:///c:/Users/HP/Documents/Underhallow/docs/NORTH_STAR.md)
-* [Creative Direction — CD-001](file:///c:/Users/HP/Documents/Underhallow/docs/CREATIVE_DIRECTION.md)
-* [Art Direction Bible — AD-001](file:///c:/Users/HP/Documents/Underhallow/docs/ART_DIRECTION_BIBLE.md)
-* [World Bible — WB-001](file:///c:/Users/HP/Documents/Underhallow/docs/WORLD_BIBLE.md)
-* [Narrative Bible — NB-001](file:///c:/Users/HP/Documents/Underhallow/docs/NARRATIVE_BIBLE.md)
-* [Building & Construction System Specification — BI-001](file:///c:/Users/HP/Documents/Underhallow/docs/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md)
-* [Main Island Design Specification — MI-001](file:///c:/Users/HP/Documents/Underhallow/docs/MAIN_ISLAND_DESIGN_SPECIFICATION.md)
-* [Farming System Specification — FB-001](file:///c:/Users/HP/Documents/Underhallow/docs/FARMING_SYSTEM_SPECIFICATION.md)
+* [North Star — NS-001](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/NORTH_STAR.md)
+* [Creative Direction — CD-001](file:///c:/Users/HP/Documents/Underhallow/docs/06-art/CREATIVE_DIRECTION.md)
+* [Art Direction Bible — AD-001](file:///c:/Users/HP/Documents/Underhallow/docs/06-art/ART_DIRECTION_BIBLE.md)
+* [World Bible — WB-001](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/WORLD_BIBLE.md)
+* [Narrative Bible — NB-001](file:///c:/Users/HP/Documents/Underhallow/docs/05-narrative/NARRATIVE_BIBLE.md)
+* [Building & Construction System Specification — BI-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md)
+* [Main Island Design Specification — MI-001](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/MAIN_ISLAND_DESIGN_SPECIFICATION.md)
+* [Farming System Specification — FB-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/FARMING_SYSTEM_SPECIFICATION.md)
 
 ---
 

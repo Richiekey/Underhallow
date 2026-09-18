@@ -8,16 +8,16 @@
 **Status:** APPROVED  
 **Authority Level:** Level 1 — Foundation Specification  
 **Parent Documents:**  
-* [North Star V1.0 (NS-001)](NORTH_STAR.md)  
-* [Creative Direction V1.0 (CD-001)](CREATIVE_DIRECTION.md)  
-* [Art Direction Bible V1.0 (AD-001)](ART_DIRECTION_BIBLE.md)  
-* [World Bible V1.0 (WB-001)](WORLD_BIBLE.md)  
-* [Engine & Technical Architecture Specification V1 (ETA-001)](ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)  
-* [Core Gameplay Systems Specification V1.0 (CG-001)](CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md)  
-* [Player Control, Movement & Interaction Specification V1.0 (PC-001)](PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md)  
-* [Biome & Environment Bible V1.1 (BE-001)](BIOME_ENVIRONMENT_BIBLE.md)  
-* [Creature & Wildlife Bible V1.0 (CW-001)](CREATURE_WILDLIFE_BIBLE.md)  
-* [Master Specification Index & Build Governance V1.0 (MSI-001)](MASTER_SPECIFICATION_INDEX.md)  
+* [North Star V1.0 (NS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/NORTH_STAR.md)  
+* [Creative Direction V1.0 (CD-001)](file:///c:/Users/HP/Documents/Underhallow/docs/06-art/CREATIVE_DIRECTION.md)  
+* [Art Direction Bible V1.0 (AD-001)](file:///c:/Users/HP/Documents/Underhallow/docs/06-art/ART_DIRECTION_BIBLE.md)  
+* [World Bible V1.0 (WB-001)](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/WORLD_BIBLE.md)  
+* [Engine & Technical Architecture Specification V1 (ETA-001)](file:///c:/Users/HP/Documents/Underhallow/docs/02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)  
+* [Core Gameplay Systems Specification V1.0 (CG-001)](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md)  
+* [Player Control, Movement & Interaction Specification V1.0 (PC-001)](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md)  
+* [Biome & Environment Bible V1.1 (BE-001)](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/BIOME_ENVIRONMENT_BIBLE.md)  
+* [Creature & Wildlife Bible V1.0 (CW-001)](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/CREATURE_WILDLIFE_BIBLE.md)  
+* [Master Specification Index & Build Governance V1.0 (MSI-001)](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)  
 
 **Primary Domain:** World Architecture  
 **Scope:** Main Island, Personal Island, world topology, scale, traversal, environmental simulation boundaries, map structure, exploration architecture, and future expansion  
@@ -218,10 +218,10 @@ To protect architectural stability, visual cohesion, and performance, Personal I
 ### Supported V1 Terrain Modifications:
 * clearing wild trees, stumps, and fallen branches;
 * clearing loose surface stones, weed clusters, and ground clutter;
-* tilling soil into agricultural plots (via farming tools governed by [FB-001](FARMING_SYSTEM_SPECIFICATION.md));
+* tilling soil into agricultural plots (via farming tools governed by [FB-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/FARMING_SYSTEM_SPECIFICATION.md));
 * laying constructed pathways (stone, brick, wood planks, gravel);
 * surface landscaping and cosmetic ground cover painting (grass, dirt, packed earth);
-* placing buildings, workshops, fences, and outdoor furniture (governed by [BI-001](BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md));
+* placing buildings, workshops, fences, and outdoor furniture (governed by [BI-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md));
 * planting domestic crops, orchard saplings, and decorative flora.
 
 ### NOT Supported in V1 (Constrained Architecture):
@@ -245,7 +245,7 @@ The Personal Island expands through **Connected Player-Selected Grid Expansion**
 3. **Coherent Adjacency:** A player may only unlock an expansion grid that directly shares a boundary with already unlocked territory. Isolated or disconnected island claims are impossible.
 4. **Meaningful Choice:** When multiple adjacent grids are available, the player chooses their expansion trajectory (e.g., expanding eastward toward the meadow versus northward toward the pine bluff).
 5. **Permanence:** Once unlocked, grid access is permanent.
-6. **System Boundaries:** Unlocking requirements (currency, deeds, community favor) are governed by Economy ([EC-001](MASTER_SPECIFICATION_INDEX.md)) and Personal Island Design ([PI-001](PERSONAL_ISLAND_DESIGN_SPECIFICATION.md)). WM-001 defines the spatial grid topology, not the economic pricing.
+6. **System Boundaries:** Unlocking requirements (currency, deeds, community favor) are governed by Economy ([EC-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)) and Personal Island Design ([PI-001](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md)). WM-001 defines the spatial grid topology, not the economic pricing.
 
 ---
 
@@ -264,7 +264,7 @@ Underhallow utilizes **Selective Authored Persistence** to balance player agency
 ### What Regenerates (Ecological Cycle):
 * ordinary wild forage nodes (berries, mushrooms, herbs);
 * harvestable timber trees and surface stones in designated wild zones;
-* ambient wildlife populations and creature spawns (governed by [CW-001](CREATURE_WILDLIFE_BIBLE.md));
+* ambient wildlife populations and creature spawns (governed by [CW-001](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/CREATURE_WILDLIFE_BIBLE.md));
 * temporary weather effects and seasonal cycles;
 * transient world events and festival decorations.
 
@@ -336,7 +336,7 @@ Player Interacts with Dock Boat at Personal Island
 
 * **Physical Docks:** Every travel route connects two physically authored dock structures.
 * **Topology Ownership:** WM-001 owns dock locations, water clearances, pier geometry, and spawn marker placement.
-* **System Boundaries:** Transportation mechanics, vessel upgrades, travel fares, ferry timetables, and travel UX are governed by Transportation & Travel ([TR-001](MASTER_SPECIFICATION_INDEX.md)). WM-001 defines the physical connection points.
+* **System Boundaries:** Transportation mechanics, vessel upgrades, travel fares, ferry timetables, and travel UX are governed by Transportation & Travel ([TR-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)). WM-001 defines the physical connection points.
 
 ---
 
@@ -406,7 +406,7 @@ Content density is balanced to evoke a living, breathing countryside:
 
 The Main Island is organized into distinct, organically flowing regions.
 
-WM-001 defines the **architectural container and spatial layout**, while the [Biome & Environment Bible (BE-001)](BIOME_ENVIRONMENT_BIBLE.md) and [Main Island Design Specification (MI-001)](MAIN_ISLAND_DESIGN_SPECIFICATION.md) define the canonical environmental identities, ecotones, and regional lore.
+WM-001 defines the **architectural container and spatial layout**, while the [Biome & Environment Bible (BE-001)](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/BIOME_ENVIRONMENT_BIBLE.md) and [Main Island Design Specification (MI-001)](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/MAIN_ISLAND_DESIGN_SPECIFICATION.md) define the canonical environmental identities, ecotones, and regional lore.
 
 ### Core Regional Framework (Aligned with BE-001 & MI-001):
 1. **Town Square & Valley Heart:** Communal center, council hall, shops, market green, river bridges.
@@ -426,7 +426,7 @@ Transitions between regions are physical and organic (ecotones), never abrupt bi
 WM-001 establishes the spatial distribution principles of natural resources across the world map:
 
 * **Resource Territories:** Surface ores are found in rocky outcrops and highland cuts; hardwood timber in dense deep forests; common softwoods in woodland margins; wild herbs and berries along hedgerows and riverbanks.
-* **Ownership Boundary:** WM-001 defines **where** resource zones lie and how they sit within the world topology. It does **not** define node hitpoints, tool tiers, extraction drop tables, harvest yields, or respawn timers. Those belong strictly to Resource Gathering, Forestry & Mining ([RG-001](MASTER_SPECIFICATION_INDEX.md)) and Foraging & Wild Resources ([FR-001](MASTER_SPECIFICATION_INDEX.md)).
+* **Ownership Boundary:** WM-001 defines **where** resource zones lie and how they sit within the world topology. It does **not** define node hitpoints, tool tiers, extraction drop tables, harvest yields, or respawn timers. Those belong strictly to Resource Gathering, Forestry & Mining ([RG-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)) and Foraging & Wild Resources ([FR-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)).
 
 ---
 
@@ -436,7 +436,7 @@ The world map responds dynamically to environmental simulation:
 
 * **Diurnal Cycles:** Regions undergo lighting, ambient sound, and activity shifts between morning, afternoon, twilight, and night.
 * **Weather Footprints:** Rain dampens soil, enhances river flow, and generates atmospheric mist; clear days increase visibility across distant valley ridges.
-* **Ownership Boundary:** WM-001 defines the spatial structures that respond to environmental conditions (e.g., a river basin that can flood or freeze). The numerical clock, day length, calendar, and scheduling are owned by Time & Simulation ([TS-001](MASTER_SPECIFICATION_INDEX.md)). Atmospheric parameters, precipitation tables, and storm mechanics are owned by Weather & Environmental Systems ([WE-001](MASTER_SPECIFICATION_INDEX.md)).
+* **Ownership Boundary:** WM-001 defines the spatial structures that respond to environmental conditions (e.g., a river basin that can flood or freeze). The numerical clock, day length, calendar, and scheduling are owned by Time & Simulation ([TS-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)). Atmospheric parameters, precipitation tables, and storm mechanics are owned by Weather & Environmental Systems ([WE-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)).
 
 ---
 
@@ -455,7 +455,7 @@ Underhallow is **single-player-first, multiplayer-native**:
 
 * **Single-Player Baseline:** The entire V1 world map functions completely and coherently as a solitary, cozy adventure RPG. The world does not require other players to feel alive or functional.
 * **Multiplayer Additive Architecture:** World layouts (pathway widths, door clearances, dock sizes) are dimensioned to accommodate multiple players comfortably without crowding or blocking.
-* **Deferred Guild Spaces:** Guild-owned islands, guild halls, and shared social hubs are planned for future multiplayer expansions (governed by [MS-001](MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md)) and do not form part of the initial V1 world footprint.
+* **Deferred Guild Spaces:** Guild-owned islands, guild halls, and shared social hubs are planned for future multiplayer expansions (governed by [MS-001](file:///c:/Users/HP/Documents/Underhallow/docs/07-multiplayer/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md)) and do not form part of the initial V1 world footprint.
 
 ---
 
@@ -499,7 +499,7 @@ In accordance with **Core Operating Invariant 6 (Non-Lethal Defeat & Expedition 
 
 * **The Physical Defeat Contract:** When a player's health is depleted in dangerous wilderness, dungeons, or ruins on the Main Island, they are not permanently killed or deleted.
 * **Return Transition:** The player is cleanly transitioned from the defeat location back to their Personal Island cottage bed.
-* **World State Continuity:** The Main Island world state remains intact. Resource loss (expedition inventory penalties) is processed by the combat and inventory systems ([HU-001](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md), [PR-001](PLAYER_PROGRESSION_SPECIFICATION.md)); WM-001 defines the spatial return anchor at the player's home.
+* **World State Continuity:** The Main Island world state remains intact. Resource loss (expedition inventory penalties) is processed by the combat and inventory systems ([HU-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md), [PR-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/PLAYER_PROGRESSION_SPECIFICATION.md)); WM-001 defines the spatial return anchor at the player's home.
 
 ---
 
@@ -510,21 +510,21 @@ To maintain rigorous governance across the specification library, WM-001 establi
 | System / Domain | Governing Specification | WM-001 Boundary |
 | :--- | :--- | :--- |
 | **World Topology & Scale** | **WM-001 (This Document)** | **Authoritative.** Owns world structure, scale, island connectivity, and spatial design. |
-| **Player Locomotion & Control** | [PC-001](PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md) | WM-001 provides the physical spaces; PC-001 owns input, movement, camera follow, and interaction. |
-| **Engine & Technical Pipeline** | [ETA-001](ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md) | WM-001 defines spatial requirements; ETA-001 owns Godot nodes, chunk streaming, and netcode. |
-| **Biome & Environmental Identity** | [BE-001](BIOME_ENVIRONMENT_BIBLE.md) | WM-001 houses the biomes; BE-001 owns environmental laws, layer models, flora, and ecotones. |
-| **Creatures & Ambient Wildlife** | [CW-001](CREATURE_WILDLIFE_BIBLE.md) | WM-001 provides habitat space; CW-001 owns wildlife laws, taxonomies, and routines. |
-| **Main Island Regional Layout** | [MI-001](MAIN_ISLAND_DESIGN_SPECIFICATION.md) | WM-001 establishes the continuous island rule; MI-001 details specific regional maps. |
-| **Personal Island Layout & Progression** | [PI-001](PERSONAL_ISLAND_DESIGN_SPECIFICATION.md) | WM-001 defines baseline grid expansion; PI-001 details house stages and plots. |
-| **Building & Construction** | [BI-001](BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md) | WM-001 defines buildable terrain rules; BI-001 owns construction recipes, snapping, and tools. |
-| **Farming Mechanics** | [FB-001](FARMING_SYSTEM_SPECIFICATION.md) | WM-001 defines agricultural plots; FB-001 owns soil, crop growth, and seeds. |
-| **Hunting & Combat** | [HU-001](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md) | WM-001 provides wilderness terrain; HU-001 owns creature stats, weapons, and damage. |
-| **Resource Gathering & Forestry** | [RG-001](MASTER_SPECIFICATION_INDEX.md) | WM-001 defines node locations; RG-001 owns node durability, tools, and drop tables. |
-| **Foraging & Wild Plants** | [FR-001](MASTER_SPECIFICATION_INDEX.md) | WM-001 defines gathering zones; FR-001 owns wild plant tables and regeneration timers. |
-| **Transportation & Travel** | [TR-001](MASTER_SPECIFICATION_INDEX.md) | WM-001 defines docks and piers; TR-001 owns ferry schedules, boat costs, and transit UX. |
-| **Time & Simulation** | [TS-001](MASTER_SPECIFICATION_INDEX.md) | WM-001 defines physical day/night changes; TS-001 owns the clock, calendar, and simulation ticks. |
-| **Weather & Atmosphere** | [WE-001](MASTER_SPECIFICATION_INDEX.md) | WM-001 defines weather-reactive paths; WE-001 owns precipitation, storm systems, and fog. |
-| **Multiplayer & Social Systems** | [MS-001](MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md) | WM-001 ensures spatial readiness; MS-001 owns party systems, visitor permissions, and guild islands. |
+| **Player Locomotion & Control** | [PC-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md) | WM-001 provides the physical spaces; PC-001 owns input, movement, camera follow, and interaction. |
+| **Engine & Technical Pipeline** | [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md) | WM-001 defines spatial requirements; ETA-001 owns Godot nodes, chunk streaming, and netcode. |
+| **Biome & Environmental Identity** | [BE-001](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/BIOME_ENVIRONMENT_BIBLE.md) | WM-001 houses the biomes; BE-001 owns environmental laws, layer models, flora, and ecotones. |
+| **Creatures & Ambient Wildlife** | [CW-001](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/CREATURE_WILDLIFE_BIBLE.md) | WM-001 provides habitat space; CW-001 owns wildlife laws, taxonomies, and routines. |
+| **Main Island Regional Layout** | [MI-001](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/MAIN_ISLAND_DESIGN_SPECIFICATION.md) | WM-001 establishes the continuous island rule; MI-001 details specific regional maps. |
+| **Personal Island Layout & Progression** | [PI-001](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md) | WM-001 defines baseline grid expansion; PI-001 details house stages and plots. |
+| **Building & Construction** | [BI-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md) | WM-001 defines buildable terrain rules; BI-001 owns construction recipes, snapping, and tools. |
+| **Farming Mechanics** | [FB-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/FARMING_SYSTEM_SPECIFICATION.md) | WM-001 defines agricultural plots; FB-001 owns soil, crop growth, and seeds. |
+| **Hunting & Combat** | [HU-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md) | WM-001 provides wilderness terrain; HU-001 owns creature stats, weapons, and damage. |
+| **Resource Gathering & Forestry** | [RG-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md) | WM-001 defines node locations; RG-001 owns node durability, tools, and drop tables. |
+| **Foraging & Wild Plants** | [FR-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md) | WM-001 defines gathering zones; FR-001 owns wild plant tables and regeneration timers. |
+| **Transportation & Travel** | [TR-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md) | WM-001 defines docks and piers; TR-001 owns ferry schedules, boat costs, and transit UX. |
+| **Time & Simulation** | [TS-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md) | WM-001 defines physical day/night changes; TS-001 owns the clock, calendar, and simulation ticks. |
+| **Weather & Atmosphere** | [WE-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md) | WM-001 defines weather-reactive paths; WE-001 owns precipitation, storm systems, and fog. |
+| **Multiplayer & Social Systems** | [MS-001](file:///c:/Users/HP/Documents/Underhallow/docs/07-multiplayer/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md) | WM-001 ensures spatial readiness; MS-001 owns party systems, visitor permissions, and guild islands. |
 
 ---
 
@@ -573,9 +573,9 @@ To ensure stable 60 FPS performance on target PC hardware within Godot (per ETA-
 
 ### Deferred Questions (To be detailed in regional and system specifications):
 1. **Exact Tile Boundaries:** Precise coordinate extents for individual regional chunk borders (to be established during Godot scene authoring).
-2. **Grid Plot Square Footages:** Exact pixel dimensions for Personal Island expansion grid parcels (owned by [PI-001](PERSONAL_ISLAND_DESIGN_SPECIFICATION.md)).
-3. **Event Anchor Coordinates:** Specific Vector2 anchor points for Town Square festival tent layouts (owned by [EV-001](MASTER_SPECIFICATION_INDEX.md)).
-4. **Seasonal Waterway Freeze Dates:** Exact calendar days on which specific river fords become frozen and passable (owned by [TS-001](MASTER_SPECIFICATION_INDEX.md) and [WE-001](MASTER_SPECIFICATION_INDEX.md)).
+2. **Grid Plot Square Footages:** Exact pixel dimensions for Personal Island expansion grid parcels (owned by [PI-001](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md)).
+3. **Event Anchor Coordinates:** Specific Vector2 anchor points for Town Square festival tent layouts (owned by [EV-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)).
+4. **Seasonal Waterway Freeze Dates:** Exact calendar days on which specific river fords become frozen and passable (owned by [TS-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md) and [WE-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)).
 
 ---
 
