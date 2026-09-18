@@ -8,12 +8,12 @@
 
 **Parent Specifications**
 
-* [North Star V1.0 (NS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/NORTH_STAR.md)
-* [Core Gameplay Specifications V1.0 (CG-001)](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md)
-* [World & Map Architecture Specification V1.0 (WM-001)](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md)
-* [Player Control, Movement & Interaction Specification V1.0 (PC-001)](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md)
-* [Player Progression Specification V1.0 (PR-001)](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/PLAYER_PROGRESSION_SPECIFICATION.md)
-* [Master Specification Index & Build Governance V1.0 (MSI-001)](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)
+* [North Star V1.0 (NS-001)](../01-product/NORTH_STAR.md)
+* [Core Gameplay Specifications V1.0 (CG-001)](CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md)
+* [World & Map Architecture Specification V1.0 (WM-001)](../04-world/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md)
+* [Player Control, Movement & Interaction Specification V1.0 (PC-001)](PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md)
+* [Player Progression Specification V1.0 (PR-001)](PLAYER_PROGRESSION_SPECIFICATION.md)
+* [Master Specification Index & Build Governance V1.0 (MSI-001)](../00-governance/MASTER_SPECIFICATION_INDEX.md)
 
 **Related Systems**
 

@@ -2,7 +2,7 @@
 
 **Document ID:** QA-001  
 **Team:** QA, Integration & Release  
-**Target Commit:** [`c77836b9f2da99e731d6e40e6b81d9d0d482ae96`](file:///c:/Users/HP/Documents/Underhallow)  
+**Target Commit:** [`c77836b9f2da99e731d6e40e6b81d9d0d482ae96`](../../..)  
 **Execution Timestamp:** 2026-09-16 11:10:00 UTC  
 **Mode:** Verification Only (Zero Production Code Modified)  
 **Final Result:** **PASS**

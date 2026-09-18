@@ -4,7 +4,7 @@
 ### Independent Runtime Verification Report
 
 **Document ID:** QA-002  
-**Target Commit:** [`58d10173af186565d07021a7b4fe1bb3a488b4a3`](file:///c:/Users/HP/Documents/Underhallow)  
+**Target Commit:** [`58d10173af186565d07021a7b4fe1bb3a488b4a3`](../../..)  
 **Parent Commit:** `210d132df2f76d4b6981338763ba63156bd92a36`  
 **Execution Timestamp:** 2026-09-16 18:27:00 UTC  
 **Environment:** Windows x86_64, Godot Engine `4.7.2.stable.official.ed1daf0bf`  
@@ -17,11 +17,11 @@
 
 QA independently executed runtime verification of commit `58d10173af186565d07021a7b4fe1bb3a488b4a3` to resolve the environmental verification blocker previously recorded against Surgical Pass 3.
 
-Full automated test execution, live scene instancing ([scenes/game/game.tscn](file:///c:/Users/HP/Documents/Underhallow/scenes/game/game.tscn)), player input event injection, and presentation/domain state tracking were successfully carried out.
+Full automated test execution, live scene instancing ([scenes/game/game.tscn](../../../scenes/game/game.tscn)), player input event injection, and presentation/domain state tracking were successfully carried out.
 
 ### Key Results
 1. **Automated Test Suite:** Exactly **532 of 532** tests executed and passed cleanly (`exit code 0`, duration `6,334 ms`).
-2. **Coordinate Agreement:** The shared world-grid transformation in [BuildingDisplay](file:///c:/Users/HP/Documents/Underhallow/scenes/gameplay/building/building_display.gd) is consumed uniformly by preview rendering, placed building rendering, and [PlayerController](file:///c:/Users/HP/Documents/Underhallow/src/player/player_controller.gd) targeting.
+2. **Coordinate Agreement:** The shared world-grid transformation in [BuildingDisplay](../../../scenes/gameplay/building/building_display.gd) is consumed uniformly by preview rendering, placed building rendering, and [PlayerController](../../../src/player/player_controller.gd) targeting.
 3. **Alignment Evidence:** At runtime, the preview display world position and the rendered placed building world position agree with zero delta (`Vector2.ZERO`) for both fence and path structures.
 4. **Authoritative Placement:** Mutation strictly obeys the architectural boundary:
    `PlayerController → PlaceBuildingCommand → GameRuntime → Validation → Mutation → BuildingState → BuildingDisplay`.
@@ -111,7 +111,7 @@ Underhallow Test Suite: ALL TESTS PASSED.
 
 ## 4. Player-Facing Runtime Verification (Live Game Scene)
 
-The full player flow was exercised against [scenes/game/game.tscn](file:///c:/Users/HP/Documents/Underhallow/scenes/game/game.tscn) with live runtime subsystems and input simulation.
+The full player flow was exercised against [scenes/game/game.tscn](../../../scenes/game/game.tscn) with live runtime subsystems and input simulation.
 
 ### 4.1 Player-Facing Fence Placement (`hotbar_4`)
 1. **Selection:** Injected `hotbar_4` input action.
@@ -134,7 +134,7 @@ The full player flow was exercised against [scenes/game/game.tscn](file:///c:/Us
    * Placed node world position: `(190.0, 300.0)`.
    * Preview vs. placed delta: `Vector2.ZERO` (`(190.0, 300.0) == (190.0, 300.0)`).
 5. **Material Accounting:**
-   * Starting wood: `10`. Cost of `rustic_fence`: `3 wood` ([data/buildings/rustic_fence.tres](file:///c:/Users/HP/Documents/Underhallow/data/buildings/rustic_fence.tres)).
+   * Starting wood: `10`. Cost of `rustic_fence`: `3 wood` ([data/buildings/rustic_fence.tres](../../../data/buildings/rustic_fence.tres)).
    * Resulting wood: `7`. Exactly 3 wood deducted.
 
 ### 4.2 Player-Facing Stone Path Placement (`hotbar_5`)
@@ -151,7 +151,7 @@ The full player flow was exercised against [scenes/game/game.tscn](file:///c:/Us
    * Placed node world position: `(206.0, 300.0)`.
    * Preview vs. placed delta: `Vector2.ZERO` (`(206.0, 300.0) == (206.0, 300.0)`).
 4. **Material Accounting:**
-   * Starting stone: `10`. Cost of `stone_path`: `1 stone` ([data/buildings/stone_path.tres](file:///c:/Users/HP/Documents/Underhallow/data/buildings/stone_path.tres)).
+   * Starting stone: `10`. Cost of `stone_path`: `1 stone` ([data/buildings/stone_path.tres](../../../data/buildings/stone_path.tres)).
    * Resulting stone: `9`. Exactly 1 stone deducted.
 
 ---
@@ -188,7 +188,7 @@ The full player flow was exercised against [scenes/game/game.tscn](file:///c:/Us
 ## 6. Origin Offset Robustness Analysis
 
 Addressed the source observation recorded in Section 5 of the QA Brief:
-* In [scenes/game/game.gd#L249](file:///c:/Users/HP/Documents/Underhallow/scenes/game/game.gd#L249), `_setup_world_building_display` explicitly synchronizes:
+* In [scenes/game/game.gd#L249](../../../scenes/game/game.gd#L249), `_setup_world_building_display` explicitly synchronizes:
   `preview_display.origin_offset = building_display.origin_offset`
 * `BuildingDisplayClass.DEFAULT_ORIGIN_OFFSET` is `Vector2(-130.0, -20.0)`.
 * Active `BuildingDisplay.origin_offset` is `Vector2(-130.0, -20.0)`.

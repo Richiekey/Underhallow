@@ -4,7 +4,7 @@
 ### Independent Runtime Verification Report
 
 **Document ID:** QA-003  
-**Target Commit:** [`a57bbd045946f791fa710cccbaa3f6e2e2d4752b`](file:///c:/Users/HP/Documents/Underhallow)  
+**Target Commit:** [`a57bbd045946f791fa710cccbaa3f6e2e2d4752b`](../../..)  
 **Parent Commit:** `1adff5ad5c5435026b348a9e42ecccfd8bb0b925`  
 **Execution Timestamp:** 2026-09-17 18:30:00 UTC  
 **Environment:** Windows x86_64, Godot Engine `4.7.2.stable.official.ed1daf0bf`  
@@ -18,14 +18,14 @@
 QA independently executed comprehensive live runtime verification of commit `a57bbd045946f791fa710cccbaa3f6e2e2d4752b` to resolve the blocker previously recorded against the Hunting Surgical Correction Pass.
 
 The verified architecture and contract corrections establish:
-1. **Responsibility Separation:** Removal of implicit discovery mutation from [AttackCreatureCommand](file:///c:/Users/HP/Documents/Underhallow/src/core/commands/attack_creature_command.gd). Discovery is strictly decoupled and handled exclusively by [DiscoverCreatureCommand](file:///c:/Users/HP/Documents/Underhallow/src/core/commands/discover_creature_command.gd).
+1. **Responsibility Separation:** Removal of implicit discovery mutation from [AttackCreatureCommand](../../../src/core/commands/attack_creature_command.gd). Discovery is strictly decoupled and handled exclusively by [DiscoverCreatureCommand](../../../src/core/commands/discover_creature_command.gd).
 2. **Complete Player-Facing Interaction Chain:** Verified live under Godot 4.7.2 against the full pipeline:
    $$\text{Physical Keypress } (\text{KEY\_E}) \longrightarrow \text{PlayerController} \longrightarrow \text{PlayerInteraction} \longrightarrow \text{HareInteractable} \longrightarrow \text{Command} \longrightarrow \text{GameRuntime} \longrightarrow \text{HuntingState} \longrightarrow \text{Presentation}$$
 3. **Loop Verification:** Independent confirmation of the complete:
    $$\text{Approach} \longrightarrow \text{Focus} \longrightarrow \text{Discover} \longrightarrow \text{Attack} \longrightarrow \text{Defeat} \longrightarrow \text{Harvest} \longrightarrow \text{Inventory Reward}$$
    loop, with zero desynchronization between authoritative state, in-game prompts, and visual presentation.
 4. **Authoritative Guardrails:** Out-of-range interactions, attacks against defeated creatures, duplicate harvests, and unharvested live harvests are rejected with zero domain mutation.
-5. **Persistence Integrity:** Full serialization and deserialization round-trip verified via [PersistenceBoundary](file:///c:/Users/HP/Documents/Underhallow/src/core/persistence/persistence_boundary.gd) with duplicate harvest exploits impossible across reloads.
+5. **Persistence Integrity:** Full serialization and deserialization round-trip verified via [PersistenceBoundary](../../../src/core/persistence/persistence_boundary.gd) with duplicate harvest exploits impossible across reloads.
 
 ---
 
@@ -75,7 +75,7 @@ godot --headless -s tests/core/test_runner.gd
 
 ## 4. Independent Live Runtime Verification Suite
 
-Live runtime testing was performed by instantiating the complete production game scene [scenes/game/game.tscn](file:///c:/Users/HP/Documents/Underhallow/scenes/game/game.tscn) with all subsystems ([GameRuntime](file:///c:/Users/HP/Documents/Underhallow/src/core/runtime/game_runtime.gd), [PersonalIsland](file:///c:/Users/HP/Documents/Underhallow/scenes/world/personal_island.tscn), [PlayerController](file:///c:/Users/HP/Documents/Underhallow/src/player/player_controller.gd), [PlayerInteraction](file:///c:/Users/HP/Documents/Underhallow/src/player/player_interaction.gd), and [HareInteractable](file:///c:/Users/HP/Documents/Underhallow/scenes/gameplay/hunting/hare_interactable.gd)) active in the scene tree.
+Live runtime testing was performed by instantiating the complete production game scene [scenes/game/game.tscn](../../../scenes/game/game.tscn) with all subsystems ([GameRuntime](../../../src/core/runtime/game_runtime.gd), [PersonalIsland](../../../scenes/world/personal_island.tscn), [PlayerController](../../../src/player/player_controller.gd), [PlayerInteraction](../../../src/player/player_interaction.gd), and [HareInteractable](../../../scenes/gameplay/hunting/hare_interactable.gd)) active in the scene tree.
 
 **Execution Command:**
 ```powershell
@@ -90,16 +90,16 @@ godot --headless -s "C:/Users/HP/.gemini/antigravity-ide/brain/0201ed03-2fbe-40f
 ## 5. Step-by-Step Runtime Verification Evidence
 
 ### Step 1 & 2: Launch Game Scene & Enter Personal Island
-* [scenes/game/game.tscn](file:///c:/Users/HP/Documents/Underhallow/scenes/game/game.tscn) instantiated at scene root.
+* [scenes/game/game.tscn](../../../scenes/game/game.tscn) instantiated at scene root.
 * `GameRuntime` started in authoritative `RUNNING` state.
-* Active world confirmed as [PersonalIsland](file:///c:/Users/HP/Documents/Underhallow/scenes/world/personal_island.tscn) (`world_id: personal_island`, `display_name: "Personal Island"`).
+* Active world confirmed as [PersonalIsland](../../../scenes/world/personal_island.tscn) (`world_id: personal_island`, `display_name: "Personal Island"`).
 * Player spawned at canonical marker position `Vector2(-60.0, 0.0)`.
 
 ### Step 3: Locate Forest Hare
 * Hare presentation node located in active world: `Environment/ForestHare` (`HareInteractable`).
 * Instance ID verified: `&"hare_01"`.
 * World position confirmed: `Vector2(60.0, -120.0)`.
-* Authoritative [CreatureState](file:///c:/Users/HP/Documents/Underhallow/src/gameplay/hunting/creature_state.gd) in [HuntingState](file:///c:/Users/HP/Documents/Underhallow/src/gameplay/hunting/hunting_state.gd):
+* Authoritative [CreatureState](../../../src/gameplay/hunting/creature_state.gd) in [HuntingState](../../../src/gameplay/hunting/hunting_state.gd):
   * `current_health: 10`, `max_health: 10`, `is_discovered: false`, `is_defeated: false`, `is_harvested: false`.
 * Initial presentation:
   * `VisualBody.color = Color(0.82, 0.72, 0.58, 1.0)` (active hare palette).
@@ -130,7 +130,7 @@ godot --headless -s "C:/Users/HP/.gemini/antigravity-ide/brain/0201ed03-2fbe-40f
 
 ### Step 6: Face Hare and Press E (Discovery)
 * **Input Injection:** Physical key `KEY_E` pressed.
-* **Command Executed:** [DiscoverCreatureCommand](file:///c:/Users/HP/Documents/Underhallow/src/core/commands/discover_creature_command.gd) (`"hare_01"`).
+* **Command Executed:** [DiscoverCreatureCommand](../../../src/core/commands/discover_creature_command.gd) (`"hare_01"`).
 * **Authoritative Telemetry:**
   * `is_discovered`: Transitioned from `false` → `true`.
   * `current_health`: Remained `10 HP` (discovery deals zero damage).
@@ -144,7 +144,7 @@ godot --headless -s "C:/Users/HP/.gemini/antigravity-ide/brain/0201ed03-2fbe-40f
 
 ### Step 7: Press E Again (First Basic Attack — Damaged State)
 * **Input Injection:** Physical key `KEY_E` pressed.
-* **Command Executed:** [AttackCreatureCommand](file:///c:/Users/HP/Documents/Underhallow/src/core/commands/attack_creature_command.gd) (`"hare_01"`, damage: 5).
+* **Command Executed:** [AttackCreatureCommand](../../../src/core/commands/attack_creature_command.gd) (`"hare_01"`, damage: 5).
 * **Authoritative Telemetry:**
   * `current_health`: Reduced deterministically from `10 HP` → `5 HP`.
   * `is_discovered`: Remained `true` (responsibility separation verified; attack does not re-trigger or mutate discovery).
@@ -157,7 +157,7 @@ godot --headless -s "C:/Users/HP/.gemini/antigravity-ide/brain/0201ed03-2fbe-40f
 
 ### Step 8: Press E Again (Second Basic Attack — Defeat State)
 * **Input Injection:** Physical key `KEY_E` pressed.
-* **Command Executed:** [AttackCreatureCommand](file:///c:/Users/HP/Documents/Underhallow/src/core/commands/attack_creature_command.gd) (`"hare_01"`, damage: 5).
+* **Command Executed:** [AttackCreatureCommand](../../../src/core/commands/attack_creature_command.gd) (`"hare_01"`, damage: 5).
 * **Authoritative Telemetry:**
   * `current_health`: Clamped cleanly to `0 HP`.
   * `is_defeated`: Transitioned from `false` → `true`.
@@ -173,7 +173,7 @@ godot --headless -s "C:/Users/HP/.gemini/antigravity-ide/brain/0201ed03-2fbe-40f
 ### Step 9: Press E on Defeated Hare (Harvest & Inventory Award)
 * **Inventory Count Before Harvest:** `resource_raw_hide` = `0`.
 * **Input Injection:** Physical key `KEY_E` pressed on defeated hare.
-* **Command Executed:** [HarvestCreatureCommand](file:///c:/Users/HP/Documents/Underhallow/src/core/commands/harvest_creature_command.gd) (`"hare_01"`).
+* **Command Executed:** [HarvestCreatureCommand](../../../src/core/commands/harvest_creature_command.gd) (`"hare_01"`).
 * **Authoritative Telemetry:**
   * `is_harvested`: Transitioned from `false` → `true`.
   * `is_defeated`: Remained `true`.

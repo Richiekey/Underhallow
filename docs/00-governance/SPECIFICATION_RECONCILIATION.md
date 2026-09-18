@@ -9,10 +9,10 @@
 **Purpose:** Reconcile the existing Underhallow specification library with the latest founder-approved design decisions.  
 **Scope:** Authority hierarchy, platform, engine, multiplayer, world architecture, player control, gameplay systems, guilds, parties, economy, persistence, and documentation dependencies.  
 **Parent Specifications:**
-* [North Star V1.0 (NS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/NORTH_STAR.md)
-* [Foundation Specification V1.0 (FS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/FOUNDATION_SPECIFICATION.md)
-* [Engine & Technical Architecture Specification V1 (ETA-001)](file:///c:/Users/HP/Documents/Underhallow/docs/02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)
-* [Master Specification Index & Build Governance V1.0 (MSI-001)](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)
+* [North Star V1.0 (NS-001)](../01-product/NORTH_STAR.md)
+* [Foundation Specification V1.0 (FS-001)](../01-product/FOUNDATION_SPECIFICATION.md)
+* [Engine & Technical Architecture Specification V1 (ETA-001)](../02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)
+* [Master Specification Index & Build Governance V1.0 (MSI-001)](MASTER_SPECIFICATION_INDEX.md)
 
 ---
 

@@ -7,7 +7,7 @@
 **Version:** 1.0  
 **Project:** Underhallow  
 **Authority:** Canonical Art Direction Specification (Level 0 — Project Authority)  
-**Parent Documents:** [docs/01-product/NORTH_STAR.md](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/NORTH_STAR.md), [docs/06-art/CREATIVE_DIRECTION.md](file:///c:/Users/HP/Documents/Underhallow/docs/06-art/CREATIVE_DIRECTION.md)  
+**Parent Documents:** [docs/01-product/NORTH_STAR.md](../01-product/NORTH_STAR.md), [docs/06-art/CREATIVE_DIRECTION.md](CREATIVE_DIRECTION.md)  
 **Supersedes:** Any unreconciled historical art-direction documents from the previous Carrot Game project  
 **Primary Platform:** Windows PC  
 **Visual Foundation:** Isometric Pixel Art  

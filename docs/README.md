@@ -13,6 +13,7 @@ docs/
 ├── README.md                                               # This central documentation index
 ├── 00-governance/                                          # Project governance, rules, constitution, & indexing
 │   ├── AGENT_CONSTITUTION.md                               # AC-001: AI agent roles, whitelists, & Definition of Done
+│   ├── EXECUTION_DOCUMENTATION_PROTOCOL.md                 # EDP-001: Execution, evidence, & team synchronization protocol
 │   ├── MASTER_SPECIFICATION_INDEX.md                       # MSI-001: Central registry, authority levels, & roadmap
 │   └── SPECIFICATION_RECONCILIATION.md                     # SR-001: Approved engine, platform, & architecture reconciliation
 │
@@ -131,17 +132,22 @@ Historical execution reports, test runs, audit logs, and executive review sessio
 ## 3. Specification Governance & Linking Standards
 
 ### 3.1 Document ID System
-Every formal specification receives a permanent Document ID and prefix (e.g., `NS-001`, `ETA-001`, `BI-001`, `GSP-001`, `QA-001`). See [Master Specification Index (MSI-001)](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md) for the complete prefix registry.
+Every formal specification receives a permanent Document ID and prefix (e.g., `NS-001`, `ETA-001`, `BI-001`, `GSP-001`, `QA-001`). See [Master Specification Index (MSI-001)](00-governance/MASTER_SPECIFICATION_INDEX.md) for the complete prefix registry.
 
 ### 3.2 Canonical Link Format
-All cross-document markdown links must use the canonical clickable link format with the `file://` scheme:
+All internal markdown links must use clean **repository-relative paths** resolving from the current document to the target document:
 ```markdown
-[Display Text](file:///c:/Users/HP/Documents/Underhallow/docs/<category>/<FILENAME>.md)
+[Display Text](<relative-path-to-document>.md)
 ```
-Example:
+Example from `docs/README.md`:
 ```markdown
-[Underhallow North Star V1.0 (NS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/NORTH_STAR.md)
+[Underhallow North Star V1.0 (NS-001)](01-product/NORTH_STAR.md)
 ```
+Example from a category directory (e.g. `docs/00-governance/`):
+```markdown
+[Underhallow North Star V1.0 (NS-001)](../01-product/NORTH_STAR.md)
+```
+Machine-specific absolute URLs (`file:///C:/Users/...`) and local filesystem paths are strictly prohibited in committed documentation.
 
 ### 3.3 Adding or Moving Documents
 1. **Never create loose documents in root `docs/`:** Every document belongs in a categorized directory (`00`–`08`).

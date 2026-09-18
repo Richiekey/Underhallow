@@ -8,7 +8,7 @@
 **Version:** 1.0  
 **Project:** Underhallow  
 **Primary Domain:** Narrative & Story  
-**Parent Documents:** [docs/01-product/NORTH_STAR.md](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/NORTH_STAR.md), [docs/06-art/CREATIVE_DIRECTION.md](file:///c:/Users/HP/Documents/Underhallow/docs/06-art/CREATIVE_DIRECTION.md), [docs/06-art/ART_DIRECTION_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/06-art/ART_DIRECTION_BIBLE.md), [docs/04-world/WORLD_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/WORLD_BIBLE.md)  
+**Parent Documents:** [docs/01-product/NORTH_STAR.md](../01-product/NORTH_STAR.md), [docs/06-art/CREATIVE_DIRECTION.md](../06-art/CREATIVE_DIRECTION.md), [docs/06-art/ART_DIRECTION_BIBLE.md](../06-art/ART_DIRECTION_BIBLE.md), [docs/04-world/WORLD_BIBLE.md](../04-world/WORLD_BIBLE.md)  
 **Scope:** Narrative philosophy, player story, world mystery, ancient history, NPC storytelling, factions, player agency, revelations, endings, themes, and narrative content rules  
 **Applies To:** All quest writing, dialogue authoring, character creation, environmental storytelling, item descriptions, lore assets, and story progression systems  
 

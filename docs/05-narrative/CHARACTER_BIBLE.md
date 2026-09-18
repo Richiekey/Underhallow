@@ -7,7 +7,7 @@
 **Version:** 1.0  
 **Project:** Underhallow  
 **Authority Level:** Level 1 — Foundation Specification / Creative Specification  
-**Parent Documents:** [docs/01-product/NORTH_STAR.md](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/NORTH_STAR.md), [docs/06-art/CREATIVE_DIRECTION.md](file:///c:/Users/HP/Documents/Underhallow/docs/06-art/CREATIVE_DIRECTION.md), [docs/06-art/ART_DIRECTION_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/06-art/ART_DIRECTION_BIBLE.md), [docs/04-world/WORLD_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/WORLD_BIBLE.md), [docs/05-narrative/NARRATIVE_BIBLE.md](file:///c:/Users/HP/Documents/Underhallow/docs/05-narrative/NARRATIVE_BIBLE.md)  
+**Parent Documents:** [docs/01-product/NORTH_STAR.md](../01-product/NORTH_STAR.md), [docs/06-art/CREATIVE_DIRECTION.md](../06-art/CREATIVE_DIRECTION.md), [docs/06-art/ART_DIRECTION_BIBLE.md](../06-art/ART_DIRECTION_BIBLE.md), [docs/04-world/WORLD_BIBLE.md](../04-world/WORLD_BIBLE.md), [docs/05-narrative/NARRATIVE_BIBLE.md](NARRATIVE_BIBLE.md)  
 **Document Type:** Creative / Narrative Design Specification  
 **Scope:** NPC philosophy, population, relationships, character behavior, visual identity, and character-driven narrative  
 **Applies To:** All NPC design, dialogue systems, social mechanics, character visual pipelines, quest generation, schedules/routines, and community storytelling across Underhallow  

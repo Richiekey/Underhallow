@@ -12,9 +12,9 @@
 **Engine:** Godot  
 **Backend:** Supabase + Dedicated Underhallow Game Servers  
 **Parent Specifications:**
-* [North Star V1.0 (NS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/NORTH_STAR.md)
-* [Foundation Specification V1.0 (FS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/FOUNDATION_SPECIFICATION.md)
-* [Master Specification Index & Build Governance V1.0 (MSI-001)](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)
+* [North Star V1.0 (NS-001)](../01-product/NORTH_STAR.md)
+* [Foundation Specification V1.0 (FS-001)](../01-product/FOUNDATION_SPECIFICATION.md)
+* [Master Specification Index & Build Governance V1.0 (MSI-001)](../00-governance/MASTER_SPECIFICATION_INDEX.md)
 
 ---
 

@@ -7,9 +7,9 @@
 **Version:** 1.0  
 **Status:** Development Governance Baseline  
 **Parent Documents:**  
-* [Underhallow North Star V1.0](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/NORTH_STAR.md)  
-* [Underhallow Foundation Specification V1.0](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/FOUNDATION_SPECIFICATION.md)  
-* [Underhallow Engine & Technical Architecture Specification V1 (ETA-001)](file:///c:/Users/HP/Documents/Underhallow/docs/02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)  
+* [Underhallow North Star V1.0](../01-product/NORTH_STAR.md)  
+* [Underhallow Foundation Specification V1.0](../01-product/FOUNDATION_SPECIFICATION.md)  
+* [Underhallow Engine & Technical Architecture Specification V1 (ETA-001)](../02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)  
 
 ---
 

@@ -6,12 +6,13 @@
 **Status:** APPROVED (Project Governance & Reporting Protocol)  
 **Authority Level:** Level 4 — Implementation & Governance Protocol  
 **Parent Specifications:**  
-* [Underhallow Agent Constitution V1.0 (AC-001)](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/AGENT_CONSTITUTION.md)  
-* [Master Specification Index & Build Governance V1.1 (MSI-001)](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)  
-* [Underhallow North Star V1.0 (NS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/NORTH_STAR.md)  
-* [Underhallow Production Plan & Vertical Slice Roadmap V1.0 (PP-001)](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/PRODUCTION_PLAN.md)  
+* [Underhallow Agent Constitution V1.0 (AC-001)](../../00-governance/AGENT_CONSTITUTION.md)  
+* [Master Specification Index & Build Governance V1.1 (MSI-001)](../../00-governance/MASTER_SPECIFICATION_INDEX.md)  
+* [Execution & Documentation Protocol V1.0 (EDP-001)](../../00-governance/EXECUTION_DOCUMENTATION_PROTOCOL.md)  
+* [Underhallow North Star V1.0 (NS-001)](../../01-product/NORTH_STAR.md)  
+* [Underhallow Production Plan & Vertical Slice Roadmap V1.0 (PP-001)](../../01-product/PRODUCTION_PLAN.md)  
 
-**Applies To:** Founder / Omni (Human Project Lead), Game Masters (GM), Lead QA, Systems Architects, and all Specialized AI Agents  
+**Applies To:** Founder / Omni (Human Project Lead), Game Masters (GM), Product Managers (PM), Lead QA, Systems Architects, and all Specialized AI Agents  
 **Repository:** `Richiekey/Underhallow`  
 **Storage Directory:** `docs/08-reports/gm/`  
 
@@ -19,13 +20,19 @@
 
 ## 1. Purpose & Scope
 
-The **Game Master (GM) Session Record Protocol** establishes the formal verification, review, and acceptance procedure for all vertical slice iterations, milestone gates, and surgical correction passes in Underhallow.
+The **Game Master (GM) Session Record Protocol (GSP-001)** establishes the formal verification, review, and acceptance procedure for all vertical slice iterations, milestone gates, and surgical correction passes in Underhallow.
 
 While automated test runners and QA verification passes confirm technical conformance (e.g., zero regression, command validation, leak checks), the **GM Review Session** provides the definitive executive bridge between mechanical implementation and creative vision:
 
 > **"Does this make Underhallow a better game, and does it feel like a living, strange little world?"**
 
 No milestone release, major feature slice, or vertical roadmap progression is marked complete without a corresponding, signed **GM Session Record** archived in `docs/08-reports/gm/`.
+
+### 1.1 Jurisdiction & Relationship to EDP-001
+This protocol operates in strict alignment with [EDP-001 (Execution & Documentation Protocol)](../../00-governance/EXECUTION_DOCUMENTATION_PROTOCOL.md):
+* **`EDP-001` governs the operational lifecycle:** How work moves across teams from requirement to assignment, implementation, implementer testing, independent QA verification, and documentation synchronization.
+* **`GSP-001` governs the executive review session:** How experiential playtests, creative audits against North Star invariants, and final sign-off decisions are conducted and recorded.
+* `GSP-001` review sessions operationalize Stage 10 (**Accept**) of the `EDP-001` lifecycle, transitioning an implementation from `QA-VERIFIED` to `GM-ACCEPTED`. Neither protocol contradicts or overrides the other.
 
 ---
 
@@ -36,8 +43,12 @@ No milestone release, major feature slice, or vertical roadmap progression is ma
            (Feature / Domain Work)
                       │
                       ▼
-        QA VERIFICATION PASS (QA-00x)
-    (Automated Tests, Invariant Verification)
+         IMPLEMENTER TEST EVIDENCE
+       (Headless Runner, Unit Tests)
+                      │
+                      ▼
+        QA INDEPENDENT VERIFICATION (QA-00x)
+    (Isolated Runtime Tests, Regressions)
                       │
                       ▼ "READY FOR GM/PM ACCEPTANCE"
          GM REVIEW SESSION (GSP-001)
@@ -46,14 +57,15 @@ No milestone release, major feature slice, or vertical roadmap progression is ma
         ┌─────────────┴─────────────┐
         ▼                           ▼
 [🟢 / 🟡 ACCEPTED]            [🔴 REJECTED / 🔄 RETEST]
-Release / Advance Milestone   Return to Agents with Action Items
+Advance to SYNCHRONIZE       Return to Agents with Action Items
 ```
 
 ### 2.1 Trigger Pre-Conditions
 A GM Review Session may only be conducted when:
 1. **Target Commit Pinned:** The target commit SHA is explicitly recorded and matches a clean git working tree.
-2. **QA Pre-requisite Satisfied:** A formal QA report (e.g., in `docs/08-reports/qa/`) exists with disposition **"READY FOR GM/PM ACCEPTANCE"**.
-3. **Headless Test Suite Green:** The canonical test suite (`godot --headless -s tests/core/test_runner.gd`) reports 100% pass rate (0 failed assertions).
+2. **Implementer Test Evidence Recorded:** The implementer has reported exit codes and test counts (`IMPLEMENTER-TESTED`).
+3. **QA Pre-requisite Satisfied:** A formal independent QA report exists in `docs/08-reports/qa/` with disposition **"READY FOR GM/PM ACCEPTANCE"** (`QA-VERIFIED`).
+4. **Headless Test Suite Green:** The canonical test suite (`godot --headless -s tests/core/test_runner.gd`) reports 100% pass rate (0 failed assertions).
 
 ---
 
@@ -86,7 +98,7 @@ At the conclusion of each GM review, the session must be assigned one of four ca
 
 | Disposition | Symbol | Definition & Consequence |
 | :--- | :---: | :--- |
-| **Accepted & Signed Off** | `🟢` | All functional and experiential requirements met. Feature or slice is approved for production baseline integration. |
+| **Accepted & Signed Off** | `🟢` | All functional, experiential, and governance requirements met. Advances to `GM-ACCEPTED` and triggers documentation synchronization. |
 | **Accepted With Conditions** | `🟡` | Core experience approved. Minor visual/polish defects noted; non-blocking action items scheduled for the next sprint/pass. |
 | **Rejected / Changes Required** | `🔴` | Core design violation, severe experiential friction, or invariant breach identified. Build blocked from milestone advance; returned to development agents. |
 | **Retest Required** | `🔄` | Environmental inconsistency, unverified edge case, or QA discrepancy discovered during review. Returned to QA team for re-run. |
@@ -101,7 +113,7 @@ At the conclusion of each GM review, the session must be assigned one of four ca
   `GM_SESSION_<YYYYMMDD>_<TOPIC_SLUG>.md`
   * Example: `GM_SESSION_20260918_PHASE4_HUNTING_CONSTRUCTION.md`
   * Example: `GM_SESSION_20260925_CLEMENTINE_NARRATIVE_SLICE.md`
-* Immutability: Once signed and committed, GM Session Records are historical audit logs and must not be retroactively edited (any follow-up must be a new session record or addendum).
+* **Immutability:** Once signed and committed, GM Session Records are historical audit logs and must not be retroactively edited (any follow-up must be a new session record or addendum).
 
 ---
 
@@ -116,9 +128,9 @@ When executing and logging a GM Review Session, copy the template below into a n
 **Review Topic:** [e.g. Phase 4 Vertical Slice — Hunting & Construction Acceptance]  
 **Lead Reviewer / GM:** [Founder / Omni / Designated GM]  
 **Execution Timestamp:** YYYY-MM-DD HH:MM:SS UTC  
-**Target Commit:** [`<COMMIT_SHA>`](file:///c:/Users/HP/Documents/Underhallow)  
+**Target Commit:** [`<COMMIT_SHA>`](../../..)  
 **Engine Baseline:** Godot 4.7.2.stable.official.ed1daf0bf (Windows PC x86_64)  
-**Pre-requisite QA Report:** [docs/08-reports/qa/QA_...md](file:///c:/Users/HP/Documents/Underhallow/docs/08-reports/qa/...)  
+**Pre-requisite QA Report:** [docs/08-reports/qa/QA_...md](../qa/QA_SESSION_01_REPORT.md)  
 **Final GM Disposition:** [🟢 ACCEPTED / 🟡 ACCEPTED WITH CONDITIONS / 🔴 REJECTED / 🔄 RETEST]  
 
 ---
@@ -183,7 +195,18 @@ When executing and logging a GM Review Session, copy the template below into a n
 
 ---
 
-## 7. Final Sign-off & Milestone Disposition
+## 7. Evidence Classification Breakdown (EDP-001 §7)
+
+* **Planned by GM/PM:** [Summary of what was originally tasked]
+* **Implemented by Coding Agent:** [Summary of what was committed]
+* **Tested by Implementer:** [Implementer test commands and counts]
+* **Independently Verified by QA:** [QA verification reference]
+* **Accepted by GM/PM:** [Explicit scope of acceptance]
+* **Remaining Limitations:** [Deferred or out-of-scope items]
+
+---
+
+## 8. Final Sign-off & Milestone Disposition
 
 * **Milestone Progress:** [e.g. Phase 4 Milestone Approved / Blocked]
 * **Next Authorized Task:** [Task title and target specification]

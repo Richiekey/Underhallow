@@ -7,13 +7,13 @@
 **Document Status:** APPROVED  
 **Authority Level:** Level 1 — Foundation Specification  
 **Parent Specifications:**  
-* [North Star V1.0 (NS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/01-product/NORTH_STAR.md)
-* [Creative Direction V1.0 (CD-001)](file:///c:/Users/HP/Documents/Underhallow/docs/06-art/CREATIVE_DIRECTION.md)
-* [Art Direction Bible V1.0 (AD-001)](file:///c:/Users/HP/Documents/Underhallow/docs/06-art/ART_DIRECTION_BIBLE.md)
-* [Core Gameplay Systems Specification V1.0 (CG-001)](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md)
-* [Engine & Technical Architecture Specification V1 (ETA-001)](file:///c:/Users/HP/Documents/Underhallow/docs/02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)
-* [World & Map Architecture Specification V1.0 (WM-001)](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md)
-* [Master Specification Index & Build Governance V1.0 (MSI-001)](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)
+* [North Star V1.0 (NS-001)](../01-product/NORTH_STAR.md)
+* [Creative Direction V1.0 (CD-001)](../06-art/CREATIVE_DIRECTION.md)
+* [Art Direction Bible V1.0 (AD-001)](../06-art/ART_DIRECTION_BIBLE.md)
+* [Core Gameplay Systems Specification V1.0 (CG-001)](CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md)
+* [Engine & Technical Architecture Specification V1 (ETA-001)](../02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)
+* [World & Map Architecture Specification V1.0 (WM-001)](../04-world/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md)
+* [Master Specification Index & Build Governance V1.0 (MSI-001)](../00-governance/MASTER_SPECIFICATION_INDEX.md)
 
 **Project:** Underhallow  
 **Primary Domain:** Player Controller, Movement, Camera & Interaction  
@@ -84,21 +84,21 @@ To maintain clean architectural separation across the Underhallow specification 
 * Player-facing interaction interface with other players in multiplayer.
 
 ### What PC-001 Does NOT Own:
-* Farming economics, crop growth algorithms, seed definitions, or soil degradation (owned by [FB-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/FARMING_SYSTEM_SPECIFICATION.md)).
-* Physical resource node spawning, regeneration, or depletion (owned by [RG-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)).
-* Naturally occurring wild plant/berry foraging generation (owned by [FR-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)).
-* Livestock welfare, care, feeding, or animal product simulation (owned by [LA-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)).
-* Cooking recipes, station processing, or food buff formulas (owned by [CK-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)).
-* Hunting creature stats, combat damage formulas, weapon balance, or creature AI (owned by [HU-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md)).
-* Item data schemas, inventory capacity, stack limits, or crafting recipes (owned by [II-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)).
-* Constructible building catalogs, construction timers, or material recovery formulas (owned by [BI-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md)).
-* Island geography, layout, or regional borders (owned by [MI-001](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/MAIN_ISLAND_DESIGN_SPECIFICATION.md) and [PI-001](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md)).
-* Traversal vehicle mechanics, ferry scheduling, or transit networks (owned by [TR-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)).
-* Weather states, atmospheric effects, or rain simulation (owned by [WE-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)).
-* Day/night cycles, simulation time, or game clocks (owned by [TS-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)).
-* Economy, pricing, currency, or merchant trading rules (owned by [EC-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)).
-* Technical networking, server authority, replication protocols, or prediction algorithms (owned by [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)).
-* Party structures, guilds, permissions, or social systems (owned by [MS-001](file:///c:/Users/HP/Documents/Underhallow/docs/07-multiplayer/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md)).
+* Farming economics, crop growth algorithms, seed definitions, or soil degradation (owned by [FB-001](FARMING_SYSTEM_SPECIFICATION.md)).
+* Physical resource node spawning, regeneration, or depletion (owned by [RG-001](../00-governance/MASTER_SPECIFICATION_INDEX.md)).
+* Naturally occurring wild plant/berry foraging generation (owned by [FR-001](../00-governance/MASTER_SPECIFICATION_INDEX.md)).
+* Livestock welfare, care, feeding, or animal product simulation (owned by [LA-001](../00-governance/MASTER_SPECIFICATION_INDEX.md)).
+* Cooking recipes, station processing, or food buff formulas (owned by [CK-001](../00-governance/MASTER_SPECIFICATION_INDEX.md)).
+* Hunting creature stats, combat damage formulas, weapon balance, or creature AI (owned by [HU-001](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md)).
+* Item data schemas, inventory capacity, stack limits, or crafting recipes (owned by [II-001](../00-governance/MASTER_SPECIFICATION_INDEX.md)).
+* Constructible building catalogs, construction timers, or material recovery formulas (owned by [BI-001](BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md)).
+* Island geography, layout, or regional borders (owned by [MI-001](../04-world/MAIN_ISLAND_DESIGN_SPECIFICATION.md) and [PI-001](../04-world/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md)).
+* Traversal vehicle mechanics, ferry scheduling, or transit networks (owned by [TR-001](../00-governance/MASTER_SPECIFICATION_INDEX.md)).
+* Weather states, atmospheric effects, or rain simulation (owned by [WE-001](../00-governance/MASTER_SPECIFICATION_INDEX.md)).
+* Day/night cycles, simulation time, or game clocks (owned by [TS-001](../00-governance/MASTER_SPECIFICATION_INDEX.md)).
+* Economy, pricing, currency, or merchant trading rules (owned by [EC-001](../00-governance/MASTER_SPECIFICATION_INDEX.md)).
+* Technical networking, server authority, replication protocols, or prediction algorithms (owned by [ETA-001](../02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)).
+* Party structures, guilds, permissions, or social systems (owned by [MS-001](../07-multiplayer/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md)).
 
 ---
 
@@ -188,9 +188,9 @@ To ensure predictable control semantics and avoid input collisions, Underhallow 
 ### B. Primary Action (`action_primary` — `Left Mouse Button` / `F`)
 `action_primary` operates as the **Equipped Hand Activation Action**. Its outcome is determined contextually by the current player state and hotbar selection:
 1. **Direct Entity Click:** If the mouse cursor directly clicks on an in-range interactable entity in the world (e.g., clicking directly on Rowan or a storage chest), the system dispatches `interact` on that specific target.
-2. **Tool Equipped (Hoe, Watering Can, Axe, Pickaxe):** Dispatches `use_tool` toward the targeted tile or resource node in the player's facing direction or cursor position. Actual tool rules belong to governing systems ([FB-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/FARMING_SYSTEM_SPECIFICATION.md), [RG-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)).
-3. **Weapon Equipped (Sword, Bow, Spear):** Dispatches `attack` along the player's facing vector or toward the cursor. Actual combat rules belong to [HU-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md).
-4. **Building Placement Active:** Confirms placement of the active ghost structure preview. Actual placement validation rules belong to [BI-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md).
+2. **Tool Equipped (Hoe, Watering Can, Axe, Pickaxe):** Dispatches `use_tool` toward the targeted tile or resource node in the player's facing direction or cursor position. Actual tool rules belong to governing systems ([FB-001](FARMING_SYSTEM_SPECIFICATION.md), [RG-001](../00-governance/MASTER_SPECIFICATION_INDEX.md)).
+3. **Weapon Equipped (Sword, Bow, Spear):** Dispatches `attack` along the player's facing vector or toward the cursor. Actual combat rules belong to [HU-001](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md).
+4. **Building Placement Active:** Confirms placement of the active ghost structure preview. Actual placement validation rules belong to [BI-001](BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md).
 5. **Empty Hand / Inactive Item:** Performs no destructive action.
 
 PC-001 provides the activation and targeting interface; the underlying gameplay systems own their respective simulation and validation rules.
@@ -247,7 +247,7 @@ This embodies **Core Operating Invariant 5 (No Stamina)**:
 * Constraints are physical time, inventory capacity, and expedition risk.
 * There is no sprint key, stamina bar, exhaustion state, or sprint cooldown.
 
-World traversal across the island network is expanded through boats, ferries, cleared wilderness trails, and shortcut infrastructure governed by [TR-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md), while basic locomotion on foot remains free from stamina micromanagement.
+World traversal across the island network is expanded through boats, ferries, cleared wilderness trails, and shortcut infrastructure governed by [TR-001](../00-governance/MASTER_SPECIFICATION_INDEX.md), while basic locomotion on foot remains free from stamina micromanagement.
 
 ---
 
@@ -262,7 +262,7 @@ To guarantee responsive gameplay without sacrificing animation weight, actions u
 | **Tool Usage** | Restricted | System-defined | Movement locked during swing/till/water animation |
 | **Crop Harvesting** | Restricted | No | Locks movement for short harvest animation |
 | **Combat Attack** | Contextual | Early recovery | Movement locked during active frames; early recovery upon completion (governed by HU-001) |
-| **Fishing** | Locked | System-defined | Movement locked while fishing line is active; lifecycle governed by [FI-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md) |
+| **Fishing** | Locked | System-defined | Movement locked while fishing line is active; lifecycle governed by [FI-001](../00-governance/MASTER_SPECIFICATION_INDEX.md) |
 | **Building Placement** | Free before placement | Yes (Cancel preview) | Movement allowed during preview; brief lock on confirm |
 | **Dialogue** | Locked | No | Movement locked while conversation window is active |
 | **World Transition** | Locked | No | Complete control lock during scene load / fade |
@@ -390,7 +390,7 @@ Animation & Sound Complete → Player Control Restored
 ```
 
 * **Tool vs. Interaction Independence:** Holding a tool never disables contextual interaction (`E`). A player holding a hoe approaching an NPC will see `[E] Talk`, not an accidental tool strike.
-* **No Resource Calculations:** Tool durability, damage numbers, and harvest yields are owned by [II-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md), [RG-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md), and [FB-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/FARMING_SYSTEM_SPECIFICATION.md).
+* **No Resource Calculations:** Tool durability, damage numbers, and harvest yields are owned by [II-001](../00-governance/MASTER_SPECIFICATION_INDEX.md), [RG-001](../00-governance/MASTER_SPECIFICATION_INDEX.md), and [FB-001](FARMING_SYSTEM_SPECIFICATION.md).
 
 ---
 
@@ -418,7 +418,7 @@ PC-001 defines the player interface for construction placement:
   * Furniture and decorative objects support fine, expressive placement.
 * **Validation Communicator:** Ghost tints green when placement is valid (unobstructed, valid terrain, within property boundary) and red when invalid.
 * **Confirmation:** Left Click confirms placement; Escape / Right Click cancels without consuming materials.
-* **Rule Authority:** Placement validation rules and persistence are governed by [BI-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md).
+* **Rule Authority:** Placement validation rules and persistence are governed by [BI-001](BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md).
 
 ---
 
@@ -435,7 +435,7 @@ Underhallow utilizes a ground-footprint collision architecture:
 * **Impassable Water:** Deep water is a strict physical barrier. Players cannot walk into deep water; crossing waterways requires bridges or boats.
 * **Elevation & Cliffs:** Cliffs represent impassable elevation boundaries. Movement remains strictly constrained to navigable authored paths; there is no freeform falling or fall damage.
 
-Technical implementation of collision shapes and layers is owned by [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md).
+Technical implementation of collision shapes and layers is owned by [ETA-001](../02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md).
 
 ---
 
@@ -457,7 +457,7 @@ World Boundary Clamping
 STRICTLY NO CAMERA ROTATION IN V1.0
 ```
 
-* **No Camera Rotation:** Camera rotation is **strictly disabled in V1.0** (per [SR-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/SPECIFICATION_RECONCILIATION.md), [AD-001](file:///c:/Users/HP/Documents/Underhallow/docs/06-art/ART_DIRECTION_BIBLE.md), and [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)). The camera orientation remains locked to a single fixed isometric angle. There is no free rotation, arbitrary orbit, or player-controlled camera yaw/pitch. This protects 16-bit pixel-art hand-drawn sprite density, avoids costly 4-sided asset redundancy, and ensures spatial readability.
+* **No Camera Rotation:** Camera rotation is **strictly disabled in V1.0** (per [SR-001](../00-governance/SPECIFICATION_RECONCILIATION.md), [AD-001](../06-art/ART_DIRECTION_BIBLE.md), and [ETA-001](../02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md)). The camera orientation remains locked to a single fixed isometric angle. There is no free rotation, arbitrary orbit, or player-controlled camera yaw/pitch. This protects 16-bit pixel-art hand-drawn sprite density, avoids costly 4-sided asset redundancy, and ensures spatial readability.
 * **Smooth Tracking:** The camera tracks the player smoothly using asymptotic smoothing and deadzone filtering, avoiding jarring frame-to-frame snaps.
 * **Directional Look-Ahead:** During sustained locomotion, the camera gently biases slightly forward in the direction of travel to expand forward visibility, easing back to center when stationary.
 * **Controlled Zoom:** Players can adjust zoom within safe clamped limits (e.g., $1.0\times$ to $2.0\times$ / $3.0\times$). Zoom increments maintain integer pixel scaling to eliminate pixel shimmering and texture distortion.
@@ -470,7 +470,7 @@ STRICTLY NO CAMERA ROTATION IN V1.0
 
 The player controller maintains an explicit state model to ensure **incompatible actions never execute simultaneously**.
 
-These states represent **player-facing control and interaction states**, not a duplicate of the global game-state architecture or domain state machines. Where another system owns an action's underlying simulation lifecycle (e.g., combat animations in [HU-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md), crop harvesting in [FB-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/FARMING_SYSTEM_SPECIFICATION.md), building placement in [BI-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md), fishing minigame in [FI-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md)), PC-001 defines only the **player-facing control contract**: whether movement is permitted, whether input is accepted, whether the action is interruptible, and what player-facing control state applies.
+These states represent **player-facing control and interaction states**, not a duplicate of the global game-state architecture or domain state machines. Where another system owns an action's underlying simulation lifecycle (e.g., combat animations in [HU-001](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md), crop harvesting in [FB-001](FARMING_SYSTEM_SPECIFICATION.md), building placement in [BI-001](BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md), fishing minigame in [FI-001](../00-governance/MASTER_SPECIFICATION_INDEX.md)), PC-001 defines only the **player-facing control contract**: whether movement is permitted, whether input is accepted, whether the action is interruptible, and what player-facing control state applies.
 
 ### Core State Categories:
 1. **`FREE` / `IDLE`:** Player is stationary, eligible to move, interact, equip, or activate tools.
@@ -495,12 +495,12 @@ These states represent **player-facing control and interaction states**, not a d
 
 # 25. Combat Control Interface
 
-Combat operates as **simple, readable, real-time directional action** (grounded in [HU-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md)):
+Combat operates as **simple, readable, real-time directional action** (grounded in [HU-001](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md)):
 
 * **Direct Attack Action:** Left Click (`action_primary`) with a weapon equipped initiates a directional attack in the player's facing direction or toward the cursor.
 * **Soft Targeting Assistance:** Combat uses soft cone detection to connect attacks with nearby hostile creatures without locking the player into an inflexible hard target camera lock.
 * **Responsive Spacing:** Attack animations have clear windup and active frames, followed by early movement recovery. Evasion is based on positioning, spacing, and movement timing—there is no sprint, dash, or dodge-roll meter.
-* **System Independence:** Weapon stats, creature health, hitboxes, damage numbers, and combat progression are governed by [HU-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md).
+* **System Independence:** Weapon stats, creature health, hitboxes, damage numbers, and combat progression are governed by [HU-001](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md).
 
 ---
 
@@ -539,7 +539,7 @@ Player Enters Portal Trigger / Boards Dock Ferry / Interacts with Door
 
 * **Control Lock:** During island travel, interior transitions, loading/fade screens, and respawn, player control is locked to prevent invalid movement or interaction.
 * **Doors:** Doors use contextual interaction (`[E] Enter Cottage`) rather than accidental proximity walk-ins.
-* **Travel:** Boarding boats at docks initiates a deliberate travel sequence; players do not teleport abruptly without diegetic context. World topology and travel rules belong to [WM-001](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md) and [TR-001](file:///c:/Users/HP/Documents/Underhallow/docs/00-governance/MASTER_SPECIFICATION_INDEX.md).
+* **Travel:** Boarding boats at docks initiates a deliberate travel sequence; players do not teleport abruptly without diegetic context. World topology and travel rules belong to [WM-001](../04-world/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md) and [TR-001](../00-governance/MASTER_SPECIFICATION_INDEX.md).
 
 ---
 
@@ -563,18 +563,18 @@ Health Reaches Zero in Dangerous Wilderness / Dungeon
 
 * **Defeat Control Contract:** Defeat temporarily disables player control, prevents interaction during the defeat sequence, transitions the character to the canonical Personal Island cottage respawn location, and restores control only when respawn is fully complete.
 * **Permanent Progression Intact:** Player skill levels, tool ownership, personal island structures, and equipped items are never permanently lost. There is no permadeath, no health-system redesign, and no stamina penalty.
-* **Ownership Boundary:** Defeat resource-loss rules and inventory handling are governed by [HU-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md) and [PR-001](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/PLAYER_PROGRESSION_SPECIFICATION.md). PC-001 defines only the player-facing control handover.
+* **Ownership Boundary:** Defeat resource-loss rules and inventory handling are governed by [HU-001](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md) and [PR-001](PLAYER_PROGRESSION_SPECIFICATION.md). PC-001 defines only the player-facing control handover.
 
 ---
 
 # 29. Multiplayer Player-to-Player Interaction
 
-In multiplayer environments (governed by [MS-001](file:///c:/Users/HP/Documents/Underhallow/docs/07-multiplayer/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md)):
+In multiplayer environments (governed by [MS-001](../07-multiplayer/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md)):
 
 * **Soft Avoidance Collision:** Players cannot form human walls or physically trap other players in cottages, shops, or narrow paths. Players gently slide past one another.
 * **Proximity Interaction:** Approaching another player displays a dedicated social prompt (`[E] Inspect / Social`).
 * **Non-Interference with Environment:** When another player stands near a crop or resource node, environmental interaction maintains clear targeting distinction to prevent misclicks.
-* **Ownership Boundary:** PC-001 defines the player-facing control interface. Social permissions, party mechanics, guild structures, trading rules, chat systems, and network authority remain strictly owned by [MS-001](file:///c:/Users/HP/Documents/Underhallow/docs/07-multiplayer/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md) and [ETA-001](file:///c:/Users/HP/Documents/Underhallow/docs/02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md).
+* **Ownership Boundary:** PC-001 defines the player-facing control interface. Social permissions, party mechanics, guild structures, trading rules, chat systems, and network authority remain strictly owned by [MS-001](../07-multiplayer/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md) and [ETA-001](../02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md).
 
 ---
 
@@ -601,12 +601,12 @@ The following rules represent immutable requirements for the player control syst
 
 This specification serves as the foundational control layer for:
 
-* **[Farming System Specification (FB-001)](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/FARMING_SYSTEM_SPECIFICATION.md):** Consumes tile targeting and tool usage activations.
-* **[Hunting & Combat System Specification (HU-001)](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md):** Consumes directional attack actions and soft target cones.
-* **[Building & Construction System Specification (BI-001)](file:///c:/Users/HP/Documents/Underhallow/docs/03-gameplay/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md):** Consumes preview positioning, rotation inputs, and placement confirmation.
-* **[Main Island Design Specification (MI-001)](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/MAIN_ISLAND_DESIGN_SPECIFICATION.md) & [Personal Island Design Specification (PI-001)](file:///c:/Users/HP/Documents/Underhallow/docs/04-world/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md):** Provide authored navigation boundaries, dock portals, and cottage transition targets.
-* **[Engine & Technical Architecture Specification (ETA-001)](file:///c:/Users/HP/Documents/Underhallow/docs/02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md):** Governs authoritative state management, simulation step boundaries, and network replication.
-* **[Multiplayer & Social Systems Specification (MS-001)](file:///c:/Users/HP/Documents/Underhallow/docs/07-multiplayer/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md):** Governs social permissions, party mechanics, and multiplayer sessions.
+* **[Farming System Specification (FB-001)](FARMING_SYSTEM_SPECIFICATION.md):** Consumes tile targeting and tool usage activations.
+* **[Hunting & Combat System Specification (HU-001)](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md):** Consumes directional attack actions and soft target cones.
+* **[Building & Construction System Specification (BI-001)](BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md):** Consumes preview positioning, rotation inputs, and placement confirmation.
+* **[Main Island Design Specification (MI-001)](../04-world/MAIN_ISLAND_DESIGN_SPECIFICATION.md) & [Personal Island Design Specification (PI-001)](../04-world/PERSONAL_ISLAND_DESIGN_SPECIFICATION.md):** Provide authored navigation boundaries, dock portals, and cottage transition targets.
+* **[Engine & Technical Architecture Specification (ETA-001)](../02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md):** Governs authoritative state management, simulation step boundaries, and network replication.
+* **[Multiplayer & Social Systems Specification (MS-001)](../07-multiplayer/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md):** Governs social permissions, party mechanics, and multiplayer sessions.
 
 ---
 
