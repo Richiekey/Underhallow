@@ -66,7 +66,8 @@ docs/
     ├── narrative/                                          # Lore audits, dialogue review, consistency checks
     ├── world/                                              # Map balance, coordinate alignment, tile budget checks
     └── gm/                                                 # Game Master review records & sign-offs
-        └── GM_SESSION_RECORD_PROTOCOL.md                   # GSP-001: Formal GM Review Protocol & Template
+        ├── GM_SESSION_RECORD_PROTOCOL.md                   # GSP-001: Formal GM Review Protocol & Template
+        └── GM_SESSION_20260918_EDP001_ACCEPTANCE.md        # GM-20260918-001: EDP-001 Post-Acceptance Synchronization Record
 ```
 
 ---
