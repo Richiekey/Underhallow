@@ -59,7 +59,8 @@ docs/
     ├── qa/                                                 # Automated & manual QA execution reports (QA-001, QA-002, etc.)
     │   ├── QA_SESSION_01_REPORT.md                         # QA-001: Baseline Phase 1 runtime test execution report
     │   ├── QA_CONSTRUCTION_SURGICAL_PASS_3_REPORT.md       # QA-002: Construction Pass 3 coordinate verification
-    │   └── QA_HUNTING_SURGICAL_PASS_REPORT.md              # QA-003: Hunting loop & discovery contract verification
+    │   ├── QA_HUNTING_SURGICAL_PASS_REPORT.md              # QA-003: Hunting loop & discovery contract verification
+    │   └── QA_CLEMENTINE_PROVENANCE_REVERIFICATION_REPORT.md # QA-004: Clementine provenance correction re-verification
     ├── architecture/                                       # Architectural audits, state boundary checks, technical debt
     ├── gameplay/                                           # Playability notes, mechanical balance, tuning logs
     ├── infrastructure/                                     # Server deployment, persistence, performance profiling
@@ -67,7 +68,8 @@ docs/
     ├── world/                                              # Map balance, coordinate alignment, tile budget checks
     └── gm/                                                 # Game Master review records & sign-offs
         ├── GM_SESSION_RECORD_PROTOCOL.md                   # GSP-001: Formal GM Review Protocol & Template
-        └── GM_SESSION_20260918_EDP001_ACCEPTANCE.md        # GM-20260918-001: EDP-001 Post-Acceptance Synchronization Record
+        ├── GM_SESSION_20260918_EDP001_ACCEPTANCE.md        # GM-20260918-001: EDP-001 Post-Acceptance Synchronization Record
+        └── GM_SESSION_20260918_CLEMENTINE_NARRATIVE_SLICE.md # GM-20260918-002: Clementine Narrative Slice Acceptance Record
 ```
 
 ---
