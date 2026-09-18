@@ -25,7 +25,7 @@ func _init(
 	check_distance = p_check_dist
 
 func validate(state: GameState) -> CommandResult:
-	if state == null or state.progression_state == null or state.inventory_state == null:
+	if state == null or state.progression_state == null or state.inventory_state == null or state.hunting_state == null:
 		return CommandResult.fail("Invalid game state for objective completion.")
 	
 	if objective_id != CLEMENTINE_INTRO_ID:
@@ -53,20 +53,16 @@ func validate(state: GameState) -> CommandResult:
 	if hide < 1:
 		return CommandResult.fail("Missing Raw Hide: need 1 obtained from a forest hare.")
 	
-	# Verify hunting contract: if hunting state has registered creatures, verify a hare was harvested
-	if state.hunting_state != null:
-		var creatures: Dictionary = state.hunting_state.get_all_creatures()
-		var has_hares: bool = false
-		var hare_harvested: bool = false
-		for c: Variant in creatures.values():
-			var creature: CreatureState = c as CreatureState
-			if creature != null and creature.definition_id == &"hare":
-				has_hares = true
-				if creature.is_harvested:
-					hare_harvested = true
-					break
-		if has_hares and not hare_harvested:
-			return CommandResult.fail("Raw Hide must be obtained by harvesting a defeated forest hare.")
+	# Verify hunting contract: at least one registered forest hare must be harvested
+	var creatures: Dictionary = state.hunting_state.get_all_creatures()
+	var hare_harvested: bool = false
+	for c: Variant in creatures.values():
+		var creature: CreatureState = c as CreatureState
+		if creature != null and creature.definition_id == &"hare" and creature.is_harvested:
+			hare_harvested = true
+			break
+	if not hare_harvested:
+		return CommandResult.fail("Raw Hide must be obtained by harvesting a defeated forest hare.")
 	
 	return CommandResult.ok()
 

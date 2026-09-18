@@ -2058,23 +2058,49 @@ func _run_clementine_narrative_slice_tests() -> void:
 	var complete_no_berries_res: CommandResult = runtime.execute_command(CompleteObjectiveCommandClass.new(&"clementine_intro", dummy_player.global_position, clementine_node.global_position, true))
 	_assert_true(not complete_no_berries_res.success, "Narrative 8: Complete command rejected without 3 berries")
 	
-	# 9. Forest hare hunting outcome verification
+	# 9. Complete Provenance Matrix Verification
+	# Matrix 3 (Defect Regression): 3 Wild Berries + 1 Raw Hide + zero registered hare rejected
 	runtime.game_state.inventory_state.add_item(&"resource_wild_berries", 3)
-	var test_hare: CreatureState = runtime.game_state.hunting_state.register_creature(&"test_hare_narrative", &"hare", Vector2(250, -80))
-	_assert_true(not test_hare.is_harvested, "Narrative 9: Test hare registered and unharvested")
-	_assert_true(not runtime.game_state.progression_state.can_complete_clementine_objective(runtime.game_state.inventory_state, runtime.game_state.hunting_state), "Narrative 9: Incomplete while registered forest hare has not been harvested")
+	var xp_before_zero_hare: int = runtime.game_state.progression_state.farming_xp
+	_assert_equal(runtime.game_state.hunting_state.get_all_creatures().size(), 0, "Narrative 9A: Zero creatures registered in hunting state")
+	_assert_true(not runtime.game_state.progression_state.can_complete_clementine_objective(runtime.game_state.inventory_state, runtime.game_state.hunting_state), "Narrative 9A: 3 berries + Raw Hide + zero hare rejected by predicate")
+	var complete_zero_hare_res: CommandResult = runtime.execute_command(CompleteObjectiveCommandClass.new(&"clementine_intro", dummy_player.global_position, clementine_node.global_position, true))
+	_assert_true(not complete_zero_hare_res.success, "Narrative 9A: Complete command rejected when zero hares registered")
+	_assert_equal(runtime.game_state.progression_state.clementine_objective_state, ProgressionStateClass.ClementineObjectiveState.ACTIVE, "Narrative 9A: Objective remains ACTIVE with zero hares")
+	_assert_equal(runtime.game_state.progression_state.farming_xp, xp_before_zero_hare, "Narrative 9A: Farming XP unchanged with zero hares")
 	
-	# Defeat and harvest the hare through the authoritative command pipeline
+	# Matrix 4: 3 berries + Raw Hide + unharvested hare rejected
+	var test_hare: CreatureState = runtime.game_state.hunting_state.register_creature(&"test_hare_narrative", &"hare", Vector2(250, -80))
+	_assert_true(not test_hare.is_harvested, "Narrative 9B: Test hare registered and unharvested")
+	_assert_true(not runtime.game_state.progression_state.can_complete_clementine_objective(runtime.game_state.inventory_state, runtime.game_state.hunting_state), "Narrative 9B: 3 berries + Raw Hide + unharvested hare rejected by predicate")
+	var complete_unharvested_res: CommandResult = runtime.execute_command(CompleteObjectiveCommandClass.new(&"clementine_intro", dummy_player.global_position, clementine_node.global_position, true))
+	_assert_true(not complete_unharvested_res.success, "Narrative 9B: Complete command rejected with unharvested hare")
+	_assert_equal(runtime.game_state.progression_state.clementine_objective_state, ProgressionStateClass.ClementineObjectiveState.ACTIVE, "Narrative 9B: Objective remains ACTIVE with unharvested hare")
+	_assert_equal(runtime.game_state.progression_state.farming_xp, xp_before_zero_hare, "Narrative 9B: Farming XP unchanged with unharvested hare")
+	
+	# Matrix 5: 3 berries + Raw Hide + harvested non-hare rejected
+	var test_non_hare: CreatureState = runtime.game_state.hunting_state.register_creature(&"test_fox_narrative", &"fox", Vector2(260, -80))
+	test_non_hare.is_defeated = true
+	test_non_hare.is_harvested = true
+	_assert_true(test_non_hare.is_harvested, "Narrative 9C: Non-hare creature registered and harvested")
+	_assert_true(not test_hare.is_harvested, "Narrative 9C: Forest hare remains unharvested")
+	_assert_true(not runtime.game_state.progression_state.can_complete_clementine_objective(runtime.game_state.inventory_state, runtime.game_state.hunting_state), "Narrative 9C: Harvested non-hare does not satisfy hare requirement in predicate")
+	var complete_non_hare_res: CommandResult = runtime.execute_command(CompleteObjectiveCommandClass.new(&"clementine_intro", dummy_player.global_position, clementine_node.global_position, true))
+	_assert_true(not complete_non_hare_res.success, "Narrative 9C: Complete command rejected when only non-hare is harvested")
+	_assert_equal(runtime.game_state.progression_state.clementine_objective_state, ProgressionStateClass.ClementineObjectiveState.ACTIVE, "Narrative 9C: Objective remains ACTIVE with harvested non-hare")
+	_assert_equal(runtime.game_state.progression_state.farming_xp, xp_before_zero_hare, "Narrative 9C: Farming XP unchanged with harvested non-hare")
+	
+	# Matrix 6: 3 berries + Raw Hide + harvested hare -> eligible
 	var atk_cmd1: AttackCreatureCommand = AttackCreatureCommandClass.new(&"test_hare_narrative", 5)
 	var atk_cmd2: AttackCreatureCommand = AttackCreatureCommandClass.new(&"test_hare_narrative", 5)
 	runtime.execute_command(atk_cmd1)
 	runtime.execute_command(atk_cmd2)
-	_assert_true(test_hare.is_defeated, "Narrative 9: Hare defeated at 0 HP")
+	_assert_true(test_hare.is_defeated, "Narrative 9D: Hare defeated at 0 HP")
 	var harvest_cmd: HarvestCreatureCommand = HarvestCreatureCommandClass.new(&"test_hare_narrative")
 	var harv_res: CommandResult = runtime.execute_command(harvest_cmd)
-	_assert_true(harv_res.success, "Narrative 9: Defeated hare harvested successfully")
-	_assert_true(test_hare.is_harvested, "Narrative 9: Authoritative state records hare as harvested")
-	_assert_true(runtime.game_state.progression_state.can_complete_clementine_objective(runtime.game_state.inventory_state, runtime.game_state.hunting_state), "Narrative 9: All objective requirements fully satisfied")
+	_assert_true(harv_res.success, "Narrative 9D: Defeated hare harvested successfully")
+	_assert_true(test_hare.is_harvested, "Narrative 9D: Authoritative state records hare as harvested")
+	_assert_true(runtime.game_state.progression_state.can_complete_clementine_objective(runtime.game_state.inventory_state, runtime.game_state.hunting_state), "Narrative 9D: 3 berries + Raw Hide + harvested hare is eligible")
 	
 	# 10. Returning to Clementine required (having items does not auto-complete)
 	_assert_equal(runtime.game_state.progression_state.clementine_objective_state, ProgressionStateClass.ClementineObjectiveState.ACTIVE, "Narrative 10: State remains ACTIVE before returning to Clementine")

@@ -67,30 +67,26 @@ func is_clementine_objective_completed() -> bool:
 ## Authoritative check for Clementine objective completion requirements:
 ## 1. At least 3 Wild Berries in inventory.
 ## 2. At least 1 Raw Hide in inventory.
-## 3. If hunting state has registered creatures, at least one forest hare must be harvested.
+## 3. At least one registered forest hare must exist in hunting state and be harvested.
 func can_complete_clementine_objective(inventory: InventoryState, hunting: HuntingState = null) -> bool:
-	if inventory == null:
+	if clementine_objective_state != ClementineObjectiveState.ACTIVE:
+		return false
+	if clementine_reward_granted:
+		return false
+	if inventory == null or hunting == null:
 		return false
 	if inventory.get_quantity(&"resource_wild_berries") < 3:
 		return false
 	if inventory.get_quantity(&"resource_raw_hide") < 1:
 		return false
 	
-	if hunting != null:
-		var creatures: Dictionary = hunting.get_all_creatures()
-		var has_hares: bool = false
-		var hare_harvested: bool = false
-		for c: Variant in creatures.values():
-			var creature: CreatureState = c as CreatureState
-			if creature != null and creature.definition_id == &"hare":
-				has_hares = true
-				if creature.is_harvested:
-					hare_harvested = true
-					break
-		if has_hares and not hare_harvested:
-			return false
+	var creatures: Dictionary = hunting.get_all_creatures()
+	for c: Variant in creatures.values():
+		var creature: CreatureState = c as CreatureState
+		if creature != null and creature.definition_id == &"hare" and creature.is_harvested:
+			return true
 	
-	return true
+	return false
 
 func to_dictionary() -> Dictionary:
 	return {
