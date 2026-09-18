@@ -60,6 +60,10 @@ const BuildingPreviewDisplayClass = preload("res://scenes/gameplay/building/buil
 const HotbarUIClass = preload("res://scenes/gameplay/ui/hotbar_ui.gd")
 const HareInteractableClass = preload("res://scenes/gameplay/hunting/hare_interactable.gd")
 const HareScene = preload("res://scenes/gameplay/hunting/hare.tscn")
+const AcceptObjectiveCommandClass = preload("res://src/core/commands/accept_objective_command.gd")
+const CompleteObjectiveCommandClass = preload("res://src/core/commands/complete_objective_command.gd")
+const ClementineInteractableClass = preload("res://scenes/gameplay/narrative/clementine_interactable.gd")
+const ClementineScene = preload("res://scenes/gameplay/narrative/clementine.tscn")
 
 var total_tests: int = 0
 var passed_tests: int = 0
@@ -83,6 +87,7 @@ func _init() -> void:
 	_run_hunting_and_building_state_tests()
 	_run_hunting_slice_tests()
 	_run_construction_slice_tests()
+	_run_clementine_narrative_slice_tests()
 	
 	print("==================================================")
 	print("Test Results: %d passed, %d failed of %d total tests." % [passed_tests, failed_tests, total_tests])
@@ -1981,4 +1986,181 @@ func _run_construction_slice_tests() -> void:
 	_assert_true(footprint_new_state.building_state.has_instance(&"shed_valid"), "Footprint 6: Restored state preserves shed_valid")
 	_assert_equal(footprint_new_state.building_state.get_instance(&"shed_valid").footprint, Vector2i(2, 2), "Footprint 6: Restored instance footprint is (2, 2)")
 	_assert_true(footprint_new_state.building_state.has_building_at(Vector2i(41, 41)), "Footprint 6: Restored state preserves corner cell (41, 41)")
+
+func _run_clementine_narrative_slice_tests() -> void:
+	print("\n--- Testing Phase 4 Clementine Narrative Slice ---")
+	var root_node: Window = root
+	var runtime: GameRuntime = GameRuntimeClass.new()
+	runtime.initialize_runtime()
+	runtime.start_runtime()
+	
+	# 1. State initialization
+	_assert_equal(runtime.game_state.progression_state.clementine_objective_state, ProgressionStateClass.ClementineObjectiveState.INACTIVE, "Narrative 1: Objective starts INACTIVE")
+	_assert_true(not runtime.game_state.progression_state.is_clementine_objective_active(), "Narrative 1: Objective not active initially")
+	_assert_true(not runtime.game_state.progression_state.is_clementine_objective_completed(), "Narrative 1: Objective not completed initially")
+	_assert_true(not runtime.game_state.progression_state.clementine_reward_granted, "Narrative 1: Reward not granted initially")
+	
+	# 2. Clementine node instantiation & binding
+	var clementine_node: ClementineInteractable = ClementineScene.instantiate() as ClementineInteractable
+	clementine_node.bind_runtime(runtime)
+	root_node.add_child(clementine_node)
+	clementine_node.global_position = Vector2(200, 20)
+	
+	clementine_node.update_prompt_for_player(null)
+	_assert_equal(clementine_node.prompt_text, "Talk to Clementine", "Narrative 2: Initial prompt is 'Talk to Clementine'")
+	_assert_equal(clementine_node.get_dialogue_state(), "intro", "Narrative 2: Dialogue state is 'intro'")
+	
+	# 3. Direct Complete command before acceptance fails validation
+	var premature_complete_cmd: CompleteObjectiveCommand = CompleteObjectiveCommandClass.new()
+	var premature_res: CommandResult = runtime.execute_command(premature_complete_cmd)
+	_assert_true(not premature_res.success, "Narrative 3: Complete command fails validation when inactive")
+	_assert_equal(runtime.game_state.progression_state.clementine_objective_state, ProgressionStateClass.ClementineObjectiveState.INACTIVE, "Narrative 3: State remains INACTIVE")
+	
+	# 4. Objective acceptance via player interaction
+	var dummy_player: Node2D = Node2D.new()
+	dummy_player.global_position = Vector2(200, 30)
+	root_node.add_child(dummy_player)
+	
+	clementine_node.interact(dummy_player)
+	_assert_equal(runtime.game_state.progression_state.clementine_objective_state, ProgressionStateClass.ClementineObjectiveState.ACTIVE, "Narrative 4: Interacting accepts objective and transitions to ACTIVE")
+	_assert_true(runtime.game_state.progression_state.is_clementine_objective_active(), "Narrative 4: is_clementine_objective_active() returns true")
+	_assert_equal(clementine_node.get_current_dialogue(), ClementineInteractableClass.INTRO_DIALOGUE, "Narrative 4: Intro dialogue delivered upon acceptance")
+	_assert_equal(clementine_node.get_dialogue_state(), "active", "Narrative 4: Dialogue state transitions to 'active'")
+	
+	# 5. Duplicate acceptance rejected by command pipeline
+	var dup_accept: AcceptObjectiveCommand = AcceptObjectiveCommandClass.new()
+	var dup_res: CommandResult = runtime.execute_command(dup_accept)
+	_assert_true(not dup_res.success, "Narrative 5: Duplicate acceptance rejected by validation")
+	_assert_equal(runtime.game_state.progression_state.clementine_objective_state, ProgressionStateClass.ClementineObjectiveState.ACTIVE, "Narrative 5: State remains ACTIVE")
+	
+	# 6. Active incomplete interaction reminder
+	clementine_node.update_prompt_for_player(dummy_player)
+	_assert_equal(clementine_node.prompt_text, "Talk to Clementine", "Narrative 6: Incomplete prompt remains 'Talk to Clementine'")
+	clementine_node.interact(dummy_player)
+	_assert_true(clementine_node.get_current_dialogue().begins_with(ClementineInteractableClass.ACTIVE_DIALOGUE), "Narrative 6: Interacting while incomplete shows active reminder")
+	_assert_true(clementine_node.get_current_dialogue().contains("0/3"), "Narrative 6: Reminder reports 0/3 Wild Berries")
+	_assert_true(clementine_node.get_current_dialogue().contains("0/1"), "Narrative 6: Reminder reports 0/1 Raw Hide")
+	_assert_equal(runtime.game_state.progression_state.clementine_objective_state, ProgressionStateClass.ClementineObjectiveState.ACTIVE, "Narrative 6: Objective remains ACTIVE")
+	
+	# 7. Partial progress: 3 Wild Berries without Raw Hide remains incomplete
+	runtime.game_state.inventory_state.add_item(&"resource_wild_berries", 3)
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wild_berries"), 3, "Narrative 7: Inventory has 3 wild berries")
+	_assert_true(not runtime.game_state.progression_state.can_complete_clementine_objective(runtime.game_state.inventory_state, runtime.game_state.hunting_state), "Narrative 7: 3 berries without Raw Hide is incomplete")
+	var complete_no_hide_res: CommandResult = runtime.execute_command(CompleteObjectiveCommandClass.new(&"clementine_intro", dummy_player.global_position, clementine_node.global_position, true))
+	_assert_true(not complete_no_hide_res.success, "Narrative 7: Complete command rejected without Raw Hide")
+	
+	# 8. Partial progress: 1 Raw Hide without 3 Wild Berries remains incomplete
+	runtime.game_state.inventory_state.remove_item(&"resource_wild_berries", 3)
+	runtime.game_state.inventory_state.add_item(&"resource_raw_hide", 1)
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_wild_berries"), 0, "Narrative 8: Wild berries removed (0 in inventory)")
+	_assert_equal(runtime.game_state.inventory_state.get_quantity(&"resource_raw_hide"), 1, "Narrative 8: Inventory has 1 raw hide")
+	_assert_true(not runtime.game_state.progression_state.can_complete_clementine_objective(runtime.game_state.inventory_state, runtime.game_state.hunting_state), "Narrative 8: 1 Raw Hide without berries is incomplete")
+	var complete_no_berries_res: CommandResult = runtime.execute_command(CompleteObjectiveCommandClass.new(&"clementine_intro", dummy_player.global_position, clementine_node.global_position, true))
+	_assert_true(not complete_no_berries_res.success, "Narrative 8: Complete command rejected without 3 berries")
+	
+	# 9. Forest hare hunting outcome verification
+	runtime.game_state.inventory_state.add_item(&"resource_wild_berries", 3)
+	var test_hare: CreatureState = runtime.game_state.hunting_state.register_creature(&"test_hare_narrative", &"hare", Vector2(250, -80))
+	_assert_true(not test_hare.is_harvested, "Narrative 9: Test hare registered and unharvested")
+	_assert_true(not runtime.game_state.progression_state.can_complete_clementine_objective(runtime.game_state.inventory_state, runtime.game_state.hunting_state), "Narrative 9: Incomplete while registered forest hare has not been harvested")
+	
+	# Defeat and harvest the hare through the authoritative command pipeline
+	var atk_cmd1: AttackCreatureCommand = AttackCreatureCommandClass.new(&"test_hare_narrative", 5)
+	var atk_cmd2: AttackCreatureCommand = AttackCreatureCommandClass.new(&"test_hare_narrative", 5)
+	runtime.execute_command(atk_cmd1)
+	runtime.execute_command(atk_cmd2)
+	_assert_true(test_hare.is_defeated, "Narrative 9: Hare defeated at 0 HP")
+	var harvest_cmd: HarvestCreatureCommand = HarvestCreatureCommandClass.new(&"test_hare_narrative")
+	var harv_res: CommandResult = runtime.execute_command(harvest_cmd)
+	_assert_true(harv_res.success, "Narrative 9: Defeated hare harvested successfully")
+	_assert_true(test_hare.is_harvested, "Narrative 9: Authoritative state records hare as harvested")
+	_assert_true(runtime.game_state.progression_state.can_complete_clementine_objective(runtime.game_state.inventory_state, runtime.game_state.hunting_state), "Narrative 9: All objective requirements fully satisfied")
+	
+	# 10. Returning to Clementine required (having items does not auto-complete)
+	_assert_equal(runtime.game_state.progression_state.clementine_objective_state, ProgressionStateClass.ClementineObjectiveState.ACTIVE, "Narrative 10: State remains ACTIVE before returning to Clementine")
+	_assert_true(not runtime.game_state.progression_state.is_clementine_objective_completed(), "Narrative 10: Objective does NOT auto-complete on resource gathering")
+	
+	# Out-of-range completion fails distance validation
+	dummy_player.global_position = Vector2(900, 900)
+	var far_complete_cmd: CompleteObjectiveCommand = CompleteObjectiveCommandClass.new(&"clementine_intro", dummy_player.global_position, clementine_node.global_position, true)
+	var far_res: CommandResult = runtime.execute_command(far_complete_cmd)
+	_assert_true(not far_res.success, "Narrative 10: Complete command fails validation when player is far away")
+	_assert_equal(runtime.game_state.progression_state.clementine_objective_state, ProgressionStateClass.ClementineObjectiveState.ACTIVE, "Narrative 10: State remains ACTIVE after failed far completion")
+	
+	# 11. Completion execution upon return to Clementine
+	dummy_player.global_position = Vector2(200, 30)
+	clementine_node.update_prompt_for_player(dummy_player)
+	_assert_equal(clementine_node.prompt_text, "Deliver Supplies to Clementine", "Narrative 11: Prompt reflects ready to deliver")
+	
+	var xp_before_complete: int = runtime.game_state.progression_state.farming_xp
+	clementine_node.interact(dummy_player)
+	_assert_equal(runtime.game_state.progression_state.clementine_objective_state, ProgressionStateClass.ClementineObjectiveState.COMPLETED, "Narrative 11: Interacting with Clementine completes objective")
+	_assert_true(runtime.game_state.progression_state.is_clementine_objective_completed(), "Narrative 11: is_clementine_objective_completed() returns true")
+	_assert_true(runtime.game_state.progression_state.clementine_reward_granted, "Narrative 11: Reward recorded as granted")
+	_assert_equal(clementine_node.get_current_dialogue(), ClementineInteractableClass.COMPLETE_DIALOGUE, "Narrative 11: Completion dialogue delivered")
+	_assert_equal(clementine_node.get_dialogue_state(), "complete", "Narrative 11: Dialogue state is 'complete'")
+	
+	# 12. Authoritative reward (+20 Farming XP) and resource preservation
+	_assert_equal(runtime.game_state.progression_state.farming_xp, xp_before_complete + 20, "Narrative 12: Exactly +20 Farming XP awarded as approved reward")
+	_assert_true(runtime.game_state.inventory_state.get_quantity(&"resource_wild_berries") >= 3, "Narrative 12: Wild Berries preserved in inventory (not consumed)")
+	_assert_true(runtime.game_state.inventory_state.get_quantity(&"resource_raw_hide") >= 1, "Narrative 12: Raw Hide preserved in inventory (not consumed)")
+	
+	# 13. Idempotence & Duplicate reward prevention
+	var re_complete_cmd: CompleteObjectiveCommand = CompleteObjectiveCommandClass.new(&"clementine_intro", dummy_player.global_position, clementine_node.global_position, true)
+	var re_complete_res: CommandResult = runtime.execute_command(re_complete_cmd)
+	_assert_true(not re_complete_res.success, "Narrative 13: Direct Complete command on completed objective fails validation")
+	
+	var xp_after_complete: int = runtime.game_state.progression_state.farming_xp
+	clementine_node.interact(dummy_player)
+	_assert_equal(clementine_node.get_current_dialogue(), ClementineInteractableClass.POST_COMPLETE_DIALOGUE, "Narrative 13: Subsequent interaction gives friendly post-complete acknowledgement")
+	_assert_equal(runtime.game_state.progression_state.farming_xp, xp_after_complete, "Narrative 13: Farming XP unchanged on repeated interaction (no duplicate reward)")
+	
+	# 14. Persistence: Round-trip preserves completed state and reward guard
+	var pers: PersistenceBoundary = PersistenceBoundaryClass.new()
+	var save_data: SaveData = pers.serialize_state(runtime.game_state, runtime.game_time)
+	_assert_equal(save_data.schema_version, 1, "Narrative 14: Save schema version remains 1 (no migration)")
+	
+	var restored_state: GameState = GameStateClass.new()
+	var restored_time: GameTime = GameTimeClass.new()
+	var des_ok: bool = pers.deserialize_state(save_data, restored_state, restored_time)
+	_assert_true(des_ok, "Narrative 14: Deserialization succeeds")
+	_assert_equal(restored_state.progression_state.clementine_objective_state, ProgressionStateClass.ClementineObjectiveState.COMPLETED, "Narrative 14: Restored objective state is COMPLETED")
+	_assert_true(restored_state.progression_state.clementine_reward_granted, "Narrative 14: Restored reward_granted flag is true")
+	_assert_equal(restored_state.progression_state.farming_xp, xp_after_complete, "Narrative 14: Restored Farming XP matches")
+	_assert_equal(restored_state.inventory_state.get_quantity(&"resource_wild_berries"), runtime.game_state.inventory_state.get_quantity(&"resource_wild_berries"), "Narrative 14: Restored Wild Berries match")
+	_assert_equal(restored_state.inventory_state.get_quantity(&"resource_raw_hide"), runtime.game_state.inventory_state.get_quantity(&"resource_raw_hide"), "Narrative 14: Restored Raw Hide matches")
+	
+	# Attempting completion on restored state fails validation (reward guard holds)
+	var restored_runtime: GameRuntime = GameRuntimeClass.new()
+	restored_runtime.initialize_runtime()
+	restored_runtime.start_runtime()
+	restored_runtime.game_state = restored_state
+	var post_reload_cmd: CompleteObjectiveCommand = CompleteObjectiveCommandClass.new(&"clementine_intro")
+	var post_reload_res: CommandResult = restored_runtime.execute_command(post_reload_cmd)
+	_assert_true(not post_reload_res.success, "Narrative 14: Post-reload complete command fails validation")
+	_assert_equal(restored_runtime.game_state.progression_state.farming_xp, xp_after_complete, "Narrative 14: Post-reload XP strictly unchanged")
+	
+	# 15. Persistence: Active state and partial progress round-trip
+	var active_state: GameState = GameStateClass.new()
+	active_state.progression_state.clementine_objective_state = ProgressionStateClass.ClementineObjectiveState.ACTIVE
+	active_state.inventory_state.add_item(&"resource_wild_berries", 2)
+	var active_save: SaveData = pers.serialize_state(active_state, runtime.game_time)
+	var restored_active_state: GameState = GameStateClass.new()
+	pers.deserialize_state(active_save, restored_active_state, restored_time)
+	_assert_equal(restored_active_state.progression_state.clementine_objective_state, ProgressionStateClass.ClementineObjectiveState.ACTIVE, "Narrative 15: Restored active state is ACTIVE")
+	_assert_equal(restored_active_state.inventory_state.get_quantity(&"resource_wild_berries"), 2, "Narrative 15: Restored active progress has 2 Wild Berries")
+	_assert_true(not restored_active_state.progression_state.clementine_reward_granted, "Narrative 15: Restored active reward_granted is false")
+	
+	# 16. Backward compatibility with saves lacking clementine fields
+	var legacy_dict: Dictionary = { "farming_xp": 15, "farming_level": 1 }
+	var legacy_prog: ProgressionState = ProgressionStateClass.new()
+	legacy_prog.from_dictionary(legacy_dict)
+	_assert_equal(legacy_prog.clementine_objective_state, ProgressionStateClass.ClementineObjectiveState.INACTIVE, "Narrative 16: Legacy save defaults clementine_objective_state to INACTIVE")
+	_assert_true(not legacy_prog.clementine_reward_granted, "Narrative 16: Legacy save defaults clementine_reward_granted to false")
+	
+	# Clean up test nodes
+	root_node.remove_child(clementine_node)
+	clementine_node.free()
+	root_node.remove_child(dummy_player)
+	dummy_player.free()
 
