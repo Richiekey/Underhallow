@@ -28,7 +28,7 @@ docs/
 │   └── TECHNICAL_ARCHITECTURE.md                           # TA-001: Legacy browser/Phaser baseline (SUPERSEDED)
 │
 ├── 03-gameplay/                                            # Core and universal gameplay systems
-│   ├── CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md              # CG-001: Primary loops, pillars, agency, & gameplay invariants
+│   ├── CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md              # CG-001: Primary loops, 5 pillars, 8 world systems, & invariants
 │   ├── FARMING_SYSTEM_SPECIFICATION.md                     # FB-001: Soil, tilling, watering, crop growth, & harvesting
 │   ├── HUNTING_COMBAT_SYSTEM_SPECIFICATION.md              # HU-001: Weapon handling, wildlife encounters, tracking, & harvesting
 │   ├── BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md       # BI-001: Universal construction framework & hybrid placement
@@ -98,8 +98,8 @@ Technical specifications governing engine mechanics, client-server topology, and
 
 ### `03-gameplay/`
 Universal game systems, mechanics, player controls, and progression loops.
-* Universal crafting, farming, hunting, fishing, construction, and player traversal.
-* Specific game systems that apply across the entire game world.
+* Organized around five **Core Gameplay Pillars** (lifestyles: Farming, Hunting, Mining, Fishing, Animal Husbandry) and eight **Core World Systems** (infrastructure: Building, Trading/Economy, Social, World/Exploration, Combat, Inventory/Items, Quests/Progression, Crafting).
+* Defines foundational player livelihoods, cross-pillar transformation, and universal game rules.
 
 ### `04-world/`
 Spatial, geographical, environmental, and ecological specifications.

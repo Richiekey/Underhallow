@@ -14,6 +14,7 @@
 * [Master Specification Index & Build Governance V1.0 (MSI-001)](../00-governance/MASTER_SPECIFICATION_INDEX.md)
 
 **Primary Pillar:** Hunting  
+**Classification:** Core Gameplay Pillar (Wildlife Livelihood; Combat as Supporting World System)  
 **Related Systems:** Exploration, Inventory, Crafting, Farming, Economy, Building, NPCs, Time/Simulation, Equipment, Progression  
 
 ---
@@ -21,6 +22,8 @@
 ## 1. Purpose
 
 The Hunting & Combat System defines how players encounter, track, fight, harvest, interact with, and progress through Underhallow's wildlife and hostile creatures.
+
+Per [CG-001 §4](CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md), Hunting is a **Core Gameplay Pillar** representing a primary lifestyle and livelihood, while Combat is a shared **Core World System** providing interaction infrastructure.
 
 The system exists to make hunting a **full lifestyle pillar**, equal in importance to farming.
 

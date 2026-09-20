@@ -145,24 +145,31 @@ These define concrete world territories and individual major game systems.
 
 ### 2.2 Universal Gameplay Systems
 
-* **Player Progression Specification V1.0** (`PR-001`)
-* **Farming System Specification V1.0** (`FB-001`)
-* **Livestock & Animal Husbandry Specification V1.0** (`LA-001`) — Planned
-* **Hunting & Combat System Specification V1.0** (`HU-001`)
-* **Fishing Specification V1.0** (`FI-001`) — Planned
-* **Foraging & Wild Resources Specification V1.0** (`FR-001`) — Planned
-* **Resource Gathering, Forestry & Mining Specification V1.0** (`RG-001`) — Planned
-* **Cooking & Food Specification V1.0** (`CK-001`) — Planned
-* **Building & Construction System Specification V1.0** (`BI-001`) — Universal Construction Framework
-* **Inventory, Items, Tools & Crafting Specification V1.0** (`II-001`) — Planned
-* **Exploration & Secrets Specification V1.0** (`EX-001`) — Planned
-* **Transportation & Travel Specification V1.0** (`TR-001`) — Planned
-* **Time, Day/Night & Simulation Specification V1.0** (`TS-001`) — Planned *(Foundational simulation-clock authority established in ETA-001 §54; A-001 implemented)*
-* **Weather & Environmental Systems Specification V1.0** (`WE-001`) — Planned
-* **NPCs, Dialogue & Quests Specification V1.0** (`NQ-001`) — Planned
-* **Multiplayer & Social Systems Specification V1.0** (`MS-001`) — Cross-Cutting Social Systems
-* **Economy Specification V1.0** (`EC-001`) — Planned
-* **Story & Narrative Architecture Specification V1.0** (`ST-001`) — Planned
+Per [Core Gameplay Systems Specification V1.0 (CG-001 §4)](../03-gameplay/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md), Universal Gameplay Systems are structured into **Core Gameplay Pillars** (lifestyles & livelihoods) and **Core World Systems** (shared cross-pillar infrastructure):
+
+#### 2.2.1 Core Gameplay Pillars (Lifestyles & Livelihoods)
+* **Farming System Specification V1.0** (`FB-001`) — Cultivation Livelihood
+* **Hunting & Combat System Specification V1.0** (`HU-001`) — Wildlife Livelihood
+* **Resource Gathering, Forestry & Mining Specification V1.0** (`RG-001`) — Resource Extraction Livelihood *(Planned)*
+* **Fishing Specification V1.0** (`FI-001`) — Aquatic Resource Livelihood *(Planned)*
+* **Livestock & Animal Husbandry Specification V1.0** (`LA-001`) — Pastoral Livelihood *(Planned)*
+
+#### 2.2.2 Core World Systems (Shared Infrastructure)
+* **Building & Construction System Specification V1.0** (`BI-001`) — Universal Construction Framework & Physical Infrastructure
+* **Economy Specification V1.0** (`EC-001`) — Commerce & Market Exchange *(Planned)*
+* **Multiplayer & Social Systems Specification V1.0** (`MS-001`) — Cross-Cutting Social & Community Infrastructure
+* **Exploration & Secrets Specification V1.0** (`EX-001`) — World Spatial Framework & Traversal *(Planned)*
+* **Combat Infrastructure** (`HU-001`) — Supporting Interaction Mechanics
+* **Inventory, Items, Tools & Crafting Specification V1.0** (`II-001`) — Item Storage & Cross-Pillar Transformation *(Planned)*
+* **Player Progression Specification V1.0** (`PR-001`) — Multi-Pillar Player & Account Advancement
+* **NPCs, Dialogue & Quests Specification V1.0** (`NQ-001`) — Structured Objectives & Community Interaction *(Planned)*
+* **Supporting World & Simulation Systems:**
+  * **Foraging & Wild Resources Specification V1.0** (`FR-001`) — Planned
+  * **Cooking & Food Specification V1.0** (`CK-001`) — Planned
+  * **Transportation & Travel Specification V1.0** (`TR-001`) — Planned
+  * **Time, Day/Night & Simulation Specification V1.0** (`TS-001`) — Planned *(Foundational simulation-clock authority established in ETA-001 §54; A-001 implemented)*
+  * **Weather & Environmental Systems Specification V1.0** (`WE-001`) — Planned
+  * **Story & Narrative Architecture Specification V1.0** (`ST-001`) — Planned
 
 ---
 
@@ -697,7 +704,7 @@ The MSI is the primary navigation and governance layer for humans and AI agents.
 - **MSI-001 — Master Specification Index & Build Governance V1.1:** Approved baseline established at [`docs/00-governance/MASTER_SPECIFICATION_INDEX.md`](MASTER_SPECIFICATION_INDEX.md) (reconciled master registry, authority levels, reading matrices, and roadmap).
 - **FS-001 — Foundation Specification V1.0:** Approved foundation product definition established at [`docs/01-product/FOUNDATION_SPECIFICATION.md`](../01-product/FOUNDATION_SPECIFICATION.md) (defines comprehensive system boundaries, core player loops, non-lethal defeat, no stamina, and product structure).
 - **ETA-001 — Engine & Technical Architecture Specification V1:** Approved foundation architecture established at [`docs/02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md`](../02-architecture/ENGINE_TECHNICAL_ARCHITECTURE_SPECIFICATION.md) (supersedes initial browser/Phaser baseline `TA-001`; establishes Godot + GDScript + Dedicated Game Servers + Supabase for Windows PC).
-- **CG-001 — Core Gameplay Systems Specification V1.0:** Locked gameplay foundation established at [`docs/03-gameplay/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md`](../03-gameplay/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md) (defines primary gameplay loops, progression pillars, player agency, and gameplay invariants).
+- **CG-001 — Core Gameplay Systems Specification V1.0:** Locked gameplay foundation established at [`docs/03-gameplay/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md`](../03-gameplay/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md) (defines primary gameplay loops, five Core Gameplay Pillars [Farming, Hunting, Mining, Fishing, Animal Husbandry], eight Core World Systems [Building, Trading/Economy, Social, World/Exploration, Combat, Inventory/Items, Quests/Progression, Crafting], conceptual economic loop, player agency, and gameplay invariants).
 - **PC-001 — Player Control, Movement & Interaction Specification V1.0:** Approved foundation specification established at [`docs/03-gameplay/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md`](../03-gameplay/PLAYER_CONTROL_MOVEMENT_INTERACTION_SPECIFICATION.md) (defines continuous 2D locomotion, diagonal normalization, strict no-sprint/no-stamina invariant, contextual resolution between Left Mouse Button and E, canonical interaction targeting hierarchy, 8-directional facing retention, action commitment matrix, mutually exclusive control states, fixed isometric camera with smooth tracking/zoom, footprint-based ground collision, non-lethal defeat expedition flow, and clean separation between player-facing control contract and ETA-001 technical implementation).
 - **WM-001 — World & Map Architecture Specification V1.0:** Approved foundation specification established at [`docs/04-world/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md`](../04-world/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md) (defines canonical V1 two-island structure [Main Island and Personal Island], continuous primary landmass, medium world scale with travel-time constraints, layered natural gating, constrained Personal Island terrain editing, connected grid expansion, selective authored persistence, restrained verticality, and physical boat/dock transitions; Guild Islands deferred).
 - **NB-001 — Narrative Bible V1.0:** Foundation narrative specification established at [`docs/05-narrative/NARRATIVE_BIBLE.md`](../05-narrative/NARRATIVE_BIBLE.md) (defines 6-phase mystery curve, player arrival and vague past, grandparent legacy, NPC living history, the Ten Narrative Laws, ending philosophy, and core narrative balance: *"Cozy surface. Mystical middle. Deep mystery underneath"*).

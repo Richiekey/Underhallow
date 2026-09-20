@@ -104,33 +104,193 @@ The player should eventually feel:
 
 ---
 
-# 4. Core Gameplay Pillars
+# 4. Gameplay Taxonomy: Core Gameplay Pillars & Core World Systems
 
-Underhallow is built around six major gameplay pillars.
+Underhallow enforces a foundational architectural distinction between **how players make a life** and the **infrastructure that allows those lives to function together**:
 
-## 4.1 Exploration
+```text
+CORE GAMEPLAY PILLARS
+        ↓
+Ways players make a life (Lifestyles & Livelihoods)
+```
 
-Discovering the world, its resources, characters, secrets, hidden areas and mysteries.
+versus:
 
-## 4.2 Farming
+```text
+CORE WORLD SYSTEMS
+        ↓
+Infrastructure that allows those lives to function together
+```
 
-Developing land, growing crops, managing production and building agricultural wealth.
+This distinction is fundamental to Underhallow's world design, player agency, and long-term economic architecture. Players choose how to build their life; the world systems provide the physical, social, mechanical, and economic fabric connecting them. Underhallow documentation strictly maintains this separation and does not collapse both categories into a flat list.
 
-## 4.3 Hunting
+---
 
-Exploring dangerous areas, encountering creatures and acquiring resources through simple combat.
+## 4.1 The Five Core Gameplay Pillars
 
-## 4.4 Building
+The Core Gameplay Pillars represent distinct player lifestyle and livelihood paths. They are not merely individual mechanics; each represents a comprehensive economic and gameplay identity around which a player can establish their character's life and purpose in Underhallow.
 
-Developing the Personal Island and creating both functional and aesthetic structures.
+```text
+🌾 Farming · 🏹 Hunting · ⛏️ Mining · 🎣 Fishing · 🐄 Animal Husbandry
+```
 
-## 4.5 Progression
+### 4.1.1 🌾 Farming (Cultivation)
+* **Classification:** Core Gameplay Pillar
+* **Primary Activity:** Cultivation, agriculture, soil stewardship, and crop production.
+* **Livelihood Scope:** A farmer cultivates land, tills soil, plants seeds, manages crop growth, harvests agricultural wealth, produces food, sells crop outputs, and supplies Crafting and Cooking.
+* **Authoritative Specification:** [Farming System Specification (FB-001)](FARMING_SYSTEM_SPECIFICATION.md).
 
-Improving the player, their skills, their house, their island and their wealth.
+### 4.1.2 🏹 Hunting (Wildlife)
+* **Classification:** Core Gameplay Pillar
+* **Primary Activity:** Wildlife discovery, tracking, encounter management, and non-lethal harvesting.
+* **Livelihood Scope:** A hunter explores dangerous territories, tracks creatures, engages in wildlife combat, harvests creature materials, produces food and leather, sells raw or processed wildlife outputs, supplies Crafting, and specializes around animal resources. Per Invariant 13 & 20, processing is never forced (selling raw resources is fully supported).
+* **Authoritative Specification:** [Hunting & Combat System Specification (HU-001)](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md).
 
-## 4.6 Story & Mystery
+### 4.1.3 ⛏️ Mining (Resource Extraction)
+* **Classification:** Core Gameplay Pillar
+* **Primary Activity:** Mineral and geological resource extraction.
+* **Livelihood Scope:** A miner discovers mineral veins and subterranean deposits, extracts ores, gathers building stone, uncovers rare minerals, operates specialized extraction tools, supplies Crafting with metals and masonry, and trades raw or smelted materials through the economy.
+* **Authoritative Specification:** [Resource Gathering, Forestry & Mining Specification (RG-001)](../00-governance/MASTER_SPECIFICATION_INDEX.md) *(Planned)*.
 
-Following character-driven stories while gradually discovering the darker truth beneath Underhallow's peaceful surface.
+### 4.1.4 🎣 Fishing (Aquatic Resources)
+* **Classification:** Core Gameplay Pillar
+* **Primary Activity:** Aquatic resource gathering, freshwater and oceanic fishing.
+* **Livelihood Scope:** A fisher reads water conditions, casts in diverse coastal and inland waters, captures various fish species, harvests aquatic resources, produces food, sells fresh catch to local markets, supplies Cooking and Crafting, and specializes in rare aquatic specimens.
+* **Authoritative Specification:** [Fishing Specification (FI-001)](../00-governance/MASTER_SPECIFICATION_INDEX.md) *(Planned)*.
+
+### 4.1.5 🐄 Animal Husbandry (Livestock)
+* **Classification:** Core Gameplay Pillar
+* **Primary Activity:** Livestock care, herding, breeding, and pastoral production.
+* **Livelihood Scope:** A rancher/herder raises domestic livestock, manages pastures, cares for animal wellbeing, breeds for desirable traits, produces sustainable animal goods (milk, wool, eggs, fertilizer), sells livestock and byproducts, and supplies Crafting and Cooking.
+* **Authoritative Specification:** [Livestock & Animal Husbandry Specification (LA-001)](../00-governance/MASTER_SPECIFICATION_INDEX.md) *(Planned)*.
+
+---
+
+## 4.2 The Eight Core World Systems
+
+Core World Systems operate across multiple lifestyle pillars. They provide the universal physical, social, mechanical, and economic infrastructure that enables individual player lifestyles to coexist, interconnect, and flourish.
+
+| System | Classification | Primary Cross-Pillar Function | Authoritative Specification |
+| :--- | :--- | :--- | :--- |
+| 🏗️ **Building & Construction** | Core World System | Physical world infrastructure, player housing, workspaces, and territorial development across all pillars | [BI-001](BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md) |
+| 💰 **Trading & Economy** | Core World System | Commerce, pricing, market exchange, and resource distribution connecting all pillar outputs | [EC-001](../00-governance/MASTER_SPECIFICATION_INDEX.md) *(Planned)* |
+| 🧑🤝🧑 **Social / Community** | Core World System | Multiplayer cooperation, parties, guilds, shared spaces, and player interactions | [MS-001](../07-multiplayer/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md) |
+| 🗺️ **World / Exploration** | Core World System | Movement, regional geography, landmarks, discovery, spatial transitions, and secrets | [EX-001](../00-governance/MASTER_SPECIFICATION_INDEX.md) *(Planned)* / [WM-001](../04-world/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md) |
+| ⚔️ **Combat** | Core World System | Conflict resolution, hostile encounters, defense, and interaction mechanics supporting hunting and exploration | [HU-001](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md) |
+| 🎒 **Inventory / Items** | Core World System | Item definition, slot storage, transport capacity, stacking, and equipment management | [II-001](../00-governance/MASTER_SPECIFICATION_INDEX.md) *(Planned)* |
+| 📜 **Quests / Progression** | Core World System | Structured milestones, narrative objectives, skill growth, and account advancement across all pillars | [PR-001](PLAYER_PROGRESSION_SPECIFICATION.md) / [NQ-001](../00-governance/MASTER_SPECIFICATION_INDEX.md) *(Planned)* |
+| 🛠️ **Crafting** | Core World System | Cross-pillar resource transformation converting raw materials into goods, tools, and structures | [II-001](../00-governance/MASTER_SPECIFICATION_INDEX.md) *(Planned)* |
+
+### 4.2.1 🏗️ Building & Construction (Physical Infrastructure)
+Building is explicitly **not** one of the five Core Gameplay Pillars. Rather, it provides cross-pillar physical infrastructure. Building supports farming (plots, barns), hunting (drying racks, trophy halls), mining (smelters, storage sheds), fishing (docks, smokehouses), animal husbandry (coops, barns, fences), crafting (workbenches, workshops), and player identity (cottages, estates).
+
+### 4.2.2 💰 Trading & Economy (Commerce & Exchange)
+Trading belongs to the Economy / Commerce layer and is explicitly **not** an independent livelihood pillar. While a player may specialize as a merchant or trader, Trading functions as the systemic connective tissue through which all pillar outputs are valued, exchanged, and redistributed throughout the world:
+
+```text
+Farmer (Crops) ────────┐
+Hunter (Hides/Meat) ───┤
+Miner (Ores/Stone) ────┼──→ Economy & Trading ──→ World Wealth & Exchange
+Fisher (Fish) ─────────┤
+Rancher (Wool/Milk) ───┘
+```
+
+### 4.2.3 🛠️ Crafting (Resource Transformation)
+Crafting is cross-pillar transformation infrastructure rather than an isolated livelihood pillar. It receives raw inputs generated across all five pillars and converts them into finished goods, tools, structures, and consumables:
+
+```text
+Farming (Fiber, Grains) ─────┐
+Hunting (Hides, Bones) ──────┤
+Mining (Ores, Gems) ─────────┼──→ Crafting ──→ Goods, Tools, Buildings, Consumables
+Fishing (Scales, Oils) ──────┤
+Animal Husbandry (Wool) ─────┘
+```
+
+### 4.2.4 🧑🤝🧑 Social / Community (Multiplayer Infrastructure)
+Social systems provide the cross-cutting framework for player interaction, co-op parties, guild islands, mutual aid, and communal events across all lifestyle activities, upholding the single-player-first, multiplayer-native principle ([MS-001](../07-multiplayer/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md)).
+
+### 4.2.5 🗺️ World / Exploration (Spatial Framework)
+Exploration provides the spatial environment and geographic context in which all pillars operate. It encompasses traversal, regional transitions, discovery, landmarks, and secrets across the Main Island, Personal Islands, and Guild Islands ([EX-001](../00-governance/MASTER_SPECIFICATION_INDEX.md), [WM-001](../04-world/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md)).
+
+### 4.2.6 ⚔️ Combat (Interaction System)
+Combat is shared interaction infrastructure. Combat supports wildlife defense, hostile encounters, and expedition risk management. Hunting is a livelihood lifestyle; combat is the interaction mechanism utilized during that pursuit.
+
+### 4.2.7 🎒 Inventory / Items (Resource Transport)
+Inventory and item systems manage the ownership, containment, weight, stacking, and transfer of resources produced by all five pillars. Inventory constraints serve as the primary expedition pacing mechanism in place of artificial stamina meters (Invariant 4).
+
+### 4.2.8 📜 Quests / Progression (Universal Advancement)
+Quests and progression provide horizontal and vertical advancement across every lifestyle and world system. Progression rewards engagement in any pillar without forcing players to participate in activities they do not enjoy ([PR-001](PLAYER_PROGRESSION_SPECIFICATION.md), [NQ-001](../00-governance/MASTER_SPECIFICATION_INDEX.md)).
+
+---
+
+## 4.3 Conceptual Economic Relationship
+
+The Core Gameplay Pillars and Core World Systems interact through an integrated, self-sustaining economic loop:
+
+```text
+CORE PILLARS (Farming · Hunting · Mining · Fishing · Husbandry)
+     │
+     ▼
+Gather / Produce (Raw Resources)
+     │
+     ▼
+Crafting (Transformation)
+     │
+     ▼
+Finished Goods & Supplies
+     │
+     ▼
+Trading & Markets (Commerce Layer)
+     │
+     ▼
+Player Economy
+     │
+ ┌───┴────┐
+ ▼        ▼
+Consume  Build & Equip
+ └───┬────┘
+     ▼
+Continue Life in Underhallow
+     │
+     └────→ Gather / Produce
+```
+
+---
+
+## 4.4 Player Specialization Model
+
+Underhallow does not require any player to master all systems. The five pillars allow players to pursue deep, distinct lifestyles and economic specializations:
+
+* **The Dedicated Farmer:** Focuses on crop rotation, soil management, and high-yield harvests; trades agricultural surpluses for tools, stone, and animal products.
+* **The Wilderness Hunter:** Specializes in tracking, animal habits, and rare wildlife harvests; trades pelts, meats, and trophies for farm produce and crafted arrows.
+* **The Subterranean Miner:** Focuses on mineral prospecting and deep quarrying; supplies smiths and builders with high-grade ores and structural stone.
+* **The Coastal Fisher:** Reads oceanic tides and weather patterns; supplies fresh fish, oils, and rare aquatic ingredients to village markets and cooks.
+* **The Pastoral Rancher:** Breeds prized livestock and harvests wool, dairy, and eggs; trades animal byproducts for feed and agricultural grains.
+* **The Artisan / Crafter:** Leverages the Crafting world system to refine multi-pillar raw materials into high-value tools, furniture, and equipment.
+* **The Merchant / Trader:** Specializes within the Trading world system, mastering supply lines, regional arbitrage, and marketplace commerce.
+
+---
+
+## 4.5 Authoritative Specification Mapping
+
+All pillars and world systems map to authoritative Level 2 specifications registered in the [Master Specification Index (MSI-001)](../00-governance/MASTER_SPECIFICATION_INDEX.md). Existing specification IDs and their current drafting statuses remain strictly authoritative:
+
+| System Name | Classification | Specification ID | Current Status | Parent / Authority |
+| :--- | :--- | :--- | :---: | :--- |
+| **Farming** | Core Gameplay Pillar | `FB-001` | DRAFT | [docs/03-gameplay/FARMING_SYSTEM_SPECIFICATION.md](FARMING_SYSTEM_SPECIFICATION.md) |
+| **Hunting** | Core Gameplay Pillar | `HU-001` | DRAFT | [docs/03-gameplay/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md) |
+| **Mining** | Core Gameplay Pillar | `RG-001` | PLANNED | Resource Gathering, Forestry & Mining *(Not yet drafted)* |
+| **Fishing** | Core Gameplay Pillar | `FI-001` | PLANNED | Fishing *(Not yet drafted)* |
+| **Animal Husbandry** | Core Gameplay Pillar | `LA-001` | PLANNED | Livestock & Animal Husbandry *(Not yet drafted)* |
+| **Building & Construction** | Core World System | `BI-001` | DRAFT | [docs/03-gameplay/BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md](BUILDING_CONSTRUCTION_SYSTEM_SPECIFICATION.md) |
+| **Trading & Economy** | Core World System | `EC-001` | PLANNED | Economy *(Not yet drafted)* |
+| **Social / Community** | Core World System | `MS-001` | DRAFT | [docs/07-multiplayer/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md](../07-multiplayer/MULTIPLAYER_SOCIAL_SYSTEMS_SPECIFICATION.md) |
+| **World / Exploration** | Core World System | `EX-001` | PLANNED | Exploration & Secrets *(Not yet drafted)* |
+| **Combat** | Core World System | `HU-001` | DRAFT | [docs/03-gameplay/HUNTING_COMBAT_SYSTEM_SPECIFICATION.md](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md) |
+| **Inventory / Items** | Core World System | `II-001` | PLANNED | Inventory, Items, Tools & Crafting *(Not yet drafted)* |
+| **Quests** | Core World System | `NQ-001` | PLANNED | NPCs, Dialogue & Quests *(Not yet drafted)* |
+| **Progression** | Core World System | `PR-001` | DRAFT | [docs/03-gameplay/PLAYER_PROGRESSION_SPECIFICATION.md](PLAYER_PROGRESSION_SPECIFICATION.md) |
+| **Crafting** | Core World System | `II-001` | PLANNED | Inventory, Items, Tools & Crafting *(Not yet drafted)* |
 
 ---
 
@@ -319,7 +479,7 @@ Detailed movement and camera behavior will be defined in the **Player Controller
 
 # 11. Exploration
 
-Exploration is a core gameplay pillar.
+Exploration is a foundational **Core World System** providing the shared spatial framework and environmental context in which all gameplay pillars operate.
 
 The player should be rewarded for going beyond the obvious path.
 
@@ -627,6 +787,10 @@ Hunting combines:
 
 # 25. Combat
 
+Combat is a **Core World System** providing shared interaction infrastructure for hostile encounters and wildlife defense.
+
+Combat is not an independent lifestyle pillar; rather, it is the interaction mechanism utilized during the Hunting livelihood and dangerous territorial expeditions.
+
 Combat is intentionally simple.
 
 Combat should be:
@@ -707,6 +871,10 @@ This creates meaningful expedition risk without creating devastating permanent f
 
 # 29. Building
 
+Building & Construction is a **Core World System** providing foundational physical infrastructure across all lifestyle pillars, workspaces, and territorial development.
+
+Building is explicitly not one of the five Core Gameplay Pillars. It provides cross-pillar physical infrastructure that supports farming, hunting, mining, fishing, animal husbandry, crafting, commerce, and player housing.
+
 Building is both:
 
 **Functional + Creative**
@@ -770,9 +938,9 @@ The exact house progression will be defined separately.
 
 # 32. Crafting
 
-Crafting is a **supporting gameplay system**.
+Crafting is a **Core World System** providing cross-pillar resource transformation.
 
-It exists primarily to transform resources into useful items.
+It exists to convert raw materials gathered across all five Core Gameplay Pillars (farming, hunting, mining, fishing, animal husbandry) into finished goods, tools, equipment, structures, and consumables.
 
 Potential outputs include:
 
@@ -783,24 +951,26 @@ Potential outputs include:
 * Utility items
 * Specialized items
 
-Crafting should support the primary gameplay pillars rather than becoming a separate dominant gameplay loop.
+Crafting functions as shared transformation infrastructure supporting the lifestyle pillars and the player economy rather than existing as an isolated livelihood pillar.
 
 ---
 
 # 33. Fishing
 
-Fishing is a **supporting gameplay system**.
+Fishing is one of the five **Core Gameplay Pillars**, representing the aquatic resource production livelihood.
 
-Fishing may provide:
+A player specializing as a fisher reads water conditions, navigates coastal and freshwater environments, catches fish species, harvests aquatic resources, and supplies Cooking, Crafting, and local markets.
 
-* Resources
-* Food
-* Income
-* Collection opportunities
-* Rare items
-* Exploration opportunities
+Fishing provides:
 
-Fishing should be enjoyable and worthwhile without becoming one of the game's primary identities.
+* Aquatic resources
+* Food & culinary ingredients
+* Economic income through Trade
+* Collection & discovery opportunities
+* Rare materials & secrets
+* Coastal & maritime exploration
+
+Fishing offers a complete, viable lifestyle identity within Underhallow's world.
 
 ---
 
@@ -929,6 +1099,10 @@ The economic fantasy is:
 ---
 
 # 39. Future Economy
+
+Trading & Economy is a **Core World System** providing the commerce and exchange layer that connects the outputs of all Core Gameplay Pillars.
+
+Trading is explicitly **not an independent Core Gameplay Pillar**. While a player may specialize as a merchant or trader, Trading functions as the world system through which crops, pelts, ores, fish, livestock goods, and crafted items circulate through player and NPC economies.
 
 The eventual Underhallow economy is intended to potentially connect to the real world.
 
@@ -1288,31 +1462,34 @@ At the highest level:
           ▼            ▼            ▼
       EXPLORATION    NPCs       ACTIVITIES
                                   │
-                    ┌─────────────┼─────────────┐
-                    ▼             ▼             ▼
-                 FARMING       HUNTING       BUILDING
-                    │             │             │
-                    └─────────────┼─────────────┘
+                    ┌─────────────┴─────────────┐
+                    ▼                           ▼
+          CORE GAMEPLAY PILLARS         CORE WORLD SYSTEMS
+          (Farming, Hunting,            (Building, Social,
+           Mining, Fishing,              Combat, Exploration)
+           Animal Husbandry)                    │
+                    │                           │
+                    ▼                           │
+                RESOURCES                       │
+                    │                           │
+                    ▼                           ▼
+          CRAFTING / INVENTORY ─────────→ PLAYER ECONOMY
+          (Resource Transformation)      (Trading & Markets)
+                    │                           │
+                    └─────────────┬─────────────┘
                                   ▼
-                              RESOURCES
+                             PROGRESSION
                                   │
-                    ┌─────────────┼─────────────┐
-                    ▼             ▼             ▼
-                INVENTORY      CRAFTING      WEALTH
-                    │
-                    ▼
-                PROGRESSION
-                    │
-          ┌─────────┼─────────┐
-          ▼         ▼         ▼
-       PLAYER      HOUSE     ISLAND
-          │                    │
-          └──────────┬─────────┘
-                     ▼
-                 NEW OPTIONS
-                     │
-                     ▼
-                 EXPLORATION
+          ┌─────────┼─────────────┴─────────────┐
+          ▼         ▼                           ▼
+       PLAYER      HOUSE                     ISLAND
+          │                                     │
+          └─────────────────┬───────────────────┘
+                            ▼
+                       NEW OPTIONS
+                            │
+                            ▼
+                       EXPLORATION
 ```
 
 Narrative, quests and mystery operate across the entire world rather than existing as isolated systems.
@@ -1384,15 +1561,16 @@ The Core Gameplay Systems Specification establishes the foundation for the follo
 3. **Exploration & World Systems Specification** (EX-001)
 4. **Farming Systems Specification** (FB-001)
 5. **Hunting & Combat Specification** (HU-001)
-6. **Building & Personal Island Specification** (BI-001)
-7. **Inventory, Items & Resources Specification** (II-001)
-8. **Crafting & Tool Systems Specification** (II-001)
-9. **Fishing Specification** (FI-001)
-10. **Player Progression Specification** (PR-001)
-11. **NPC & Quest Systems Specification** (NQ-001)
-12. **Narrative & Mystery Specification** (ST-001)
-13. **Economy Specification** (EC-001)
-14. **Multiplayer & Social Systems Specification** (MS-001)
+6. **Resource Gathering, Forestry & Mining Specification** (RG-001)
+7. **Fishing Specification** (FI-001)
+8. **Livestock & Animal Husbandry Specification** (LA-001)
+9. **Building & Personal Island Specification** (BI-001)
+10. **Inventory, Items, Tools & Crafting Specification** (II-001)
+11. **Player Progression Specification** (PR-001)
+12. **NPC & Quest Systems Specification** (NQ-001)
+13. **Narrative & Mystery Specification** (ST-001)
+14. **Economy Specification** (EC-001)
+15. **Multiplayer & Social Systems Specification** (MS-001)
 
 The order may be adjusted when dependencies require it.
 
@@ -1433,8 +1611,8 @@ The major decisions currently locked are:
 | Game structure        | Three-space open world (Main, Personal, Guild Islands) |
 | Main world            | Main Island                                  |
 | Player world          | Personal Island                              |
-| Primary roles         | Farming + Hunting                            |
-| Supporting activities | Building, Exploration, Crafting, Fishing     |
+| Core Gameplay Pillars (Lifestyles) | Farming, Hunting, Mining, Fishing, Animal Husbandry |
+| Core World Systems (Infrastructure) | Building, Trading/Economy, Social, World/Exploration, Combat, Inventory, Quests/Progression, Crafting |
 | Inventory             | Limited slots                                |
 | Stamina               | **Removed**                                  |
 | Time                  | Traditional game day                         |

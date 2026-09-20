@@ -4,6 +4,7 @@
 **Status:** DRAFT  
 **Version:** V1.0  
 **System:** Player Progression  
+**Classification:** Core World System (Structured Advancement & Objectives)  
 **Parent Specifications:**  
 * [North Star V1.0 (NS-001)](../01-product/NORTH_STAR.md)  
 * [Core Gameplay Systems Specification V1.0 (CG-001)](CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md)  
@@ -18,6 +19,8 @@
 # 1. Purpose
 
 The Player Progression System defines how a player's character, abilities, activities, possessions, personal island, and overall life in **Underhallow** develop over time.
+
+Per [CG-001 §4](CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md), Player Progression is a **Core World System** providing structured advancement across all five Core Gameplay Pillars and shared world systems without requiring players to master every activity.
 
 The system exists to give players a meaningful sense of growth without turning Underhallow into a conventional grind-heavy RPG.
 

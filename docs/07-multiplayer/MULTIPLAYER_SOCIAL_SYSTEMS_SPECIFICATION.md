@@ -6,6 +6,7 @@
 **Version:** V1.0  
 **Status:** DRAFT  
 **System Level:** Level 2 — Cross-Cutting Gameplay & Social System  
+**Classification:** Core World System (Social & Community Infrastructure)  
 **Parent Specifications:**
 * [North Star V1.0 (NS-001)](../01-product/NORTH_STAR.md)
 * [Foundation Specification V1.0 (FS-001)](../01-product/FOUNDATION_SPECIFICATION.md)
@@ -23,6 +24,8 @@
 # 1. Purpose
 
 The **Multiplayer & Social Systems Specification** defines how players connect, collaborate, communicate, organize, share spaces, and interact within Underhallow.
+
+Per [CG-001 §4](../03-gameplay/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md), Social & Multiplayer is a **Core World System** providing cross-pillar community, co-op, trade, and shared-space infrastructure that allows players pursuing any lifestyle pillar to connect and collaborate.
 
 In accordance with the foundational directives established in `NS-001`, `SR-001`, and `ETA-001`, Underhallow is:
 

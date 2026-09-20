@@ -7,6 +7,7 @@
 **Status:** DRAFT  
 **Authority Level:** Level 2 — Gameplay System Specification  
 **System:** Building & Construction  
+**Classification:** Core World System (Physical Infrastructure)  
 **Primary Domain:** Player Building / Construction  
 **Engine:** Godot  
 **Language:** GDScript  
@@ -40,7 +41,7 @@
 
 The Building & Construction System defines how players acquire, place, construct, modify, customize, relocate, and remove structures and objects within spaces where building is permitted.
 
-Building is a major lifestyle pillar of Underhallow.
+Per [CG-001 §4](CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md), Building is explicitly classified as a **Core World System** providing cross-pillar physical infrastructure rather than an isolated livelihood pillar. It provides the shared physical foundation supporting farming, hunting, mining, fishing, animal husbandry, crafting, commerce, and player housing.
 
 It exists simultaneously as:
 

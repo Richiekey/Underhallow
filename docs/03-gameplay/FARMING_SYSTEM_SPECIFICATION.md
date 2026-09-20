@@ -4,6 +4,7 @@
 **Version:** V1.0  
 **Status:** DRAFT  
 **System:** Farming  
+**Classification:** Core Gameplay Pillar (Cultivation Livelihood)  
 **Authority Level:** Level 2 — Gameplay System Specification  
 
 **Parent Specifications**
