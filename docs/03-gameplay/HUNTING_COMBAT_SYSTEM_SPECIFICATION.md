@@ -23,7 +23,7 @@
 
 The Hunting & Combat System defines how players encounter, track, fight, harvest, interact with, and progress through Underhallow's wildlife and hostile creatures.
 
-Per [CG-001 §4](CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md), Hunting is a **Core Gameplay Pillar** representing a primary lifestyle and livelihood, while Combat is a shared **Core World System** providing interaction infrastructure.
+Per [CG-001 §4](CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md), Hunting is a **Core Gameplay Pillar** representing a primary lifestyle and livelihood, while Combat is a shared **Core World System** providing interaction infrastructure. `HU-001` serves as the single combined Level 2 specification authority for both the Hunting pillar and Combat as its supporting world-system function; no separate combat specification exists or is required.
 
 The system exists to make hunting a **full lifestyle pillar**, equal in importance to farming.
 

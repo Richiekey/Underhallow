@@ -33,28 +33,23 @@ This document defines:
 
 * The core gameplay loop
 * Player agency
-* World structure
-* Main Island
-* Personal Island
-* Exploration
-* Farming
-* Hunting
-* Combat
-* Building
-* Crafting
-* Fishing
-* Inventory
-* Progression
-* Time
-* Day/night
-* Defeat
-* Resource risk
-* NPC interaction
-* Quests
-* Narrative integration
-* Mystery
+* World structure (Main Island, Personal Island, Guild Islands)
+* Core Gameplay Pillars (Farming, Hunting, Mining, Fishing, Animal Husbandry)
+* Core World Systems (Building, Trading/Economy, Social, Exploration, Combat, Inventory, Quests/Progression, Crafting)
+* Exploration and spatial traversal
+* Farming cultivation loop
+* Hunting wildlife loop and combat interaction mechanics
+* Building and physical infrastructure
+* Crafting and cross-pillar resource transformation
+* Fishing and aquatic resource loop
+* Inventory and expedition constraints
+* Multi-dimensional player progression
+* Time, day/night, and simulation loop
+* Defeat and expedition resource risk
+* NPC interaction, quests, and narrative integration
+* Underlying world mystery
 * Future economy boundaries
-* Social/competitive boundaries
+* Social and cooperative boundaries
 
 It does **not** yet define exact code, database schemas, formulas, asset specifications, or complete content catalogues.
 
@@ -144,7 +139,7 @@ The Core Gameplay Pillars represent distinct player lifestyle and livelihood pat
 * **Classification:** Core Gameplay Pillar
 * **Primary Activity:** Wildlife discovery, tracking, encounter management, and non-lethal harvesting.
 * **Livelihood Scope:** A hunter explores dangerous territories, tracks creatures, engages in wildlife combat, harvests creature materials, produces food and leather, sells raw or processed wildlife outputs, supplies Crafting, and specializes around animal resources. Per Invariant 13 & 20, processing is never forced (selling raw resources is fully supported).
-* **Authoritative Specification:** [Hunting & Combat System Specification (HU-001)](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md).
+* **Authoritative Specification:** [Hunting & Combat System Specification (HU-001)](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md). `HU-001` serves as the combined Level 2 specification authority governing both Hunting as the Core Gameplay Pillar (lifestyle/livelihood) and Combat as the supporting Core World System (interaction mechanics).
 
 ### 4.1.3 ⛏️ Mining (Resource Extraction)
 * **Classification:** Core Gameplay Pillar
@@ -213,7 +208,7 @@ Social systems provide the cross-cutting framework for player interaction, co-op
 Exploration provides the spatial environment and geographic context in which all pillars operate. It encompasses traversal, regional transitions, discovery, landmarks, and secrets across the Main Island, Personal Islands, and Guild Islands ([EX-001](../00-governance/MASTER_SPECIFICATION_INDEX.md), [WM-001](../04-world/WORLD_MAP_ARCHITECTURE_SPECIFICATION.md)).
 
 ### 4.2.6 ⚔️ Combat (Interaction System)
-Combat is shared interaction infrastructure. Combat supports wildlife defense, hostile encounters, and expedition risk management. Hunting is a livelihood lifestyle; combat is the interaction mechanism utilized during that pursuit.
+Combat is shared interaction infrastructure. Combat supports wildlife defense, hostile encounters, and expedition risk management. Hunting is a lifestyle and livelihood (Core Gameplay Pillar); combat is the interaction mechanism utilized during that pursuit and across dangerous territories (Core World System). Per Underhallow specification governance, combat does not have a separate standalone specification; the combined [Hunting & Combat System Specification (HU-001)](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md) remains the single authoritative Level 2 specification governing both the Hunting pillar and the supporting Combat world system.
 
 ### 4.2.7 🎒 Inventory / Items (Resource Transport)
 Inventory and item systems manage the ownership, containment, weight, stacking, and transfer of resources produced by all five pillars. Inventory constraints serve as the primary expedition pacing mechanism in place of artificial stamina meters (Invariant 4).
@@ -292,6 +287,9 @@ All pillars and world systems map to authoritative Level 2 specifications regist
 | **Progression** | Core World System | `PR-001` | DRAFT | [docs/03-gameplay/PLAYER_PROGRESSION_SPECIFICATION.md](PLAYER_PROGRESSION_SPECIFICATION.md) |
 | **Crafting** | Core World System | `II-001` | PLANNED | Inventory, Items, Tools & Crafting *(Not yet drafted)* |
 
+> [!NOTE]
+> **Combined Specification Authority (HU-001):** `HU-001` ([Hunting & Combat System Specification](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md)) is the unified Level 2 specification authority for both the **Hunting** Core Gameplay Pillar and the **Combat** Core World System. Hunting is classified as the lifestyle pillar, while Combat is classified as the supporting world-system interaction function. No separate or standalone combat specification exists or is required.
+
 ---
 
 # 5. Player Agency
@@ -344,10 +342,13 @@ Examples:
 
 * Wealthy farmer
 * Skilled hunter
+* Deep miner
+* Master fisher
+* Homestead rancher
 * Dedicated explorer
 * Master builder
-* Trader
-* Mixed-role player
+* Trader / Artisan
+* Mixed-lifestyle player (multi-pillar practitioner)
 * Highly developed island owner
 
 There must not be one universally optimal playstyle.
@@ -719,7 +720,7 @@ The player should sometimes deliberately remain outside at night because:
 
 # 21. Farming
 
-Farming is one of the two primary player roles.
+Farming is one of the five **Core Gameplay Pillars**, representing the cultivation and agricultural livelihood.
 
 The basic farming loop is:
 
@@ -769,7 +770,9 @@ Exact formulas are deferred.
 
 # 24. Hunting
 
-Hunting is the second primary player role.
+Hunting is one of the five **Core Gameplay Pillars**, representing the wildlife tracking, creature engagement, and animal resource harvesting livelihood.
+
+Per Underhallow specification governance, the combined **[Hunting & Combat System Specification (HU-001)](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md)** is the authoritative Level 2 specification governing both Hunting as the lifestyle pillar and Combat as its supporting world-system interaction function.
 
 The basic hunting loop is:
 
@@ -779,17 +782,24 @@ Hunting combines:
 
 * Exploration
 * Tracking/discovery
-* Combat
+* Combat (supporting world system)
 * Risk
 * Resource gathering
+* Optional processing or direct raw sale (per Invariants 13 & 20)
 
 ---
 
 # 25. Combat
 
-Combat is a **Core World System** providing shared interaction infrastructure for hostile encounters and wildlife defense.
+Combat is a **Core World System** providing shared interaction infrastructure for hostile encounters, wildlife defense, and expedition risk management.
 
-Combat is not an independent lifestyle pillar; rather, it is the interaction mechanism utilized during the Hunting livelihood and dangerous territorial expeditions.
+Combat is explicitly not an independent lifestyle pillar; rather, it is the interaction mechanism utilized during the Hunting livelihood and dangerous territorial expeditions.
+
+### 25.1 Specification Authority (HU-001)
+
+Combat does not have or require a separate standalone specification. The **[Hunting & Combat System Specification (HU-001)](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md)** serves as the unified Level 2 specification authority for both:
+1. **Hunting** as a Core Gameplay Pillar (lifestyle, livelihood, creature discovery, tracking, harvesting); and
+2. **Combat** as a supporting Core World System (interaction infrastructure, conflict resolution, encounter mechanics, defeat handling).
 
 Combat is intentionally simple.
 
@@ -825,7 +835,7 @@ Progression may eventually unlock:
 * New hunting opportunities
 * Access to more dangerous regions
 
-Exact mechanics are deferred to the Hunting & Combat Specification.
+Exact mechanics are defined authoritatively in the combined [Hunting & Combat System Specification (HU-001)](HUNTING_COMBAT_SYSTEM_SPECIFICATION.md).
 
 ---
 
@@ -1007,6 +1017,9 @@ The initial progression model includes:
 
 * Farming Skill
 * Hunting Skill
+* Mining Skill *(Planned)*
+* Fishing Skill
+* Animal Husbandry Skill *(Planned)*
 * Building Skill
 
 ### Personal Development
@@ -1058,6 +1071,18 @@ Farming → wealth → infrastructure → island development
 ### Hunter
 
 Exploration → hunting → resources → equipment → dangerous areas
+
+### Miner
+
+Prospecting → subterranean extraction → smelting/masonry → wealth/trade
+
+### Fisher
+
+Waterway exploration → casting/netting → aquatic resources → culinary/trade
+
+### Rancher
+
+Pasture management → animal care/breeding → sustainable goods → trade
 
 ### Explorer
 
@@ -1560,7 +1585,7 @@ The Core Gameplay Systems Specification establishes the foundation for the follo
 2. **Time & World Simulation Specification** (TS-001)
 3. **Exploration & World Systems Specification** (EX-001)
 4. **Farming Systems Specification** (FB-001)
-5. **Hunting & Combat Specification** (HU-001)
+5. **Hunting & Combat System Specification** (HU-001) *(Combined authority for the Hunting pillar and supporting Combat world system)*
 6. **Resource Gathering, Forestry & Mining Specification** (RG-001)
 7. **Fishing Specification** (FI-001)
 8. **Livestock & Animal Husbandry Specification** (LA-001)
@@ -1586,7 +1611,7 @@ The Core Gameplay foundation is considered complete when:
 * The three-space world structure (Main Island, Personal Island, Guild Islands) is defined.
 * Player progression categories are defined.
 * Farming is defined at the system level.
-* Hunting/combat is defined at the system level.
+* Hunting (as a Core Gameplay Pillar) and Combat (as a Core World System) are defined at the system level under HU-001.
 * Building is defined at the system level.
 * Exploration is defined at the system level.
 * Inventory philosophy is defined.
