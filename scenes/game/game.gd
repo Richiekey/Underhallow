@@ -43,7 +43,7 @@ func _verify_input_actions() -> void:
 		"move_up", "move_down", "move_left", "move_right",
 		"interact", "cancel", "zoom_in", "zoom_out",
 		"hotbar_1", "hotbar_2", "hotbar_3", "hotbar_4", "hotbar_5", "rotate_building",
-		"toggle_inventory", "debug_advance_day"
+		"toggle_inventory", "debug_advance_day", "quick_save", "quick_load"
 	]
 	var all_actions_valid: bool = true
 	for action: String in required_actions:
@@ -158,6 +158,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("debug_advance_day"):
 		if runtime != null:
 			runtime.execute_command(AdvanceDayDebugCommand.new())
+	elif event.is_action_pressed("quick_save"):
+		_save_game()
+	elif event.is_action_pressed("quick_load"):
+		_load_game()
 
 func _on_command_executed(cmd: Command, result: CommandResult) -> void:
 	if cmd is SleepCommand:
@@ -165,6 +169,7 @@ func _on_command_executed(cmd: Command, result: CommandResult) -> void:
 			_show_location_banner("Day %d" % runtime.game_state.time_state.current_day)
 		_show_toast(result.message, 3.5)
 		_refresh_all_world_nodes()
+		_save_game()
 	elif result.message != "":
 		_show_toast(result.message, 2.0)
 	
@@ -204,6 +209,9 @@ func switch_world(destination_scene_path: String, arrival_marker: String) -> voi
 	if new_world == null:
 		printerr("Underhallow Travel Error: Destination scene is not a WorldSpace: ", destination_scene_path)
 		return
+	
+	# Auto-save before travel transition
+	_save_game()
 	
 	# Remove previous world space
 	if active_world != null:
@@ -360,6 +368,56 @@ func _process(delta: float) -> void:
 		_banner_timer -= delta
 		if _banner_timer <= 0.0 and location_banner != null:
 			location_banner.text = ""
+
+func _format_game_time_string() -> String:
+	if runtime == null or runtime.game_state == null or runtime.game_state.time_state == null:
+		return ""
+	var time_state: TimeState = runtime.game_state.time_state
+	var progress: float = time_state.get_day_progress()
+	var total_minutes: int = int(progress * 1440.0) + (6 * 60)
+	var hours: int = (total_minutes / 60) % 24
+	var minutes: int = total_minutes % 60
+	return "Day %d, %02d:%02d" % [time_state.current_day, hours, minutes]
+
+func _save_game(slot_name: String = "default") -> bool:
+	if runtime == null:
+		return false
+	var success: bool = runtime.save_to_slot(slot_name)
+	if success:
+		var time_str: String = _format_game_time_string()
+		_show_toast("Game Saved — %s" % time_str if time_str != "" else "Game Saved", 2.5)
+	else:
+		_show_toast("Save Failed", 2.5)
+	return success
+
+func _load_game(slot_name: String = "default") -> bool:
+	if runtime == null:
+		return false
+	var success: bool = runtime.load_from_slot(slot_name)
+	if success:
+		_refresh_all_world_nodes()
+		if active_world != null:
+			var building_display: BuildingDisplay = active_world.get_node_or_null("BuildingDisplay") as BuildingDisplay
+			if building_display != null and runtime.game_state != null:
+				building_display.initialize_from_state(runtime.game_state.building_state)
+		if player_instance != null and runtime.game_state != null and runtime.game_state.player_state != null:
+			player_instance.global_position = runtime.game_state.player_state.position
+		if status_bar != null:
+			status_bar.update_display()
+		if inventory_ui != null:
+			inventory_ui.refresh()
+		if hotbar_ui != null:
+			hotbar_ui.refresh()
+		var time_str: String = _format_game_time_string()
+		_show_toast("Game Loaded — %s" % time_str if time_str != "" else "Game Loaded", 2.5)
+	else:
+		_show_toast("No save found or Load Failed", 2.5)
+	return success
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		if runtime != null and runtime.current_state == GameRuntime.LifecycleState.RUNNING:
+			runtime.save_to_slot("default")
 
 func _exit_tree() -> void:
 	if runtime != null:
