@@ -57,8 +57,8 @@ Instead:
 
 ---
 
-## 4. The Three Primary Gameplay Pillars
-The initial game is built around three major activities.
+## 4. The Core Gameplay Pillars
+Underhallow's gameplay is built around five Core Gameplay Pillars — distinct lifestyle and livelihood paths through which players make a life — supported by Core World Systems that provide the shared infrastructure connecting them. Per [CG-001 §4](../03-gameplay/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md), the five pillars and their relationship to world systems are the foundational gameplay taxonomy.
 
 ### 4.1 Farming
 Players cultivate their personal land, grow crops and develop their agricultural capabilities.  
@@ -71,13 +71,25 @@ Hunting provides:
 - Resource acquisition
 - Skill progression
 - Risk/reward
-- A second major gameplay path outside farming
+- A major gameplay path outside farming
 
 Combat should remain approachable and supportive of the broader game rather than turning Underhallow into a combat-first RPG.
 
-### 4.3 Building
-Players develop their personal island and home.  
-Building includes:
+### 4.3 Mining
+Players discover mineral veins, extract ores, gather building stone and uncover rare underground resources.  
+Mining provides a resource-extraction livelihood distinct from surface-level farming and hunting.
+
+### 4.4 Fishing
+Players read water conditions, cast in diverse coastal and freshwater environments, and harvest aquatic resources.  
+Fishing provides food, trade goods, rare materials, and a self-sufficient livelihood path.
+
+### 4.5 Animal Husbandry
+Players raise, breed and manage livestock — producing sustainable animal goods such as milk, wool, eggs and fertilizer.  
+Animal Husbandry provides a pastoral livelihood path complementary to farming.
+
+### 4.6 Building & Construction (Core World System)
+Building is a **Core World System** rather than a Core Gameplay Pillar. It provides the cross-pillar physical infrastructure that supports all five lifestyles.  
+Players develop their personal island and home. Building includes:
 - Houses
 - Functional buildings
 - Farms
@@ -89,20 +101,23 @@ Building includes:
 
 Building should ultimately provide a meaningful expression of player identity.
 
+### 4.7 Pillar and World System Distinction
+The five Core Gameplay Pillars represent ways players **make a life** in Underhallow. Core World Systems — including Building & Construction, Trading & Economy, Crafting, Combat, Inventory, Quests/Progression, Social/Community, and World/Exploration — provide the infrastructure that allows those lives to function together. A player's identity emerges from how they choose to spend their time across these pillars; the existence of a pillar classification does not lock any player into a single path.
+
 ---
 
-## 5. Secondary Playstyles
-The three primary pillars support additional player identities.  
-Potential secondary paths include:
-- Exploration
-- Trading
-- Crafting
+## 5. Additional Playstyles & Core World Systems
+The five Core Gameplay Pillars and the Core World Systems together support additional player identities and specializations.  
+Players may additionally specialize through:
+- Exploration (Core World System)
+- Trading (Core World System)
+- Crafting (Core World System)
 - Collecting
-- Social/community play
+- Social/community play (Core World System)
 - Specialized professions
 - Other systems discovered during development
 
-These should initially be treated as playstyles rather than rigid classes.  
+These should be treated as playstyles rather than rigid classes.  
 A player should be able to transition naturally between activities.
 
 ---
@@ -286,7 +301,7 @@ The goal is to create moments where the player thinks: *"What's over there?"* an
 Underhallow should use multi-dimensional progression.  
 Current intended progression dimensions include:
 - **Character:** Character level, general progression.
-- **Skills:** Farming, hunting, building.
+- **Skills:** Farming, hunting, mining, fishing, animal husbandry, building.
 - **Property:** House, island, buildings, land/grid expansion.
 - **Economy:** Wealth, trading capability, economic opportunities.
 - **Discovery:** Potential future progression through exploration, collections, lore, discoveries.
@@ -643,7 +658,7 @@ If the answer is no, it does not belong.
 ## 46. North Star Summary
 - Cozy, open-ended, isometric pixel-art game.
 - Three-space world structure: Shared Main Island (hub/social/exploration) + Personal Island (player-owned farm/build/expand) + Guild Islands (guild-owned communal hub/farms/plots).
-- Core loop: Farm → Hunt → Build → Explore → Trade → Progress → Discover.
+- Core loop: Farm → Hunt → Mine → Fish → Raise → Build → Explore → Trade → Progress → Discover.
 - Peaceful surface layer with a deep, unsettling mystery underneath.
 - Windows PC-first, single-player-first, multiplayer-native, fun and polish before scale.
 
@@ -661,10 +676,13 @@ If the answer is no, it does not belong.
 | Personal Island | 🔒 LOCKED |
 | Guild Islands | 🔒 LOCKED |
 | Unlockable island grids | 🔒 LOCKED |
-| Farming | 🔒 LOCKED |
-| Hunting | 🔒 LOCKED |
-| Building | 🔒 LOCKED |
-| Exploration as major pillar | 🔒 LOCKED |
+| Farming (Core Gameplay Pillar) | 🔒 LOCKED |
+| Hunting (Core Gameplay Pillar) | 🔒 LOCKED |
+| Mining (Core Gameplay Pillar) | 🔒 LOCKED (CG-001) |
+| Fishing (Core Gameplay Pillar) | 🔒 LOCKED (CG-001) |
+| Animal Husbandry (Core Gameplay Pillar) | 🔒 LOCKED (CG-001) |
+| Building & Construction (Core World System) | 🔒 LOCKED (CG-001) |
+| Exploration as Core World System | 🔒 LOCKED |
 | Character-driven narrative | 🔒 LOCKED |
 | Major milestones without forced ending | 🔒 LOCKED |
 | Optional competition | 🔒 LOCKED |
