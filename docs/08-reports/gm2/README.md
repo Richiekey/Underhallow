@@ -5,7 +5,7 @@
 * [Agent Constitution V1.0 (AC-001)](../../00-governance/AGENT_CONSTITUTION.md)
 * [Execution & Documentation Protocol V1.0 (EDP-001)](../../00-governance/EXECUTION_DOCUMENTATION_PROTOCOL.md)
 * [GM Session Record Protocol V1.0 (GSP-001)](../gm/GM_SESSION_RECORD_PROTOCOL.md)
-* [Master Specification Index & Build Governance V1.1 (MSI-001)](../../00-governance/MASTER_SPECIFICATION_INDEX.md)
+* [Master Specification Index & Build Governance V1.7 (MSI-001)](../../00-governance/MASTER_SPECIFICATION_INDEX.md)
 
 ---
 
