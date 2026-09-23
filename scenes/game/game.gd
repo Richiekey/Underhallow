@@ -169,7 +169,7 @@ func _on_command_executed(cmd: Command, result: CommandResult) -> void:
 			_show_location_banner("Day %d" % runtime.game_state.time_state.current_day)
 		_show_toast(result.message, 3.5)
 		_refresh_all_world_nodes()
-		_save_game()
+		_save_game("default", true)
 	elif result.message != "":
 		_show_toast(result.message, 2.0)
 	
@@ -379,15 +379,16 @@ func _format_game_time_string() -> String:
 	var minutes: int = total_minutes % 60
 	return "Day %d, %02d:%02d" % [time_state.current_day, hours, minutes]
 
-func _save_game(slot_name: String = "default") -> bool:
+func _save_game(slot_name: String = "default", silent: bool = false) -> bool:
 	if runtime == null:
 		return false
 	var success: bool = runtime.save_to_slot(slot_name)
-	if success:
-		var time_str: String = _format_game_time_string()
-		_show_toast("Game Saved — %s" % time_str if time_str != "" else "Game Saved", 2.5)
-	else:
-		_show_toast("Save Failed", 2.5)
+	if not silent:
+		if success:
+			var time_str: String = _format_game_time_string()
+			_show_toast("Game Saved — %s" % time_str if time_str != "" else "Game Saved", 2.5)
+		else:
+			_show_toast("Save Failed", 2.5)
 	return success
 
 func _load_game(slot_name: String = "default") -> bool:
@@ -407,7 +408,7 @@ func _load_game(slot_name: String = "default") -> bool:
 		if inventory_ui != null:
 			inventory_ui.refresh()
 		if hotbar_ui != null:
-			hotbar_ui.refresh()
+			hotbar_ui.update_display()
 		var time_str: String = _format_game_time_string()
 		_show_toast("Game Loaded — %s" % time_str if time_str != "" else "Game Loaded", 2.5)
 	else:
