@@ -22,6 +22,8 @@ signal command_failed(command: Command, result: CommandResult)
 ## Configurable per runtime instance; not locked as final game design.
 const DEFAULT_SIMULATION_STEP: float = 1.0 / 60.0
 
+const SaveManager = preload("res://src/core/persistence/save_manager.gd")
+
 ## Prototype safety cap: Maximum simulation steps allowed per rendered frame
 ## to prevent spiral-of-death stalls during extreme frame hitches.
 const DEFAULT_MAX_STEPS_PER_FRAME: int = 8
@@ -33,6 +35,7 @@ var current_state: LifecycleState = LifecycleState.BOOT
 var game_state: GameState = null
 var game_time: GameTime = null
 var persistence: PersistenceBoundary = null
+var save_manager: SaveManager = null
 var input_provider: InputProvider = null
 
 ## Controlled simulation stepping configuration
@@ -44,6 +47,7 @@ func _init() -> void:
 	game_state = GameState.new()
 	game_time = GameTime.new()
 	persistence = PersistenceBoundary.new()
+	save_manager = SaveManager.new(persistence)
 	input_provider = InputProvider.new()
 	current_state = LifecycleState.BOOT
 	simulation_step = DEFAULT_SIMULATION_STEP
@@ -168,3 +172,21 @@ func execute_command(command: Command) -> CommandResult:
 	else:
 		command_failed.emit(command, execution)
 	return execution
+
+## Persists authoritative state to the specified local save slot.
+## Guarded by runtime lifecycle: only permitted while in RUNNING state.
+func save_to_slot(slot_name: String = "default") -> bool:
+	if current_state != LifecycleState.RUNNING:
+		return false
+	if save_manager == null:
+		return false
+	return save_manager.save_game(game_state, game_time, slot_name)
+
+## Restores authoritative state from the specified local save slot.
+func load_from_slot(slot_name: String = "default") -> bool:
+	if save_manager == null or persistence == null or game_state == null or game_time == null:
+		return false
+	var save_data: SaveData = save_manager.load_game(slot_name)
+	if save_data == null:
+		return false
+	return persistence.deserialize_state(save_data, game_state, game_time)

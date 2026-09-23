@@ -10,6 +10,7 @@ const CommandResultClass = preload("res://src/core/commands/command_result.gd")
 const TestIncrementCommandClass = preload("res://src/core/commands/test_increment_command.gd")
 const SaveDataClass = preload("res://src/core/persistence/save_data.gd")
 const PersistenceBoundaryClass = preload("res://src/core/persistence/persistence_boundary.gd")
+const SaveManagerClass = preload("res://src/core/persistence/save_manager.gd")
 const InputProviderClass = preload("res://src/core/input/input_provider.gd")
 const GameRuntimeClass = preload("res://src/core/runtime/game_runtime.gd")
 const PlayerStateClass = preload("res://src/player/player_state.gd")
@@ -88,6 +89,7 @@ func _init() -> void:
 	_run_hunting_slice_tests()
 	_run_construction_slice_tests()
 	_run_clementine_narrative_slice_tests()
+	_run_local_save_load_tests()
 	
 	print("==================================================")
 	print("Test Results: %d passed, %d failed of %d total tests." % [passed_tests, failed_tests, total_tests])
@@ -2189,4 +2191,154 @@ func _run_clementine_narrative_slice_tests() -> void:
 	clementine_node.free()
 	root_node.remove_child(dummy_player)
 	dummy_player.free()
+
+# -----------------------------------------------------------------------------
+# 15. Local Save/Load Persistence System Tests (GM2-BRIEF-002)
+# -----------------------------------------------------------------------------
+func _run_local_save_load_tests() -> void:
+	print("\n--- Testing Local Save/Load Persistence System ---")
+	var test_slot: String = "_test_local_persistence"
+	var corrupt_slot: String = "_test_corrupt_persistence"
+	var invalid_ver_slot: String = "_test_invalid_ver_persistence"
+	
+	# Instantiate SaveManager
+	var pers: PersistenceBoundary = PersistenceBoundaryClass.new()
+	var sm = SaveManagerClass.new(pers)
+	_assert_true(sm != null, "SaveManager 1: Instantiation succeeds")
+	_assert_equal(sm.get_save_path(test_slot), "user://saves/%s.json" % test_slot, "SaveManager 1: Canonical path construction matches")
+	
+	# Ensure clean slate
+	if sm.has_save(test_slot):
+		sm.delete_save(test_slot)
+	if sm.has_save(corrupt_slot):
+		sm.delete_save(corrupt_slot)
+	if sm.has_save(invalid_ver_slot):
+		sm.delete_save(invalid_ver_slot)
+	
+	# 2. has_save on non-existent file
+	_assert_true(not sm.has_save(test_slot), "SaveManager 2: has_save returns false before saving")
+	_assert_true(sm.load_game(test_slot) == null, "SaveManager 2: load_game returns null for missing save file")
+	
+	# 3. Create populated state to save
+	var state: GameState = GameStateClass.new()
+	var time: GameTime = GameTimeClass.new()
+	time.advance(350.0) # Day 2, ~08:20
+	state.game_time_elapsed = time.elapsed_seconds
+	state.time_state.sync_from_game_time(time)
+	
+	state.player_state.position = Vector2(142.5, -88.0)
+	state.inventory_state.add_item(&"seed_turnip", 12)
+	state.inventory_state.add_item(&"resource_wood", 35)
+	state.farming_state.set_plot(Vector2i(3, 4), SoilPlotStateClass.new(Vector2i(3, 4), true))
+	var created_creature = state.hunting_state.register_creature(&"test_hare", &"hare", Vector2(100, 200))
+	created_creature.current_health = 15
+	state.building_state.place_building(&"bld_test", &"rustic_fence", Vector2i(12, 14), 1)
+	state.progression_state.add_farming_xp(45)
+	state.progression_state.clementine_objective_state = ProgressionStateClass.ClementineObjectiveState.ACTIVE
+	
+	# Signal verification
+	var save_signal_received: Array = []
+	sm.save_completed.connect(func(s): save_signal_received.append(s))
+	
+	var save_ok: bool = sm.save_game(state, time, test_slot)
+	_assert_true(save_ok, "SaveManager 3: save_game succeeds and returns true")
+	_assert_true(sm.has_save(test_slot), "SaveManager 3: has_save returns true after saving")
+	_assert_equal(save_signal_received.size(), 1, "SaveManager 3: save_completed signal fired exactly once")
+	_assert_equal(save_signal_received[0], test_slot, "SaveManager 3: save_completed signal provides slot_name")
+	
+	# 4. Save file inspection on disk
+	var file_path: String = sm.get_save_path(test_slot)
+	_assert_true(FileAccess.file_exists(file_path), "SaveManager 4: Save file physically exists on disk")
+	var fa: FileAccess = FileAccess.open(file_path, FileAccess.READ)
+	_assert_true(fa != null, "SaveManager 4: File can be opened for reading")
+	var raw_text: String = fa.get_as_text()
+	fa.close()
+	
+	var json: JSON = JSON.new()
+	var parse_err: Error = json.parse(raw_text)
+	_assert_equal(parse_err, OK, "SaveManager 4: File content is valid JSON")
+	_assert_true(json.data is Dictionary, "SaveManager 4: JSON root is a Dictionary")
+	var root_dict: Dictionary = json.data as Dictionary
+	_assert_equal(root_dict.get("schema_version", 0), 1, "SaveManager 4: JSON header contains schema_version = 1")
+	_assert_approx(float(root_dict.get("game_time_elapsed", 0.0)), 350.0, "SaveManager 4: JSON contains accurate game_time_elapsed")
+	_assert_true(root_dict.has("payload"), "SaveManager 4: JSON contains payload dictionary")
+	_assert_true(raw_text.contains("\t"), "SaveManager 4: File is formatted with tab indentation for human readability")
+	
+	# 5. Load round-trip into SaveData
+	var load_signal_received: Array = []
+	sm.load_completed.connect(func(s): load_signal_received.append(s))
+	var loaded_save_data: SaveData = sm.load_game(test_slot)
+	_assert_true(loaded_save_data != null, "SaveManager 5: load_game returns non-null SaveData")
+	_assert_equal(loaded_save_data.schema_version, 1, "SaveManager 5: SaveData schema version is 1")
+	_assert_approx(loaded_save_data.game_time_elapsed, 350.0, "SaveManager 5: SaveData game_time_elapsed matches")
+	_assert_equal(load_signal_received.size(), 1, "SaveManager 5: load_completed signal fired exactly once")
+	_assert_equal(load_signal_received[0], test_slot, "SaveManager 5: load_completed signal provides slot_name")
+	
+	# 6. State fidelity restoration across all sub-states
+	var restored_state: GameState = GameStateClass.new()
+	var restored_time: GameTime = GameTimeClass.new()
+	var des_ok: bool = pers.deserialize_state(loaded_save_data, restored_state, restored_time)
+	_assert_true(des_ok, "SaveManager 6: Deserialization into GameState succeeds")
+	_assert_approx(restored_time.elapsed_seconds, 350.0, "SaveManager 6: GameTime restored to 350.0s")
+	_assert_equal(restored_state.time_state.current_day, state.time_state.current_day, "SaveManager 6: Calendar current_day matches")
+	_assert_equal(restored_state.player_state.position, Vector2(142.5, -88.0), "SaveManager 6: Player position preserved")
+	_assert_equal(restored_state.inventory_state.get_quantity(&"seed_turnip"), 12, "SaveManager 6: Inventory turnip seeds preserved")
+	_assert_equal(restored_state.inventory_state.get_quantity(&"resource_wood"), 35, "SaveManager 6: Inventory wood count preserved")
+	_assert_true(restored_state.farming_state.has_plot(Vector2i(3, 4)), "SaveManager 6: Farming plot (3, 4) preserved")
+	_assert_true(restored_state.hunting_state.has_creature(&"test_hare"), "SaveManager 6: Hunting creature registered")
+	var creature: CreatureState = restored_state.hunting_state.get_creature(&"test_hare")
+	_assert_equal(creature.current_health, 15, "SaveManager 6: Creature damaged health preserved (20-5=15)")
+	_assert_true(restored_state.building_state.has_instance(&"bld_test"), "SaveManager 6: Building instance preserved")
+	_assert_equal(restored_state.building_state.get_instance(&"bld_test").grid_coord, Vector2i(12, 14), "SaveManager 6: Building coordinate preserved")
+	_assert_equal(restored_state.progression_state.farming_xp, 45, "SaveManager 6: Farming XP preserved")
+	_assert_equal(restored_state.progression_state.clementine_objective_state, ProgressionStateClass.ClementineObjectiveState.ACTIVE, "SaveManager 6: Clementine narrative state preserved")
+	
+	# 7. Corrupted file error handling
+	var cfile: FileAccess = FileAccess.open(sm.get_save_path(corrupt_slot), FileAccess.WRITE)
+	cfile.store_string("NOT A JSON FILE {[[}")
+	cfile.close()
+	_assert_true(sm.load_game(corrupt_slot) == null, "SaveManager 7: Corrupted JSON returns null")
+	
+	# 8. Schema version rejection
+	var bad_ver_dict: Dictionary = {
+		"schema_version": 999,
+		"timestamp": 123456,
+		"game_time_elapsed": 0.0,
+		"payload": {}
+	}
+	var vfile: FileAccess = FileAccess.open(sm.get_save_path(invalid_ver_slot), FileAccess.WRITE)
+	vfile.store_string(JSON.stringify(bad_ver_dict))
+	vfile.close()
+	_assert_true(sm.load_game(invalid_ver_slot) == null, "SaveManager 8: Unsupported schema version returns null")
+	
+	# 9. delete_save
+	var del_ok: bool = sm.delete_save(test_slot)
+	_assert_true(del_ok, "SaveManager 9: delete_save returns true on existing save")
+	_assert_true(not sm.has_save(test_slot), "SaveManager 9: has_save returns false after delete")
+	_assert_true(not sm.delete_save(test_slot), "SaveManager 9: delete_save returns false on already deleted file")
+	
+	# 10. GameRuntime integration & Lifecycle guard
+	var runtime: GameRuntime = GameRuntimeClass.new()
+	_assert_true(runtime.save_manager != null, "SaveManager 10: GameRuntime automatically initializes save_manager")
+	_assert_true(not runtime.save_to_slot(test_slot), "SaveManager 10: save_to_slot fails in BOOT lifecycle state")
+	
+	runtime.initialize_runtime()
+	_assert_true(not runtime.save_to_slot(test_slot), "SaveManager 10: save_to_slot fails in INITIALIZE lifecycle state")
+	
+	runtime.start_runtime()
+	runtime.game_state.player_state.position = Vector2(77.0, 88.0)
+	var rt_save_ok: bool = runtime.save_to_slot(test_slot)
+	_assert_true(rt_save_ok, "SaveManager 10: save_to_slot succeeds in RUNNING lifecycle state")
+	
+	# Mutate runtime state then load back
+	runtime.game_state.player_state.position = Vector2.ZERO
+	_assert_equal(runtime.game_state.player_state.position, Vector2.ZERO, "SaveManager 10: Runtime state mutated to Vector2.ZERO")
+	var rt_load_ok: bool = runtime.load_from_slot(test_slot)
+	_assert_true(rt_load_ok, "SaveManager 10: load_from_slot succeeds")
+	_assert_equal(runtime.game_state.player_state.position, Vector2(77.0, 88.0), "SaveManager 10: Player position restored via GameRuntime.load_from_slot")
+	
+	# Clean up remaining test files
+	sm.delete_save(test_slot)
+	sm.delete_save(corrupt_slot)
+	sm.delete_save(invalid_ver_slot)
 
