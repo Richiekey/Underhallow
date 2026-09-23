@@ -67,9 +67,7 @@ Instead, the world should provide reasons to pursue different activities.
 
 ## 1.3 Multiple valid playstyles
 
-Farming, hunting and building are the three foundational gameplay pillars.
-
-Exploration, trading, collecting, relationships and future professions build around them.
+Farming, hunting, mining, fishing and animal husbandry are the five Core Gameplay Pillars — distinct lifestyle and livelihood paths per [CG-001 §4](../03-gameplay/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md). Building & Construction, trading, crafting, exploration and other Core World Systems provide the shared infrastructure that connects them.
 
 No single activity should invalidate the others.
 
@@ -560,7 +558,7 @@ The system should eventually support islands that look substantially different f
 
 # 16. Farming Foundation
 
-Farming is one of three primary gameplay pillars.
+Farming is one of five Core Gameplay Pillars per [CG-001 §4.1.1](../03-gameplay/CORE_GAMEPLAY_SYSTEMS_SPECIFICATION.md).
 
 The basic farming loop is:
 
@@ -1626,7 +1624,7 @@ These are rules that should remain true unless the North Star changes.
 
 ### Invariant 6
 
-**Farming, hunting and building are foundational gameplay pillars.**
+**Farming, hunting, mining, fishing and animal husbandry are the five Core Gameplay Pillars. Building & Construction is a foundational Core World System.**
 
 ### Invariant 7
 
@@ -1665,7 +1663,7 @@ We consider the Foundation Specification complete enough to begin technical arch
 ### Gameplay
 
 * What are the primary loops?
-* How do farming, hunting and building interact?
+* How do the five Core Gameplay Pillars (farming, hunting, mining, fishing, animal husbandry) and Core World Systems interact?
 * How does exploration feed those loops?
 
 ### Narrative
