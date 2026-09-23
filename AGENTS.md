@@ -11,44 +11,46 @@ Refer to the authoritative documentation hierarchy:
 
 ---
 
-## Coding Agent Operational Directives (EDP-001)
+## Multi-Agent Organization & Operational Directives (EDP-001)
 
-Underhallow enforces a strict separation of development boundaries:
-* **Owning Teams:** Think, Inspect, Analyze, Plan, Task, and Review. Owning teams and GM/PM **never directly modify repository implementation artifacts**.
-* **Coding Agents / Human:** Implement, Test, Commit, and Report. Only coding agents or the human implementer may modify repository code, strictly within assigned domain whitelists.
-* **QA Engineers:** Independently verify implementation in dedicated test scenarios.
-* **GM / PM:** Coordinate, Review, Accept or Reject, and Synchronize documentation.
-* **Founder / Human:** Ultimate project authority.
+Underhallow enforces a strict separation of development boundaries across its multi-agent development organization:
+* **Founder / Human:** Ultimate project, product, and governance authority.
+* **GM1 — ChatGPT:** Canonical project-level coordination, specification interpretation, cross-team reconciliation, and final milestone acceptance authority.
+* **GM2 — Claude Opus 4.6:** Execution planning, deep repository inspection, implementation brief authoring, coordination, report review, and defect escalation.
+* **Owning Teams:** Think, inspect, analyze, plan, and review. Owning teams, GM1, and GM2 **never directly modify repository implementation artifacts**.
+* **Gemini / Coding Agents / Human:** Gemini is the designated coding and implementation agent for this workflow; other coding agents or the human implement when explicitly authorized. Implement, test, commit, and report strictly within assigned domain whitelists.
+* **QA Engineers:** Independently verify implementation in dedicated test scenarios. QA never implements production code and never repairs defects under test.
 
 ### 17 Mandatory Operational Rules for Coding Agents
 1. **Inspect Before Implementation:** Thoroughly inspect the active codebase, MSI, and relevant specifications before writing or proposing code.
 2. **Read Authoritative Specifications:** Base all changes on locked and approved specifications, never on assumptions or conversational memory.
 3. **Follow Domain Boundaries:** Adhere strictly to domain whitelists defined in [AC-001](docs/00-governance/AGENT_CONSTITUTION.md). Never touch `src/core/state/` or global save schemas without an approved Architecture Plan.
-4. **Follow the Implementation Brief:** Execute exactly what is authorized in the brief. Do not add unrequested features or unsolicited refactorings.
+4. **Follow the Implementation Brief:** Execute exactly what is authorized in the implementation brief authored by GM2 (or GM1/Team). Do not add unrequested features or unsolicited refactorings.
 5. **Preserve Architecture & Product Scope:** Never redefine system architecture, product scope, or gameplay invariants.
 6. **Stop on Contradiction:** Stop and escalate immediately if requirements, specifications, or architectural patterns conflict.
 7. **Implement Only Authorized Work:** Confine all changes strictly to the assigned task.
-8. **Run Appropriate Tests:** Always execute the relevant test suites (e.g. `godot --headless -s tests/core/test_runner.gd`) after modifying code.
+8. **Run Appropriate Tests:** Always execute the relevant test suites (e.g. `godot --headless -s tests/core/test_runner.gd`) and record actual test metrics after modifying code.
 9. **Report Actual Test Evidence:** Document exact test counts, pass/fail counts, and exit codes. Never claim tests passed without running them.
 10. **Report Changed Files:** Provide an exhaustive list of all created, modified, and deleted files.
 11. **Report Documentation Changes:** Detail all updates to specifications, MSI registries, and index documents.
 12. **Report Risks & Blockers:** Disclose any technical debt, architectural friction, performance concerns, or follow-up risks.
 13. **Distinguish Implementation from QA:** Never represent implementer test results as independent QA verification.
 14. **Commit Completed Implementation Separately:** Create focused git commits with descriptive messages, separating documentation work from runtime code.
-15. **Provide Commit Hash:** Provide the exact commit SHA to the requesting team upon completion.
-16. **Never Claim QA or GM Acceptance:** A coding agent can only state what was implemented and tested; acceptance is the sole prerogative of GM/PM.
+15. **Provide Commit Hash:** Provide the exact commit SHA to GM2 / GM1 upon completion.
+16. **Never Claim QA or GM Acceptance:** A coding agent can only state what was implemented and tested; acceptance is the sole prerogative of GM1 (or Human Project Authority).
 17. **Current Repository is Ground Truth:** Never treat past conversations, outdated reports, or temporary scratch files as authoritative over the active repository.
 
-### Mandatory Evidence Classification in Reports
-Every implementation report must explicitly categorize its findings into distinct evidence classes:
-* **Planned by GM/PM / Team:** What the brief authorized.
-* **Implemented by Coding Agent:** What files and logic were actually modified.
-* **Tested by Coding Agent:** Implementer test commands, pass counts, and exit codes.
-* **Independently Verified:** Only cite if an independent QA report (e.g. `QA-00x`) was formally produced.
-* **Accepted by GM/PM:** Only cite if formal GM/PM acceptance was explicitly granted.
+### Mandatory Status Attribution in Implementation Reports
+Every implementation report must explicitly record which canonical states have actually occurred for that task or session, avoiding artificial conflation:
+* **Planned:** Citing the active brief from GM2 / Team.
+* **Implemented:** Citing the exact commit SHA and modified files.
+* **Implementer-Tested:** Citing actual test commands, pass counts, and exit codes.
+* **Team-Reviewed:** Citing domain team review findings (when conducted).
+* **QA-Verified:** Only cite if an independent QA report (e.g. `QA-00x`) was formally produced.
+* **GM-Accepted:** Only cite if formal GM1 acceptance was explicitly granted under [GSP-001](docs/08-reports/gm/GM_SESSION_RECORD_PROTOCOL.md).
 
 ### Stop & Escalation Conditions
-Stop and report to the requesting team or GM/PM immediately if:
+In accordance with the Escalation Matrix in [EDP-001 §19](docs/00-governance/EXECUTION_DOCUMENTATION_PROTOCOL.md), stop and report immediately if:
 * An implementation brief contradicts a locked or approved specification.
 * A required change requires touching code outside your assigned domain whitelist.
 * An architectural pattern would cause illegal mutations to `src/core/state/` or state/presentation separation.

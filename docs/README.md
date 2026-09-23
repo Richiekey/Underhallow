@@ -66,10 +66,12 @@ docs/
     ├── infrastructure/                                     # Server deployment, persistence, performance profiling
     ├── narrative/                                          # Lore audits, dialogue review, consistency checks
     ├── world/                                              # Map balance, coordinate alignment, tile budget checks
-    └── gm/                                                 # Game Master review records & sign-offs
-        ├── GM_SESSION_RECORD_PROTOCOL.md                   # GSP-001: Formal GM Review Protocol & Template
-        ├── GM_SESSION_20260918_EDP001_ACCEPTANCE.md        # GM-20260918-001: EDP-001 Post-Acceptance Synchronization Record
-        └── GM_SESSION_20260918_CLEMENTINE_NARRATIVE_SLICE.md # GM-20260918-002: Clementine Narrative Slice Acceptance Record
+    ├── gm/                                                 # Game Master review records & sign-offs
+    │   ├── GM_SESSION_RECORD_PROTOCOL.md                   # GSP-001: Formal GM Review Protocol & Template
+    │   ├── GM_SESSION_20260918_EDP001_ACCEPTANCE.md        # GM-20260918-001: EDP-001 Post-Acceptance Synchronization Record
+    │   └── GM_SESSION_20260918_CLEMENTINE_NARRATIVE_SLICE.md # GM-20260918-002: Clementine Narrative Slice Acceptance Record
+    └── gm2/                                                # GM2 planning records, archived briefs, and review reports to GM1
+        └── README.md                                       # GM2 report storage directory standard
 ```
 
 ---
@@ -82,6 +84,7 @@ When authoring new documents or filing reports, place them strictly according to
 Contains the overarching rules that govern how development is conducted.
 * **Master Specification Index (MSI):** The central registry for all specifications.
 * **Agent Constitution:** Development boundaries, agent roles, domain whitelists, and Definitions of Done.
+* **Execution & Documentation Protocol (EDP):** 12-stage multi-agent work lifecycle (Human → GM1 → GM2 → Gemini → Team Review → QA → GM2 → GM1), session assignments, GM2 implementation brief standard, and documentation synchronization.
 * **Reconciliation Specifications:** High-level decisions resolving platform, engine, or scope shifts.
 
 ### `01-product/`
@@ -128,7 +131,8 @@ Historical execution reports, test runs, audit logs, and executive review sessio
 * **`infrastructure/`**: Server performance, load tests, and database migration logs.
 * **`narrative/`**: Narrative consistency checks and lore audits.
 * **`world/`**: Level design, collision mesh, and coordinate validation logs.
-* **`gm/`**: Executive Game Master reviews, experiential evaluations, milestone sign-offs, and protocol specifications (e.g. `GSP-001`).
+* **`gm/`**: Executive Game Master (GM1) reviews, experiential evaluations, milestone sign-offs, and protocol specifications (e.g. `GSP-001`).
+* **`gm2/`**: Execution planning records, archived implementation briefs, and coordination reports from GM2 to GM1 per `EDP-001`.
 
 ---
 
@@ -155,4 +159,4 @@ Machine-specific absolute URLs (`file:///C:/Users/...`) and local filesystem pat
 ### 3.3 Adding or Moving Documents
 1. **Never create loose documents in root `docs/`:** Every document belongs in a categorized directory (`00`–`08`).
 2. **Update the Master Specification Index:** Register the new document in `docs/00-governance/MASTER_SPECIFICATION_INDEX.md` (§4 Prefix Table and §28 Registry Table).
-3. **Verify Link Integrity:** Run the repository link checker (`scratch/check_links.py`) to confirm zero broken links remain.
+3. **Verify Link Integrity:** Validate that all internal markdown links resolve using repository-relative paths to ensure zero broken links.

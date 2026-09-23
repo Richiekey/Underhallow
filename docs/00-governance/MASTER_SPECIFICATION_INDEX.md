@@ -2,7 +2,7 @@
 
 ## Master Specification Index & Build Governance
 
-### Version 1.1 — Reconciled Baseline
+### Version 1.7 — Multi-Agent Workflow Reconciliation Baseline
 
 **Document ID:** MSI-001  
 **Status:** APPROVED (Project Governance Baseline)  
@@ -197,6 +197,8 @@ Current documents include:
 * **Implementation Architecture Specification V1.1** (`IA-001`) — REVIEW (Godot 4.x, GDScript Domain Structure, Input Actions, V0.1 Slice)
 * **Production Plan & Vertical Slice Roadmap V1.0** (`PP-001`) — APPROVED (Phases 0–7, Vertical Slice Roadmap, Quality Gates)
 * **QA & Testing Specification** (`QA-001`) — PLANNED
+* **GM Session Record Protocol V1.0** (`GSP-001`) — APPROVED (Executive review criteria, experiential audits, acceptance dispositions, and post-session reporting)
+* **Execution & Documentation Protocol V1.0** (`EDP-001`) — APPROVED (12-stage multi-agent work lifecycle [Human → GM1 → GM2 → Gemini → Team Review → QA → GM2 → GM1], GM1/GM2 authority boundaries, session assignments, GM2 implementation brief standard, explicit status attribution, escalation rules, evidence classification, and documentation synchronization)
 
 ---
 
@@ -321,6 +323,7 @@ To avoid unnecessary reading while ensuring absolute fidelity to established des
 | **Core Gameplay Loops (Farming, Hunting, Gathering)** | `MSI-001` → `NS-001` → `CG-001` → `PC-001` → `ETA-001` → `CW-001` → System Spec (`FB-001`, `HU-001`, etc.) → `PR-001` |
 | **Engine, State & Persistence Engineering** | `MSI-001` → `NS-001` → `AC-001` → `SR-001` → `FS-001` → `ETA-001` → `CG-001` → `IA-001` → `PP-001` |
 | **Presentation, Audio & UI/UX** | `MSI-001` → `NS-001` → `CD-001` → `AD-001` → `CG-001` → `PC-001` → `UI-001` / `AU-001` |
+| **Governance & Agent Workflow** | `MSI-001` → `AC-001` → `EDP-001` → `GSP-001` |
 
 ---
 
@@ -722,7 +725,7 @@ The MSI is the primary navigation and governance layer for humans and AI agents.
 - **IA-001 — Implementation Architecture Specification V1.1:** Advanced to `REVIEW` status at [`docs/02-architecture/IMPLEMENTATION_ARCHITECTURE_SPECIFICATION.md`](../02-architecture/IMPLEMENTATION_ARCHITECTURE_SPECIFICATION.md) (defines decision classification framework, Godot 4.x + GDScript project structure, domain state boundaries, input actions, GameTime simulation, persistence abstraction, V0.1 dependency sequence, and Vertical Slice V0.1 "The First Day" scope).
 - **PP-001 — Production Plan & Vertical Slice Roadmap V1.0:** Approved baseline implementation roadmap established at [`docs/01-product/PRODUCTION_PLAN.md`](../01-product/PRODUCTION_PLAN.md) (defines master phased progression from Phase 0 toolchain to Phase 7 production polish, vertical slice gates, and milestone acceptance criteria).
 - **GSP-001 — GM Session Record Protocol V1.0:** Approved baseline governance protocol established at [`docs/08-reports/gm/GM_SESSION_RECORD_PROTOCOL.md`](../08-reports/gm/GM_SESSION_RECORD_PROTOCOL.md) (defines executive review criteria, experiential audits against Invariant 1 and 11, acceptance dispositions, and post-session report template).
-- **EDP-001 — Execution & Documentation Protocol V1.0:** Approved baseline operational protocol established at [`docs/00-governance/EXECUTION_DOCUMENTATION_PROTOCOL.md`](EXECUTION_DOCUMENTATION_PROTOCOL.md) (defines 11-stage work lifecycle, 9-stage execution state model, non-conflation axioms, evidence classification, GM post-acceptance reporting protocol, and documentation synchronization model).
+- **EDP-001 — Execution & Documentation Protocol V1.0:** Approved baseline operational protocol established at [`docs/00-governance/EXECUTION_DOCUMENTATION_PROTOCOL.md`](EXECUTION_DOCUMENTATION_PROTOCOL.md) (defines 12-stage multi-agent work lifecycle [Human → GM1 → GM2 → Gemini → Team Review → QA → GM2 → GM1], GM1/GM2 authority boundaries, session assignments, GM2 implementation brief standard, explicit status attribution, escalation rules, evidence classification, and documentation synchronization model).
 
 ---
 
@@ -780,3 +783,4 @@ Following foundational creative definitions, remaining Level 2 gameplay specific
 | **V1.4** | 2026-09-16 | APPROVED | Gemini / Project Governance | Integrated Creature & Wildlife Bible V1.0 (`CW-001`) into Level 1 Foundation registry, reading matrices, build order, and creative hierarchy tree; codified Invariant 20; advanced creative roadmap to `ML-001` (Mystery & Lore Architecture V1.0). | Integrated CW-001 foundation baseline. |
 | **V1.5** | 2026-09-16 | APPROVED | Gemini / Project Governance | Integrated Mystery & Lore Architecture Specification V1.0 (`ML-001`) into Level 1 Foundation registry, reading matrices, build order, and creative hierarchy tree; codified Invariant 21; acknowledged founder approval of WM-001 (World & Map Architecture); advanced creative roadmap to `NC-001` (Narrative Content Framework V1.0). | Integrated ML-001 foundation baseline & WM-001 approval reconciliation. |
 | **V1.6** | 2026-09-16 | APPROVED | Gemini / Project Governance | A-001 Documentation Reconciliation. Reconciled ETA-001 §54 and MSI-001 to document the implemented single authoritative simulation-clock model (GameTime.elapsed_seconds as sole authority; GameState.game_time_elapsed mirror; derived TimeState; SaveData persistence chain). Kept TS-001 PLANNED under ETA-001 single-clock contract. | Reconciled documentation against implemented A-001 authority model. |
+| **V1.7** | 2026-09-23 | APPROVED | Gemini / Project Governance | Multi-Agent Workflow Reconciliation. Integrated GM2 (Claude Opus 4.6) execution planning and coordination tier under GM1 (ChatGPT) canonical authority; updated EDP-001 to 12-stage lifecycle with Session Assignment and GM2 Brief standards; updated Level 4 specification registry. | Governance integration per Human Owner authorization. |

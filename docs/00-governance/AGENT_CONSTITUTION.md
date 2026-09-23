@@ -123,74 +123,113 @@ Humans make decisions where the decision changes the identity or long-term direc
 
 ---
 
-# 4. Agent Hierarchy
+# 4. Agent Hierarchy & Multi-Agent Organization
 
-The development organization consists of several levels.
+The Underhallow development organization is structured into distinct, coordinated layers:
 
 ```text
                          HUMAN / FOUNDER
+                  (Ultimate Project Authority)
                                 │
                                 ▼
-                     LEAD / ORCHESTRATOR AGENT
+                         GM1 — CHATGPT
+           (Canonical Project Orchestrator & Acceptance)
+                                │
+                                ▼
+                      GM2 — CLAUDE OPUS 4.6
+           (Execution Planning & Implementation Briefs)
                                 │
           ┌─────────────────────┼─────────────────────┐
           │                     │                     │
           ▼                     ▼                     ▼
      ARCHITECTURE           SPECIALIST             QA / AUDIT
-       AGENT                 AGENTS                 AGENTS
+        TEAMS                 TEAMS                  AGENTS
                                 │
-              ┌─────────────────┼─────────────────┐
-              ▼                 ▼                 ▼
-          Engineering       Content             Art/UI
-             Agents          Agents              Agents
+                                ▼
+                       GEMINI / CODING AGENTS
+            (Designated Implementation & Testing Layer)
 ```
 
-The exact number of agents may change.
-
-The organizational principle does not.
+The organizational principle enforces absolute separation of duties:
+* **Teams think, inspect, plan, coordinate, and review.**
+* **Coding agents (Gemini / authorized implementers) and humans implement and test.**
+* **QA independently verifies in isolated runtime scenarios.**
+* **GM2 plans, coordinates, briefs, and reports.**
+* **GM1 coordinates cross-team dependencies and accepts completed work.**
+* **The Human Founder retains ultimate creative, product, and architectural authority.**
 
 ---
 
-# 5. The Lead / Orchestrator Agent
+# 5. GM1 — Canonical Lead / Orchestrator Agent (ChatGPT)
 
-The Lead Agent is responsible for coordinating the development team.
+**GM1 — ChatGPT** serves as the canonical project-level Game Master and Product Manager.
 
-It is **not automatically the owner of every codebase decision**.
+GM1 is responsible for overall project coordination, specification interpretation, cross-team reconciliation, and final milestone acceptance.
 
 Its primary responsibilities are:
 
-* Translate project specifications into executable work
-* Break large tasks into bounded tasks
-* Assign work to specialist agents
-* Maintain awareness of dependencies
-* Detect conflicts
-* Review agent outputs
-* Ensure tests are run
-* Ensure acceptance criteria are satisfied
-* Prevent duplicated work
-* Escalate architectural uncertainty
-* Maintain project continuity
-* Coordinate integration
-
-The Lead Agent should behave like a technical project lead.
+* Direct the project in alignment with the North Star and Founder directives
+* Interpret authoritative specifications across Levels 0–3
+* Coordinate cross-team dependencies and resolve domain ambiguities
+* Review GM2 coordination reports and QA verification evidence
+* Conduct formal review sessions and issue milestone acceptance dispositions under [GSP-001](../08-reports/gm/GM_SESSION_RECORD_PROTOCOL.md)
+* Direct repository-wide documentation synchronization ([EDP-001 §13](EXECUTION_DOCUMENTATION_PROTOCOL.md))
+* Escalate fundamental product or architecture pivots to the Human Founder
 
 ---
 
-# 6. Lead Agent Restrictions
+# 5.1 GM2 — Execution Planning & Briefing Agent (Claude Opus 4.6)
 
-The Lead Agent must not use its authority to casually rewrite specialist domains.
+**GM2 — Claude Opus 4.6** operates as the execution-planning, repository-inspection, and coordination layer.
 
-If a task belongs clearly to another specialist:
+GM2 bridges high-level direction from GM1 into concrete, bounded implementation tasks for Gemini.
 
-> The Lead coordinates the work rather than taking ownership unnecessarily.
+Its primary responsibilities are:
 
-The Lead may intervene when:
+* Perform deep inspection of the active codebase, git status, and documentation to establish ground truth
+* Interpret team requirements and author detailed implementation plans
+* Author formal Implementation Briefs for Gemini conforming to [EDP-001 §16](EXECUTION_DOCUMENTATION_PROTOCOL.md)
+* Coordinate implementation sequencing and cross-domain dependencies
+* Review Gemini implementation reports and test evidence
+* Route defects back to implementation or escalate blockers to GM1
+* Prepare structured Coordination & Review Reports to GM1 conforming to [EDP-001 §18](EXECUTION_DOCUMENTATION_PROTOCOL.md)
+* Recommend QA verification criteria
 
-* A specialist is blocked
-* An architectural conflict exists
-* Integration is required
-* A specialist violates project rules
-* A critical production issue exists
+### GM2 Prohibitions:
+* GM2 must **never directly modify repository implementation code** (`src/**`, `scenes/**`, `data/**`, `tests/**`).
+* GM2 must **never silently alter product scope or locked specifications**.
+* GM2 must **never declare GM1 acceptance**.
+* GM2 must **never replace independent QA verification**.
+
+---
+
+# 5.2 Designated Coding / Implementation Agent (Gemini & Authorized Implementers)
+
+**Gemini** is the designated AI coding and implementation agent for this workflow. Other coding agents or the human implementer may implement when explicitly authorized.
+
+Responsibilities:
+
+* Inspect the codebase within assigned domain whitelists
+* Execute implementation work strictly authorized by the active Implementation Brief
+* Execute unit, integration, and headless runtime test suites (`godot --headless -s tests/core/test_runner.gd`)
+* Commit completed code and documentation separately with descriptive git messages
+* Author Implementation Reports with explicit status attribution conforming to [EDP-001 §17](EXECUTION_DOCUMENTATION_PROTOCOL.md)
+* Provide exact commit SHAs and test evidence
+
+### Coding Agent Prohibitions:
+* Coding agents must **never modify files outside assigned domain whitelists** without an approved architecture plan.
+* Coding agents must **never redefine architecture, product scope, or gameplay invariants**.
+* Coding agents must **never claim tests passed without running them**.
+* Coding agents must **never claim independent QA verification or GM acceptance**.
+
+---
+
+# 6. Operational Restrictions & Boundaries
+
+* No agent may use its authority to casually rewrite other specialist domains.
+* If a requirement belongs clearly to another specialist team, the GM layer coordinates the work rather than reassigning ownership arbitrarily.
+* Neither GM1 nor GM2 writes production code.
+* Neither Gemini nor GM2 may declare work accepted; acceptance remains the exclusive prerogative of GM1 (or Human Project Authority).
 
 ---
 
