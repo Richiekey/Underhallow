@@ -79,6 +79,7 @@ def process_image(args):
         "components_removed": 0,
         "new_colors": 0,
         "cleanup_strategy": "",
+        "confidence": "UNKNOWN",
         "status": "UNSUPPORTED",
         "surgical_repair": "NONE",
         "warnings": []
@@ -93,7 +94,7 @@ def process_image(args):
     components_removed_total = 0
     
     if args.asset_class in ["organic-tall", "organic-low"]:
-        report["cleanup_strategy"] = "Green connected-component spatial isolation"
+        report["cleanup_strategy"] = "PixelLab organic benchmark-derived heuristic (green spatial isolation)"
         
         green_comps = get_connected_components(pixels, width, height, lambda rgb: is_green(*rgb))
         mid_y = orig_min_y + (orig_max_y - orig_min_y) * 0.5
@@ -113,10 +114,12 @@ def process_image(args):
                     pixels_removed_total += 1
                 components_removed_total += 1
                 
+        report["confidence"] = "LOW (Ambiguous scale)" if has_ambiguous_removals else "HIGH"
         report["status"] = "REVIEW_REQUIRED" if has_ambiguous_removals else "CLEAN"
 
     elif args.asset_class == "architectural":
         report["cleanup_strategy"] = "Architectural baseline (Optional shadow sever)"
+        report["confidence"] = "LOW (Requires manual review or explicit surgical repair)"
         report["status"] = "REVIEW_REQUIRED"
     else:
         report["warnings"].append("Unknown asset class, no cleanup performed.")

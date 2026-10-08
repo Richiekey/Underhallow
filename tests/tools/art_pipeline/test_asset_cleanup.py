@@ -85,17 +85,63 @@ def test_deterministic_repeatability():
     assert d1["pixels_removed"] == d2["pixels_removed"]
     assert d1["final_opaque"] == d2["final_opaque"]
     
+    # Exact pixel-level deterministic comparison between repeated outputs
+    with open("tests/temp_out1.png", "rb") as f1, open("tests/temp_out2.png", "rb") as f2:
+        assert f1.read() == f2.read(), "Outputs are not byte-for-byte identical"
+    
     # Also verify preservation of colors (no unexplained new colors)
     assert d1["new_colors"] == 0
     
-def test_cottage_repair():
-    # We use benchmark_cottage_cleaned.png for the shadow sever test since the new algorithm defaults to REVIEW_REQUIRED for architecture
+def test_benchmark_tree():
+    res = run_cleanup("--input", "assets/benchmarks/benchmark_mature_woodland_tree.png", "--output", "tests/temp_out.png", "--asset-class", "organic-tall", "--report-out", "tests/temp_report.json")
+    assert res.returncode == 0
+    with open("tests/temp_report.json") as f:
+        data = json.load(f)
+        assert data["status"] == "CLEAN"
+        assert data["confidence"] == "HIGH"
+        assert data["pixels_removed"] == 131
+        assert data["pixels_added"] == 0
+        assert data["new_colors"] == 0
+        assert data["dimensions"] == "64x96"
+        assert "benchmark-derived heuristic" in data["cleanup_strategy"]
+        assert data["surgical_repair"] == "NONE"
+
+def test_benchmark_berry():
+    res = run_cleanup("--input", "assets/benchmarks/benchmark_wild_berry_bush.png", "--output", "tests/temp_out.png", "--asset-class", "organic-low", "--report-out", "tests/temp_report.json")
+    assert res.returncode == 0
+    with open("tests/temp_report.json") as f:
+        data = json.load(f)
+        assert data["status"] == "CLEAN"
+        assert data["confidence"] == "HIGH"
+        assert data["pixels_removed"] == 176
+        assert data["pixels_added"] == 0
+        assert data["new_colors"] == 0
+        assert data["dimensions"] == "64x64"
+        assert "benchmark-derived heuristic" in data["cleanup_strategy"]
+        assert data["surgical_repair"] == "NONE"
+
+def test_architectural_defaults_review_required():
+    """Architectural assets must default to REVIEW_REQUIRED without explicit surgical repair."""
+    res = run_cleanup("--input", "assets/benchmarks/benchmark_cottage_cleaned.png", "--output", "tests/temp_out.png", "--asset-class", "architectural", "--report-out", "tests/temp_report.json")
+    assert res.returncode == 0
+    with open("tests/temp_report.json") as f:
+        data = json.load(f)
+        assert data["status"] == "REVIEW_REQUIRED"
+        assert data["pixels_removed"] == 0
+        assert data["pixels_added"] == 0
+        assert data["surgical_repair"] == "NONE"
+        assert "manual review" in data["confidence"].lower()
+
+def test_cottage_surgical_repair():
+    """Explicit surgical repair on architectural asset upgrades from REVIEW_REQUIRED to CLEAN_WITH_REPAIR."""
     res = run_cleanup("--input", "assets/benchmarks/benchmark_cottage_cleaned.png", "--output", "tests/temp_out.png", "--asset-class", "architectural", "--repair-sever-shadow-color", "51,27,33", "--repair-sever-x-max", "45", "--repair-sever-y-min", "90", "--report-out", "tests/temp_report.json")
     assert res.returncode == 0
     with open("tests/temp_report.json") as f:
         data = json.load(f)
         assert data["status"] == "CLEAN_WITH_REPAIR"
         assert data["pixels_removed"] > 0
+        assert data["pixels_added"] == 0
+        assert data["surgical_repair"] != "NONE"
 
 if __name__ == "__main__":
     tests = [
@@ -106,7 +152,10 @@ if __name__ == "__main__":
         test_review_required_large_component,
         test_unknown_class,
         test_deterministic_repeatability,
-        test_cottage_repair
+        test_benchmark_tree,
+        test_benchmark_berry,
+        test_architectural_defaults_review_required,
+        test_cottage_surgical_repair
     ]
     
     passed = 0
@@ -121,3 +170,4 @@ if __name__ == "__main__":
     print(f"\nTotal: {len(tests)} | Passed: {passed} | Failed: {len(tests) - passed}")
     if passed != len(tests):
         sys.exit(1)
+
