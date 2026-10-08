@@ -27,7 +27,7 @@ signal preview_coord_changed(new_coord: Vector2i)
 signal preview_orientation_changed(new_orientation: int)
 
 @onready var interaction_detector: PlayerInteraction = $InteractionDetector
-@onready var facing_indicator: Node2D = $Visual/FacingIndicator
+@onready var facing_indicator: Node2D = get_node_or_null("Visual/FacingIndicator")
 
 var player_state: PlayerState = null
 var runtime: GameRuntime = null
